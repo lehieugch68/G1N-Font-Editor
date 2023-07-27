@@ -40,15 +40,15 @@
             // pictureBox
             // 
             this.pictureBox.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.pictureBox.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox.Location = new System.Drawing.Point(340, 12);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(437, 437);
+            this.pictureBox.Size = new System.Drawing.Size(512, 512);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
             // btnSelect
             // 
-            this.btnSelect.Location = new System.Drawing.Point(455, 28);
+            this.btnSelect.Location = new System.Drawing.Point(12, 28);
             this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(75, 23);
             this.btnSelect.TabIndex = 1;
@@ -58,7 +58,7 @@
             // 
             // textBoxFilePath
             // 
-            this.textBoxFilePath.Location = new System.Drawing.Point(536, 30);
+            this.textBoxFilePath.Location = new System.Drawing.Point(93, 30);
             this.textBoxFilePath.Name = "textBoxFilePath";
             this.textBoxFilePath.Size = new System.Drawing.Size(236, 20);
             this.textBoxFilePath.TabIndex = 2;
@@ -66,7 +66,7 @@
             // labelFilePath
             // 
             this.labelFilePath.AutoSize = true;
-            this.labelFilePath.Location = new System.Drawing.Point(455, 12);
+            this.labelFilePath.Location = new System.Drawing.Point(12, 10);
             this.labelFilePath.Name = "labelFilePath";
             this.labelFilePath.Size = new System.Drawing.Size(81, 13);
             this.labelFilePath.TabIndex = 3;
@@ -75,16 +75,16 @@
             // comboBoxFont
             // 
             this.comboBoxFont.FormattingEnabled = true;
-            this.comboBoxFont.Location = new System.Drawing.Point(455, 81);
+            this.comboBoxFont.Location = new System.Drawing.Point(12, 80);
             this.comboBoxFont.Name = "comboBoxFont";
-            this.comboBoxFont.Size = new System.Drawing.Size(314, 21);
+            this.comboBoxFont.Size = new System.Drawing.Size(317, 21);
             this.comboBoxFont.TabIndex = 4;
             this.comboBoxFont.SelectedIndexChanged += new System.EventHandler(this.comboBoxFont_SelectedIndexChanged);
             // 
             // labelFont
             // 
             this.labelFont.AutoSize = true;
-            this.labelFont.Location = new System.Drawing.Point(455, 65);
+            this.labelFont.Location = new System.Drawing.Point(12, 60);
             this.labelFont.Name = "labelFont";
             this.labelFont.Size = new System.Drawing.Size(61, 13);
             this.labelFont.TabIndex = 5;
@@ -94,16 +94,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.ClientSize = new System.Drawing.Size(864, 541);
             this.Controls.Add(this.labelFont);
             this.Controls.Add(this.comboBoxFont);
             this.Controls.Add(this.labelFilePath);
             this.Controls.Add(this.textBoxFilePath);
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.pictureBox);
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 500);
-            this.MinimumSize = new System.Drawing.Size(800, 500);
+            this.MinimumSize = new System.Drawing.Size(880, 580);
             this.Name = "MainForm";
             this.Text = "G1N Font Editor by LeHieu - VietHoaGame";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

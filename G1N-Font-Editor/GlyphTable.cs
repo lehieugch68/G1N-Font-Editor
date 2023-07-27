@@ -38,8 +38,8 @@ namespace G1N_Font_Editor
                             pen,
                             glyph.Rect.X,
                             glyph.Rect.Y,
-                            bmp.Width,
-                            bmp.Height);
+                            glyph.Rect.Width,
+                            glyph.Rect.Height);
                     }
                 }
             }
@@ -72,19 +72,20 @@ namespace G1N_Font_Editor
                     }
                     currX = padx;
                 }
-                var rect = new Rectangle(currX, currY, glyphs[i].Width + padx, glyphs[i].Height + pady);
-                while (rects.Any(r => r.IntersectsWith(rect))) rect.Y++;
-                if (rect.Y + rect.Height < lowestRowHeight) lowestRowHeight = rect.Y + rect.Height;
-                rects.Add(rect);
-                glyphs[i].Rect = rect;
+                var boxRect = new Rectangle(currX, currY, glyphs[i].Width + padx, glyphs[i].Height + pady);
+                while (rects.Any(r => r.IntersectsWith(boxRect))) boxRect.Y++;
+                if (boxRect.Y + boxRect.Height < lowestRowHeight) lowestRowHeight = boxRect.Y + boxRect.Height;
+                rects.Add(boxRect);
+                glyphs[i].BoxRect = boxRect;
+                glyphs[i].Rect = new Rectangle(boxRect.X, boxRect.Y, glyphs[i].Width, glyphs[i].Height);
                 currX += glyphs[i].Width + padx;
             }
             return true;
         }
         public static class Constant
         {
-            public static readonly int MIN_WIDTH = 256;
-            public static readonly int MIN_HEIGHT = 256;
+            public static readonly int MIN_WIDTH = 512;
+            public static readonly int MIN_HEIGHT = 512;
         }
     }
 }

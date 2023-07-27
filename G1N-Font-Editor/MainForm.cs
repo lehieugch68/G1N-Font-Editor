@@ -46,7 +46,56 @@ namespace G1N_Font_Editor
                                 item.Value = fontId.Index;
                                 comboBoxFont.Items.Add(item);
                             }
-                            comboBoxFont.SelectedIndex = 0;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.IS_BUSY = false;
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                    comboBoxFont.SelectedIndex = 0;
+                });
+            }
+        }
+        private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                Global.IS_BUSY = true;
+                int fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
+                try
+                {
+                    var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
+                    Bitmap bmp = glyphTable.GetBitmap();
+                    pictureBox.BeginInvoke((MethodInvoker)delegate
+                    {
+                        pictureBox.BackColor = Color.Black;
+                        pictureBox.Image = bmp;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Global.IS_BUSY = false;
+                    MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                }
+                Global.IS_BUSY = false;
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
+                        Bitmap bmp = glyphTable.GetBitmap();
+                        pictureBox.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBox.BackColor = Color.Black;
+                            pictureBox.Image = bmp;
                         });
                     }
                     catch (Exception ex)
@@ -59,10 +108,6 @@ namespace G1N_Font_Editor
                     Global.IS_BUSY = false;
                 });
             }
-        }
-        private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
         }
     }
 }

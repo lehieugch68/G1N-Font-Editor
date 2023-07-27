@@ -23,6 +23,7 @@ namespace G1N_Font_Editor
         public byte[] PixelData { get { return _pixelData; } }
         private Bitmap Bmp;
         public Rectangle Rect;
+        public Rectangle BoxRect;
         public Glyph(int charCode, char character, byte width, byte height, byte xoff, byte yoff, byte xadv, byte shadow, int dataOffset, int pixelDataSize, byte[] pixelData)
         {
             CharCode = charCode;
