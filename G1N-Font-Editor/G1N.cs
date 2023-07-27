@@ -21,7 +21,7 @@ namespace G1N_Font_Editor
         public List<GlyphTable> GlyphTables { get; set; }
         public string RootFile { get; set; }
         public byte[] RawData { get; set; }
-        public Dictionary<int, byte> GlyphConstants { get; set; }
+        public Dictionary<int, GlyphConstant> GlyphConstants { get; set; }
         private struct CharID
         {
             public int CharCode { get; set; }
@@ -35,6 +35,16 @@ namespace G1N_Font_Editor
             {
                 Offset = offset;
                 Glyphs = new List<Glyph>();
+            }
+        }
+        public class GlyphConstant
+        {
+            public byte BaseLine { get; set; }
+            public byte Shadow { get; set; }
+            public GlyphConstant(byte baseLine, byte shadow)
+            {
+                BaseLine = baseLine;
+                Shadow = shadow;
             }
 
         }
@@ -58,8 +68,12 @@ namespace G1N_Font_Editor
             TableCount = br.ReadInt32();
             TableOffsets = new int[TableCount];
             GlyphTables = new List<GlyphTable>();
-            GlyphConstants = new Dictionary<int, byte>();
+            GlyphConstants = new Dictionary<int, GlyphConstant>();
             Palettes = new List<Color[]>();
+            for (int i = 0; i < TableCount; i++)
+            {
+                TableOffsets[i] = br.ReadInt32();
+            }
             for (int i = 0; i < PaletteCount; i++)
             {
                 var colors = new List<Color>();
@@ -68,10 +82,6 @@ namespace G1N_Font_Editor
                     colors.Add(Color.FromArgb(br.ReadInt32()));
                 }
                 Palettes.Add(colors.ToArray());
-            }
-            for (int i = 0; i < TableCount; i++)
-            {
-                TableOffsets[i] = br.ReadInt32();
             }
             for (int i = 0; i < TableCount; i++)
             {
@@ -100,6 +110,7 @@ namespace G1N_Font_Editor
                     var xadv = br.ReadByte();
                     var shadow = br.ReadByte();
                     br.BaseStream.Position += 2;
+                    if (!GlyphConstants.ContainsKey(i)) GlyphConstants.Add(i, new GlyphConstant(yoff, shadow));
                     int pixelDataOffset = br.ReadInt32();
                     int pixelDataSize = 0;
                     long temp = br.BaseStream.Position;
