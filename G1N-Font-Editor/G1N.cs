@@ -27,16 +27,6 @@ namespace G1N_Font_Editor
             public int CharCode { get; set; }
             public char Character { get; set; }
         }
-        public class GlyphTable
-        {
-            public int Offset { get; set; }
-            public List<Glyph> Glyphs { get; set; }
-            public GlyphTable(int offset)
-            {
-                Offset = offset;
-                Glyphs = new List<Glyph>();
-            }
-        }
         public class GlyphConstant
         {
             public byte BaseLine { get; set; }
@@ -46,7 +36,6 @@ namespace G1N_Font_Editor
                 BaseLine = baseLine;
                 Shadow = shadow;
             }
-
         }
         public G1N(string input)
         {
@@ -86,7 +75,7 @@ namespace G1N_Font_Editor
             for (int i = 0; i < TableCount; i++)
             {
                 int offset = TableOffsets[i];
-                var table = new GlyphTable(offset);
+                var table = new GlyphTable(i, offset);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0xFFFF];

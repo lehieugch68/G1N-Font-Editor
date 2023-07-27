@@ -56,6 +56,8 @@
     <Compile Include="Global.cs" />
     <Compile Include="G1N.cs" />
     <Compile Include="Glyph.cs" />
+    <Compile Include="GlyphTable.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

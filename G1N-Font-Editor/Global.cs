@@ -10,11 +10,9 @@ namespace G1N_Font_Editor
     public static class Global
     {
         public static bool IS_BUSY = false;
-        public static Bitmap PICTURE_PREVIEW_BITMAP;
+        public static G1N G1N_FILE;
         public static Color DEFAULT_PICTURE_COLOR = SystemColors.ScrollBar;
         public static readonly string MESSAGEBOX_TITLE = "G1N Font Editor";
-        public static int DEFAULT_TEX_PADDING_X = 4;
-        public static int DEFAULT_TEX_PADDING_Y = 4;
         public static Font TTF_FONT;
         public static int DEFAULT_TTF_FONT_SIZE = 18;
         public static int DEFAULT_TEX_WIDTH = 512;

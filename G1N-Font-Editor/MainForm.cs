@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace G1N_Font_Editor
 {
@@ -15,6 +16,53 @@ namespace G1N_Font_Editor
         public MainForm()
         {
             InitializeComponent();
+        }
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                Global.IS_BUSY = true;
+                string filePath = Utils.FileBrowser("", Global.G1N_FILE_FILTER);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    textBoxFilePath.Text = filePath;
+                }
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        Global.G1N_FILE = new G1N(textBoxFilePath.Text);
+                        comboBoxFont.BeginInvoke((MethodInvoker)delegate
+                        {
+                            comboBoxFont.Items.Clear();
+                            foreach (var fontId in Global.G1N_FILE.GlyphTables)
+                            {
+                                ComboboxItem item = new ComboboxItem();
+                                item.Text = $"Font {fontId.Index}";
+                                item.Value = fontId.Index;
+                                comboBoxFont.Items.Add(item);
+                            }
+                            comboBoxFont.SelectedIndex = 0;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.IS_BUSY = false;
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                });
+            }
+        }
+        private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
