@@ -20,7 +20,6 @@ namespace G1N_Font_Editor
     }
     public class Utils
     {
-        private static Bitmap MEASURE_BMP = new Bitmap(1, 1);
         public static string FolderBrowser(string filename)
         {
             OpenFileDialog folderBrowser = new OpenFileDialog();

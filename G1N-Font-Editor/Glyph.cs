@@ -60,7 +60,65 @@ namespace G1N_Font_Editor
             }
             return Bmp;
         }
-        public byte[] SetBitmap(Bitmap bmp)
+        public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font)
+        {
+            IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
+            var index = characterMap[Character];
+            int width = (int)
+                Math.Ceiling(
+                    (
+                        glyphTypeface.AdvanceWidths[index]
+                        + Math.Abs(glyphTypeface.LeftSideBearings[index])
+                        + Math.Abs(glyphTypeface.RightSideBearings[index])
+                    ) * font.Size
+                );
+            if (width % 2 != 0)
+                width++;
+            int height = (int)
+                Math.Ceiling(
+                    (
+                        glyphTypeface.Height
+                        - (
+                            glyphTypeface.TopSideBearings[index] < 0
+                                ? glyphTypeface.TopSideBearings[index]
+                                : 0
+                        )
+                        - (
+                            glyphTypeface.BottomSideBearings[index] < 0
+                                ? glyphTypeface.BottomSideBearings[index]
+                                : 0
+                        )
+                    ) * font.Size
+                );
+            var measureSize = FontHelper.MeasureSize(Character, font);
+            Bitmap bmp = new Bitmap(width, height);
+            bmp.SetResolution(72, 72);
+            int startX = (int)Math.Round((width - measureSize.Width) / 2);
+            int startY =
+                glyphTypeface.TopSideBearings[index] < 0
+                    ? Math.Abs((int)(glyphTypeface.TopSideBearings[index] * font.Size))
+                    : 0;
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                var rect = new Rectangle(
+                    startX,
+                    startY,
+                    (int)measureSize.Width,
+                    (int)measureSize.Height
+                );
+                g.DrawString(Character.ToString(), font, Brushes.White, rect);
+            }
+            Bmp = bmp;
+
+            //
+            Width = (byte)Bmp.Width;
+            Height = (byte)Bmp.Height;
+            //
+            _pixelData = Convert8BppTo4Bpp(Bmp);
+            return _pixelData;
+        }
+        /*public byte[] SetBitmap(Bitmap bmp)
         {
             Bmp = bmp;
             Width = (byte)Bmp.Width;
@@ -68,7 +126,7 @@ namespace G1N_Font_Editor
             XAdv = (byte)Bmp.Width;
             _pixelData = Convert8BppTo4Bpp(Bmp);
             return _pixelData;
-        }
+        }*/
         private byte[] Convert4BppTo8Bpp(byte[] input)
         {
             var result = new MemoryStream();

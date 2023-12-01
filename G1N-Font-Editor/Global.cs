@@ -18,7 +18,6 @@ namespace G1N_Font_Editor
         public static int DEFAULT_TEX_WIDTH = 512;
         public static int DEFAULT_TEX_HEIGHT = 512;
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
-        public static readonly string CONFIG_FILE = Path.Combine(APP_DIRECTORY, "Config", "config.json");
         public static readonly string G1N_FILE_FILTER = "G1N files (*.g1n)|*.g1n|All files (*.*)|*.*";
         public static Dictionary<string, string> JSON_CONFIG;
         public static Dictionary<string, string> MESSAGEBOX_MESSAGES = new Dictionary<string, string>()
