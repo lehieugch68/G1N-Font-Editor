@@ -126,5 +126,29 @@ namespace G1N_Font_Editor
                 GlyphTables.Add(table);
             }
         }
+        /*public byte[] Build()
+        {
+            MemoryStream ms = new MemoryStream();
+            using (var bw = new BinaryWriter(ms))
+            {
+                bw.Write(Magic);
+                bw.BaseStream.Position += 4;
+                bw.Write(HeaderSize);
+                bw.Write(Unk);
+                bw.BaseStream.Position += 4;
+                bw.Write(PaletteCount);
+                bw.Write(TableCount);
+                bw.BaseStream.Position += PaletteCount * 4;
+                for (int i = 0; i < PaletteCount; i++)
+                {
+                    foreach (var color in Palettes[i]) bw.Write(color.ToArgb());
+                }
+                for (int i = 0; i < TableCount; i++)
+                {
+                    
+                }
+            }
+            return RawData;
+        }*/
     }
 }

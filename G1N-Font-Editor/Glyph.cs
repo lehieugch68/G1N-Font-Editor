@@ -155,7 +155,8 @@ namespace G1N_Font_Editor
             }
             if (ms.Length > PixelDataSize)
             {
-                throw new Exception("Pixel size limit exceeded");
+                //throw new Exception("Pixel size limit exceeded");
+                PixelDataSize = (int)ms.Length;
             }
             var result = new byte[PixelDataSize];
             ms.ToArray().CopyTo(result, 0);

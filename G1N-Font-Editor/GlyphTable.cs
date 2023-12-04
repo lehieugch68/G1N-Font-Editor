@@ -82,6 +82,10 @@ namespace G1N_Font_Editor
             }
             return true;
         }
+        public void BuildGlyph(char[] chars = null)
+        {
+
+        }
         public static class Constant
         {
             public static readonly int MIN_WIDTH = 512;
