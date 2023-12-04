@@ -13,8 +13,8 @@ namespace G1N_Font_Editor
         public char Character { get; set; }
         public byte Width { get; set; }
         public byte Height { get; set; }
-        public byte XOffset { get; set; }
-        public byte YOffset { get; set; }
+        public byte LeftSide { get; set; }
+        public byte BottomSide { get; set; }
         public byte XAdv { get; set; }
         public byte Shadow { get; set; }
         public int DataOffset { get; set; }
@@ -24,14 +24,14 @@ namespace G1N_Font_Editor
         private Bitmap Bmp;
         public Rectangle Rect;
         public Rectangle BoxRect;
-        public Glyph(int charCode, char character, byte width, byte height, byte xoff, byte yoff, byte xadv, byte shadow, int dataOffset, int pixelDataSize, byte[] pixelData)
+        public Glyph(int charCode, char character, byte width, byte height, byte leftSide, byte bottomSide, byte xadv, byte shadow, int dataOffset, int pixelDataSize, byte[] pixelData)
         {
             CharCode = charCode;
             Character = character;
             Width = width;
             Height = height;
-            XOffset = xoff;
-            YOffset = yoff;
+            LeftSide = leftSide;
+            BottomSide = bottomSide;
             XAdv = xadv;
             Shadow = shadow;
             DataOffset = dataOffset;
@@ -63,7 +63,8 @@ namespace G1N_Font_Editor
         public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font)
         {
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
-            var index = characterMap[Character];
+            ushort index;
+            if (!characterMap.TryGetValue(Character, out index)) return _pixelData;
             int width = (int)
                 Math.Ceiling(
                     (
@@ -110,23 +111,14 @@ namespace G1N_Font_Editor
                 g.DrawString(Character.ToString(), font, Brushes.White, rect);
             }
             Bmp = bmp;
-
-            //
-            Width = (byte)Bmp.Width;
-            Height = (byte)Bmp.Height;
-            //
-            _pixelData = Convert8BppTo4Bpp(Bmp);
-            return _pixelData;
-        }
-        /*public byte[] SetBitmap(Bitmap bmp)
-        {
-            Bmp = bmp;
             Width = (byte)Bmp.Width;
             Height = (byte)Bmp.Height;
             XAdv = (byte)Bmp.Width;
+            LeftSide = (byte)(glyphTypeface.LeftSideBearings[index] * font.Size);
+            BottomSide = (byte)(Height + (glyphTypeface.BottomSideBearings[index] * font.Size));
             _pixelData = Convert8BppTo4Bpp(Bmp);
             return _pixelData;
-        }*/
+        }
         private byte[] Convert4BppTo8Bpp(byte[] input)
         {
             var result = new MemoryStream();

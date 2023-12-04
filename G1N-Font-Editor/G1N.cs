@@ -29,11 +29,9 @@ namespace G1N_Font_Editor
         }
         public class GlyphConstant
         {
-            public byte BaseLine { get; set; }
             public byte Shadow { get; set; }
-            public GlyphConstant(byte baseLine, byte shadow)
+            public GlyphConstant(byte shadow)
             {
-                BaseLine = baseLine;
                 Shadow = shadow;
             }
         }
@@ -94,15 +92,15 @@ namespace G1N_Font_Editor
                 {
                     var width = br.ReadByte();
                     var height = br.ReadByte();
-                    var xoff = br.ReadByte();
-                    var yoff = br.ReadByte();
+                    var leftSide = br.ReadByte();
+                    var bottomSide = br.ReadByte();
                     var xadv = br.ReadByte();
                     var shadow = br.ReadByte();
                     br.BaseStream.Position += 2;
-                    if (!GlyphConstants.ContainsKey(i)) GlyphConstants.Add(i, new GlyphConstant(yoff, shadow));
                     int pixelDataOffset = br.ReadInt32();
                     int pixelDataSize = 0;
                     long temp = br.BaseStream.Position;
+                    if (!GlyphConstants.ContainsKey(i)) GlyphConstants.Add(i, new GlyphConstant(shadow));
                     if (j >= charCount - 1)
                     {
                         int nextOffset = 0;
@@ -122,7 +120,7 @@ namespace G1N_Font_Editor
                     br.BaseStream.Position = AtlasOffset + pixelDataOffset;
                     var pixelData = br.ReadBytes(pixelDataSize);
                     br.BaseStream.Position = temp;
-                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, xoff, yoff, xadv, shadow, pixelDataOffset, pixelDataSize, pixelData);
+                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, leftSide, bottomSide, xadv, shadow, pixelDataOffset, pixelDataSize, pixelData);
                     table.Glyphs.Add(glyph);
                 }
                 GlyphTables.Add(table);
