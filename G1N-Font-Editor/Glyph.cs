@@ -14,31 +14,33 @@ namespace G1N_Font_Editor
         public byte Width { get; set; }
         public byte Height { get; set; }
         public byte LeftSide { get; set; }
-        public byte BottomSide { get; set; }
+        public byte Baseline { get; set; }
         public byte XAdv { get; set; }
-        public byte Shadow { get; set; }
+        public sbyte Unk { get; set; }
         public int DataOffset { get; set; }
         public int PixelDataSize { get; set; }
+        public long PixelDataPointer { get; set; }
         private byte[] _pixelData;
         public byte[] PixelData { get { return _pixelData; } }
         private Bitmap Bmp;
         public Rectangle Rect;
         public Rectangle BoxRect;
-        public Glyph(int charCode, char character, byte width, byte height, byte leftSide, byte bottomSide, byte xadv, byte shadow, int dataOffset, int pixelDataSize, byte[] pixelData)
+        public Glyph(int charCode, char character, byte width, byte height, byte leftSide, byte baseline, byte xadv, sbyte unk, int dataOffset, int pixelDataSize, byte[] pixelData)
         {
             CharCode = charCode;
             Character = character;
             Width = width;
             Height = height;
             LeftSide = leftSide;
-            BottomSide = bottomSide;
+            Baseline = baseline;
             XAdv = xadv;
-            Shadow = shadow;
+            Unk = unk;
             DataOffset = dataOffset;
             PixelDataSize = pixelDataSize;
             _pixelData = pixelData;
             GetBitmap();
         }
+        public Glyph() { }
         public Bitmap GetBitmap()
         {
             if (Bmp != null)
@@ -115,8 +117,10 @@ namespace G1N_Font_Editor
             Height = (byte)Bmp.Height;
             XAdv = (byte)Bmp.Width;
             LeftSide = (byte)(glyphTypeface.LeftSideBearings[index] * font.Size);
-            BottomSide = (byte)(Height + (glyphTypeface.BottomSideBearings[index] * font.Size));
+            Baseline = Height;
             _pixelData = Convert8BppTo4Bpp(Bmp);
+            Unk = (sbyte)(Height * -1);
+            PixelDataSize = Math.Abs(Unk * Height);
             return _pixelData;
         }
         private byte[] Convert4BppTo8Bpp(byte[] input)
@@ -155,8 +159,7 @@ namespace G1N_Font_Editor
             }
             if (ms.Length > PixelDataSize)
             {
-                //throw new Exception("Pixel size limit exceeded");
-                PixelDataSize = (int)ms.Length;
+                throw new Exception("Pixel size limit exceeded");
             }
             var result = new byte[PixelDataSize];
             ms.ToArray().CopyTo(result, 0);

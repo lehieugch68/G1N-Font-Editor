@@ -82,9 +82,20 @@ namespace G1N_Font_Editor
             }
             return true;
         }
-        public void BuildGlyph(char[] chars = null)
+        public void Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, char[] chars = null)
         {
-
+            char[] newChars = chars != null ? chars : Glyphs.Select(g => g.Character).ToArray();
+            foreach (var ch in newChars)
+            {
+                var glyph = Glyphs.Find(g => g.Character == ch);
+                if (glyph == null) 
+                { 
+                    glyph = new Glyph();
+                    Glyphs.Add(glyph);
+                }
+                glyph.Build(glyphTypeface, font);
+            }
+            Glyphs = Glyphs.OrderBy(g => g.Character).ToList();
         }
         public static class Constant
         {
