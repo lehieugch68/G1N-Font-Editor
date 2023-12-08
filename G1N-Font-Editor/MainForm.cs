@@ -90,22 +90,6 @@ namespace G1N_Font_Editor
             {
                 Global.IS_BUSY = true;
                 int fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
-                try
-                {
-                    var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
-                    Bitmap bmp = glyphTable.GetBitmap();
-                    pictureBox.BeginInvoke((MethodInvoker)delegate
-                    {
-                        pictureBox.BackColor = Color.Black;
-                        pictureBox.Image = bmp;
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Global.IS_BUSY = false;
-                    MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
-                }
-                Global.IS_BUSY = false;
                 Task.Run(() =>
                 {
                     try
@@ -166,7 +150,67 @@ namespace G1N_Font_Editor
 
         private void buttonBuild_Click(object sender, EventArgs e)
         {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else if (Global.G1N_FILE == null || comboBoxOptFont.SelectedIndex < 0 || textBoxOptFontSize.Text.Length <= 0 || comboBoxOptFontStyle.SelectedIndex < 0)
+            {
 
+            }
+            else
+            {
+                Global.IS_BUSY = true;
+                var fontName = comboBoxOptFont.SelectedItem.ToString();
+                var fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), comboBoxOptFontStyle.SelectedItem.ToString());
+                var fontSize = int.Parse(textBoxOptFontSize.Text);
+                var fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
+                var chars = textBoxCharsOpt.Text.ToCharArray();
+                MessageBox.Show(fontId.ToString());
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphTypeface = FontHelper.GetGlyphTypeface(fontName, fontStyle);
+                        var font = new Font(fontName, fontSize, fontStyle);
+                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(table => table.Index == fontId);
+                        glyphTable.Build(glyphTypeface, font, chars);
+                        var newData = Global.G1N_FILE.Build();
+                        //
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.IS_BUSY = false;
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                });
+            }
+        }
+
+        private void buttonCharsFromFile_Click(object sender, EventArgs e)
+        {
+            string filePath = Utils.FileBrowser("", Global.TXT_FILE_FILTER);
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        string chars = Utils.RemoveDuplicates(File.ReadAllText(filePath).Replace("\r", string.Empty).Replace("\n", string.Empty));
+                        textBoxCharsOpt.BeginInvoke((MethodInvoker)delegate
+                        {
+                            textBoxCharsOpt.Text = chars;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                });
+            }
         }
     }
 }

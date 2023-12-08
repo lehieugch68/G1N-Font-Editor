@@ -61,5 +61,9 @@ namespace G1N_Font_Editor
             }
             return result;
         }
+        public static string RemoveDuplicates(string input)
+        {
+            return new string(input.ToCharArray().Distinct().ToArray());
+        }
     }
 }
