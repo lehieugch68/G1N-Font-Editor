@@ -166,7 +166,6 @@ namespace G1N_Font_Editor
                 var fontSize = int.Parse(textBoxOptFontSize.Text);
                 var fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
                 var chars = textBoxCharsOpt.Text.ToCharArray();
-                MessageBox.Show(fontId.ToString());
                 Task.Run(() =>
                 {
                     try
@@ -177,11 +176,20 @@ namespace G1N_Font_Editor
                         glyphTable.Build(glyphTypeface, font, chars);
                         var newData = Global.G1N_FILE.Build();
                         //
+                        File.WriteAllBytes("test.g1n", newData);
+                        glyphTable.ReloadBitmap();
+                        Bitmap bmp = glyphTable.GetBitmap();
+                        pictureBox.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBox.BackColor = Color.Black;
+                            pictureBox.Image = bmp;
+                        });
+
                     }
                     catch (Exception ex)
                     {
                         Global.IS_BUSY = false;
-                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                        MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
                     }
                 }).GetAwaiter().OnCompleted(() =>
                 {

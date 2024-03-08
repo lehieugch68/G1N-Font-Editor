@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {
     public class G1N
     {
-        public long Magic { get; set; }
+        public byte[] Magic { get; set; }
         public int FileSize { get; set; }
         public int HeaderSize { get; set; }
         public int Unk { get; set; }
@@ -46,7 +47,7 @@ namespace G1N_Font_Editor
             var ms = new MemoryStream(RawData);
             var br = new BinaryReader(ms);
             br.BaseStream.Seek(0, SeekOrigin.Begin);
-            Magic = br.ReadInt64();
+            Magic = br.ReadBytes(8);
             FileSize = br.ReadInt32();
             HeaderSize = br.ReadInt32();
             Unk = br.ReadInt32();
@@ -138,6 +139,8 @@ namespace G1N_Font_Editor
                 bw.BaseStream.Position += 4;
                 bw.Write(PaletteCount);
                 bw.Write(TableCount);
+                long tablePointerOffset = bw.BaseStream.Position;
+                int[] tablePointer = new int[TableCount];
                 bw.BaseStream.Position += PaletteCount * 4;
                 for (int i = 0; i < PaletteCount; i++)
                 {
@@ -146,6 +149,7 @@ namespace G1N_Font_Editor
                 int atlasOffset = 0;
                 for (int i = 0; i < TableCount; i++)
                 {
+                    tablePointer[i] = (int)bw.BaseStream.Position;
                     ushort ordinal = 0;
                     for (int j = 0; j < 0xFFFF; j++)
                     {
@@ -159,18 +163,18 @@ namespace G1N_Font_Editor
                     for (int j = 0; j < GlyphTables[i].Glyphs.Count; j++)
                     {
                         var glyph = GlyphTables[i].Glyphs[j];
-                        if (glyph != null) continue;
+                        if (glyph == null) continue;
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Height);
-                        bw.Write(glyph.LeftSide);
+                        bw.BaseStream.Position++;
+                        //bw.Write(glyph.LeftSide);
                         bw.Write(glyph.Baseline);
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Unk);
                         //bw.Write(glyph.LeftSide);
                         bw.BaseStream.Position++;
                         bw.Write(glyph.Height);
-                        glyph.PixelDataPointer = bw.BaseStream.Position;
-                        bw.BaseStream.Position += 4;
+                        bw.Write(atlasOffset);
                         atlasOffset += glyph.PixelDataSize;
                     }  
                 }
@@ -180,17 +184,18 @@ namespace G1N_Font_Editor
                     for (int j = 0; j < GlyphTables[i].Glyphs.Count; j++)
                     {
                         var glyph = GlyphTables[i].Glyphs[j];
-                        int pixelDataOffset = (int)bw.BaseStream.Position;
                         bw.Write(GlyphTables[i].Glyphs[j].PixelData);
-                        bw.BaseStream.Position = glyph.PixelDataPointer;
-                        bw.Write(pixelDataOffset);
-                        bw.BaseStream.Position = bw.BaseStream.Length;
                     }
                 }
                 bw.BaseStream.Position = 8;
                 bw.Write((int)bw.BaseStream.Length);
                 bw.BaseStream.Position = 0x14;
                 bw.Write(AtlasOffset);
+                bw.BaseStream.Position = 0x20;
+                for (int i = 0; i < TableCount; i++) 
+                {
+                    bw.Write(tablePointer[i]);
+                }
             }
             RawData = ms.ToArray();
             return RawData;

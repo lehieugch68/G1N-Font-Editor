@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace G1N_Font_Editor
 {
@@ -90,9 +91,13 @@ namespace G1N_Font_Editor
                 var glyph = Glyphs.Find(g => g.Character == ch);
                 if (glyph == null) 
                 { 
-                    glyph = new Glyph();
+                    glyph = new Glyph(ch);
                     Glyphs.Add(glyph);
                 }
+                
+            }
+            foreach (var glyph in Glyphs)
+            {
                 glyph.Build(glyphTypeface, font);
             }
             Glyphs = Glyphs.OrderBy(g => g.Character).ToList();

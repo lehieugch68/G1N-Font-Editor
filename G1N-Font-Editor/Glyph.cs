@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {
@@ -40,7 +42,12 @@ namespace G1N_Font_Editor
             _pixelData = pixelData;
             GetBitmap();
         }
-        public Glyph() { }
+        public Glyph(char character) 
+        {
+            CharCode = (int)character;
+            Character = character;
+            PixelDataSize = 0;
+        }
         public Bitmap GetBitmap()
         {
             if (Bmp != null)
@@ -75,7 +82,7 @@ namespace G1N_Font_Editor
                         + Math.Abs(glyphTypeface.RightSideBearings[index])
                     ) * font.Size
                 );
-            if (width % 2 != 0)
+            while (width % 2 != 0 || width <= 0)
                 width++;
             int height = (int)
                 Math.Ceiling(
@@ -93,10 +100,20 @@ namespace G1N_Font_Editor
                         )
                     ) * font.Size
                 );
+            while (height % 2 != 0 || height <= 0)
+                height++;
             var measureSize = FontHelper.MeasureSize(Character, font);
-            Bitmap bmp = new Bitmap(width, height);
+            Bitmap bmp = null;
+            try
+            {
+                bmp = new Bitmap(width, height);
+            } catch (Exception ex )
+            {
+                MessageBox.Show($"{(int)Character} - {index} - {width} - {height}");
+            }
+            //Bitmap bmp = new Bitmap(width, height);
             bmp.SetResolution(72, 72);
-            int startX = (int)Math.Round((width - measureSize.Width) / 2);
+            int startX = (int)Math.Ceiling((width - measureSize.Width) / 2);
             int startY =
                 glyphTypeface.TopSideBearings[index] < 0
                     ? Math.Abs((int)(glyphTypeface.TopSideBearings[index] * font.Size))
@@ -119,8 +136,8 @@ namespace G1N_Font_Editor
             LeftSide = (byte)(glyphTypeface.LeftSideBearings[index] * font.Size);
             Baseline = Height;
             _pixelData = Convert8BppTo4Bpp(Bmp);
-            Unk = (sbyte)(Height * -1);
-            PixelDataSize = Math.Abs(Unk * Height);
+            Unk = (sbyte)((_pixelData.Length / Height) * -1);
+            PixelDataSize = _pixelData.Length;
             return _pixelData;
         }
         private byte[] Convert4BppTo8Bpp(byte[] input)
@@ -151,19 +168,52 @@ namespace G1N_Font_Editor
                 {
                     for (int x = 0; x < bmp.Width; x++)
                     {
-                        var high = bmp.GetPixel(x++, y).R;
-                        var low = bmp.GetPixel(x, y).R;
-                        bw.Write((byte)(high | (low >> 4)));
+                        string color = string.Empty;
+                        color += JoinBit(bmp.GetPixel(x, y).R);
+                        color += JoinBit(bmp.GetPixel(++x, y).R);
+                        bw.Write(byte.Parse(color, NumberStyles.HexNumber));
                     }
                 }
             }
-            if (ms.Length > PixelDataSize)
-            {
-                throw new Exception("Pixel size limit exceeded");
-            }
-            var result = new byte[PixelDataSize];
-            ms.ToArray().CopyTo(result, 0);
-            return result;
+            return ms.ToArray();
+        }
+
+        private string JoinBit(byte input)
+        {
+            string res = string.Empty;
+            if (input <= 0x0F)
+                res = "0";
+            if (0x0F < input && input <= 0x20)
+                res = "1";
+            if (0x20 < input && input <= 0x30)
+                res = "2";
+            if (0x30 < input && input <= 0x40)
+                res = "3";
+            if (0x40 < input && input <= 0x50)
+                res = "4";
+            if (0x50 < input && input <= 0x60)
+                res = "5";
+            if (0x60 < input && input <= 0x70)
+                res = "6";
+            if (0x70 < input && input <= 0x80)
+                res = "7";
+            if (0x80 < input && input <= 0x90)
+                res = "8";
+            if (0x90 < input && input <= 0xA0)
+                res = "9";
+            if (0xA0 < input && input <= 0xB0)
+                res = "A";
+            if (0xB0 < input && input <= 0xC0)
+                res = "B";
+            if (0xC0 < input && input <= 0xD0)
+                res = "C";
+            if (0xD0 < input && input <= 0xE0)
+                res = "D";
+            if (0xE0 < input && input <= 0xF0)
+                res = "E";
+            if (0xF0 < input && input <= 0xFF)
+                res = "F";
+            return res;
         }
     }
 }
