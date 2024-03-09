@@ -166,13 +166,11 @@ namespace G1N_Font_Editor
                         if (glyph == null) continue;
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Height);
-                        bw.BaseStream.Position++;
-                        //bw.Write(glyph.LeftSide);
+                        bw.Write(glyph.LeftSide);
                         bw.Write(glyph.Baseline);
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Unk);
-                        //bw.Write(glyph.LeftSide);
-                        bw.BaseStream.Position++;
+                        bw.Write(glyph.LeftSide);
                         bw.Write(glyph.Height);
                         bw.Write(atlasOffset);
                         atlasOffset += glyph.PixelDataSize;

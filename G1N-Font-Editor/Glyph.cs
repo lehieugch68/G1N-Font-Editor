@@ -74,12 +74,13 @@ namespace G1N_Font_Editor
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
             ushort index;
             if (!characterMap.TryGetValue(Character, out index)) return _pixelData;
+            double xadv = glyphTypeface.AdvanceWidths[index];
             int width = (int)
                 Math.Ceiling(
                     (
                         glyphTypeface.AdvanceWidths[index]
-                        + Math.Abs(glyphTypeface.LeftSideBearings[index])
-                        + Math.Abs(glyphTypeface.RightSideBearings[index])
+                        + (xadv > 0 ? glyphTypeface.LeftSideBearings[index] : Math.Abs(glyphTypeface.LeftSideBearings[index]))
+                        + (xadv > 0 ? glyphTypeface.RightSideBearings[index] : Math.Abs(glyphTypeface.RightSideBearings[index]))
                     ) * font.Size
                 );
             while (width % 2 != 0 || width <= 0)
@@ -103,15 +104,7 @@ namespace G1N_Font_Editor
             while (height % 2 != 0 || height <= 0)
                 height++;
             var measureSize = FontHelper.MeasureSize(Character, font);
-            Bitmap bmp = null;
-            try
-            {
-                bmp = new Bitmap(width, height);
-            } catch (Exception ex )
-            {
-                MessageBox.Show($"{(int)Character} - {index} - {width} - {height}");
-            }
-            //Bitmap bmp = new Bitmap(width, height);
+            Bitmap bmp = new Bitmap(width, height);
             bmp.SetResolution(72, 72);
             int startX = (int)Math.Ceiling((width - measureSize.Width) / 2);
             int startY =
@@ -132,8 +125,8 @@ namespace G1N_Font_Editor
             Bmp = bmp;
             Width = (byte)Bmp.Width;
             Height = (byte)Bmp.Height;
-            XAdv = (byte)Bmp.Width;
-            LeftSide = (byte)(glyphTypeface.LeftSideBearings[index] * font.Size);
+            XAdv = xadv > 0 ? (byte)Bmp.Width : (byte)0;
+            LeftSide = xadv > 0 ? (byte)0 : (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
             Baseline = Height;
             _pixelData = Convert8BppTo4Bpp(Bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);

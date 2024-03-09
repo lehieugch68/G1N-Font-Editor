@@ -122,6 +122,9 @@
             // 
             // comboBoxOptFont
             // 
+            this.comboBoxOptFont.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBoxOptFont.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxOptFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptFont.FormattingEnabled = true;
             this.comboBoxOptFont.Location = new System.Drawing.Point(79, 137);
             this.comboBoxOptFont.Name = "comboBoxOptFont";

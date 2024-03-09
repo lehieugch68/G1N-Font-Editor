@@ -14,7 +14,7 @@ namespace G1N_Font_Editor
         public static Color DEFAULT_PICTURE_COLOR = SystemColors.ScrollBar;
         public static readonly string MESSAGEBOX_TITLE = "G1N Font Editor";
         public static Font TTF_FONT;
-        public static int DEFAULT_TTF_FONT_SIZE = 18;
+        public static int DEFAULT_TTF_FONT_SIZE = 36;
         public static int DEFAULT_TEX_WIDTH = 512;
         public static int DEFAULT_TEX_HEIGHT = 512;
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;

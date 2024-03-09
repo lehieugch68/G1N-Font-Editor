@@ -85,16 +85,18 @@ namespace G1N_Font_Editor
         }
         public void Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, char[] chars = null)
         {
-            char[] newChars = chars != null ? chars : Glyphs.Select(g => g.Character).ToArray();
-            foreach (var ch in newChars)
+            if (chars != null) 
             {
-                var glyph = Glyphs.Find(g => g.Character == ch);
-                if (glyph == null) 
-                { 
-                    glyph = new Glyph(ch);
-                    Glyphs.Add(glyph);
+                foreach (var ch in chars)
+                {
+                    var glyph = Glyphs.Find(g => g.Character == ch);
+                    if (glyph == null)
+                    {
+                        glyph = new Glyph(ch);
+                        Glyphs.Add(glyph);
+                    }
+
                 }
-                
             }
             foreach (var glyph in Glyphs)
             {
