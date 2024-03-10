@@ -106,8 +106,8 @@ namespace G1N_Font_Editor
         }
         public static class Constant
         {
-            public static readonly int MIN_WIDTH = 512;
-            public static readonly int MIN_HEIGHT = 512;
+            public static readonly int MIN_WIDTH = Global.DEFAULT_TEX_WIDTH;
+            public static readonly int MIN_HEIGHT = Global.DEFAULT_TEX_HEIGHT;
         }
     }
 }

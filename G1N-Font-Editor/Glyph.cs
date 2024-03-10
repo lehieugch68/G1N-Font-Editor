@@ -74,13 +74,13 @@ namespace G1N_Font_Editor
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
             ushort index;
             if (!characterMap.TryGetValue(Character, out index)) return _pixelData;
-            double xadv = glyphTypeface.AdvanceWidths[index];
+            //MessageBox.Show($"{glyphTypeface.AdvanceWidths[index]} / {glyphTypeface.LeftSideBearings[index]} / {glyphTypeface.RightSideBearings[index]}");
             int width = (int)
                 Math.Ceiling(
                     (
                         glyphTypeface.AdvanceWidths[index]
-                        + (xadv > 0 ? glyphTypeface.LeftSideBearings[index] : Math.Abs(glyphTypeface.LeftSideBearings[index]))
-                        + (xadv > 0 ? glyphTypeface.RightSideBearings[index] : Math.Abs(glyphTypeface.RightSideBearings[index]))
+                        + Math.Abs(glyphTypeface.LeftSideBearings[index])
+                        + Math.Abs(glyphTypeface.RightSideBearings[index])
                     ) * font.Size
                 );
             while (width % 2 != 0 || width <= 0)
@@ -125,9 +125,9 @@ namespace G1N_Font_Editor
             Bmp = bmp;
             Width = (byte)Bmp.Width;
             Height = (byte)Bmp.Height;
-            XAdv = xadv > 0 ? (byte)Bmp.Width : (byte)0;
-            LeftSide = xadv > 0 ? (byte)0 : (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
-            Baseline = Height;
+            XAdv = (byte)Math.Ceiling((glyphTypeface.AdvanceWidths[index] + (glyphTypeface.LeftSideBearings[index] > 0 ? glyphTypeface.LeftSideBearings[index] : 0)) * font.Size);
+            LeftSide = (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
+            Baseline = (byte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
             _pixelData = Convert8BppTo4Bpp(Bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);
             PixelDataSize = _pixelData.Length;

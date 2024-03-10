@@ -168,7 +168,7 @@ namespace G1N_Font_Editor
                         bw.Write(glyph.Height);
                         bw.Write(glyph.LeftSide);
                         bw.Write(glyph.Baseline);
-                        bw.Write(glyph.Width);
+                        bw.Write(glyph.XAdv);
                         bw.Write(glyph.Unk);
                         bw.Write(glyph.LeftSide);
                         bw.Write(glyph.Height);
