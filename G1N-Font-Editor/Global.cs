@@ -13,13 +13,15 @@ namespace G1N_Font_Editor
         public static G1N G1N_FILE;
         public static Color DEFAULT_PICTURE_COLOR = SystemColors.ScrollBar;
         public static readonly string MESSAGEBOX_TITLE = "G1N Font Editor";
-        public static Font TTF_FONT;
+        public static FontFamily TTF_FONT_FAMILY;
+        public static string TTF_FONT_FAMILY_NAME;
         public static int DEFAULT_TTF_FONT_SIZE = 36;
         public static int DEFAULT_TEX_WIDTH = 128;
         public static int DEFAULT_TEX_HEIGHT = 128;
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
-        public static readonly string G1N_FILE_FILTER = "G1N files (*.g1n)|*.g1n|All files (*.*)|*.*";
-        public static readonly string TXT_FILE_FILTER = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+        public static readonly string G1N_FILE_FILTER = "G1N Files (*.g1n)|*.g1n|All Files (*.*)|*.*";
+        public static readonly string TXT_FILE_FILTER = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+        public static readonly string FONT_FILE_FILTER = "Font Files (*.ttf)|*.ttf|All Files (*.*)|*.*";
         public static Dictionary<string, string> JSON_CONFIG;
         public static Dictionary<string, string> MESSAGEBOX_MESSAGES = new Dictionary<string, string>()
         {

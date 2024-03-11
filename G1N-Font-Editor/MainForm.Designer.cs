@@ -45,6 +45,8 @@
             this.labelCharsOpt = new System.Windows.Forms.Label();
             this.textBoxCharsOpt = new System.Windows.Forms.TextBox();
             this.buttonCharsFromFile = new System.Windows.Forms.Button();
+            this.textBoxOptFontPath = new System.Windows.Forms.TextBox();
+            this.buttonOptFontFromFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,7 +64,7 @@
             // 
             this.btnSelect.Location = new System.Drawing.Point(12, 28);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(75, 23);
+            this.btnSelect.Size = new System.Drawing.Size(70, 23);
             this.btnSelect.TabIndex = 1;
             this.btnSelect.Text = "Select";
             this.btnSelect.UseVisualStyleBackColor = true;
@@ -70,9 +72,10 @@
             // 
             // textBoxFilePath
             // 
-            this.textBoxFilePath.Location = new System.Drawing.Point(93, 30);
+            this.textBoxFilePath.Location = new System.Drawing.Point(88, 30);
             this.textBoxFilePath.Name = "textBoxFilePath";
-            this.textBoxFilePath.Size = new System.Drawing.Size(236, 20);
+            this.textBoxFilePath.ReadOnly = true;
+            this.textBoxFilePath.Size = new System.Drawing.Size(241, 20);
             this.textBoxFilePath.TabIndex = 2;
             // 
             // labelFilePath
@@ -126,16 +129,16 @@
             this.comboBoxOptFont.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxOptFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptFont.FormattingEnabled = true;
-            this.comboBoxOptFont.Location = new System.Drawing.Point(79, 137);
+            this.comboBoxOptFont.Location = new System.Drawing.Point(88, 137);
             this.comboBoxOptFont.Name = "comboBoxOptFont";
-            this.comboBoxOptFont.Size = new System.Drawing.Size(250, 21);
+            this.comboBoxOptFont.Size = new System.Drawing.Size(241, 21);
             this.comboBoxOptFont.TabIndex = 8;
             this.comboBoxOptFont.SelectedIndexChanged += new System.EventHandler(this.comboBoxOptFont_SelectedIndexChanged);
             // 
             // labelOptFontStyle
             // 
             this.labelOptFontStyle.AutoSize = true;
-            this.labelOptFontStyle.Location = new System.Drawing.Point(170, 175);
+            this.labelOptFontStyle.Location = new System.Drawing.Point(187, 198);
             this.labelOptFontStyle.Name = "labelOptFontStyle";
             this.labelOptFontStyle.Size = new System.Drawing.Size(36, 13);
             this.labelOptFontStyle.TabIndex = 64;
@@ -145,23 +148,23 @@
             // 
             this.comboBoxOptFontStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptFontStyle.FormattingEnabled = true;
-            this.comboBoxOptFontStyle.Location = new System.Drawing.Point(212, 172);
+            this.comboBoxOptFontStyle.Location = new System.Drawing.Point(229, 195);
             this.comboBoxOptFontStyle.Name = "comboBoxOptFontStyle";
-            this.comboBoxOptFontStyle.Size = new System.Drawing.Size(117, 21);
+            this.comboBoxOptFontStyle.Size = new System.Drawing.Size(100, 21);
             this.comboBoxOptFontStyle.TabIndex = 63;
             // 
             // textBoxOptFontSize
             // 
-            this.textBoxOptFontSize.Location = new System.Drawing.Point(79, 172);
+            this.textBoxOptFontSize.Location = new System.Drawing.Point(88, 195);
             this.textBoxOptFontSize.Name = "textBoxOptFontSize";
             this.textBoxOptFontSize.ShortcutsEnabled = false;
-            this.textBoxOptFontSize.Size = new System.Drawing.Size(85, 20);
+            this.textBoxOptFontSize.Size = new System.Drawing.Size(76, 20);
             this.textBoxOptFontSize.TabIndex = 62;
             // 
             // labelOptFontSize
             // 
             this.labelOptFontSize.AutoSize = true;
-            this.labelOptFontSize.Location = new System.Drawing.Point(12, 175);
+            this.labelOptFontSize.Location = new System.Drawing.Point(12, 198);
             this.labelOptFontSize.Name = "labelOptFontSize";
             this.labelOptFontSize.Size = new System.Drawing.Size(33, 13);
             this.labelOptFontSize.TabIndex = 61;
@@ -169,7 +172,7 @@
             // 
             // buttonBuild
             // 
-            this.buttonBuild.Location = new System.Drawing.Point(12, 265);
+            this.buttonBuild.Location = new System.Drawing.Point(12, 288);
             this.buttonBuild.Name = "buttonBuild";
             this.buttonBuild.Size = new System.Drawing.Size(317, 23);
             this.buttonBuild.TabIndex = 65;
@@ -180,7 +183,7 @@
             // labelCharsOpt
             // 
             this.labelCharsOpt.AutoSize = true;
-            this.labelCharsOpt.Location = new System.Drawing.Point(12, 210);
+            this.labelCharsOpt.Location = new System.Drawing.Point(12, 233);
             this.labelCharsOpt.Name = "labelCharsOpt";
             this.labelCharsOpt.Size = new System.Drawing.Size(61, 13);
             this.labelCharsOpt.TabIndex = 66;
@@ -188,26 +191,47 @@
             // 
             // textBoxCharsOpt
             // 
-            this.textBoxCharsOpt.Location = new System.Drawing.Point(79, 207);
+            this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 230);
+            this.textBoxCharsOpt.Multiline = true;
             this.textBoxCharsOpt.Name = "textBoxCharsOpt";
-            this.textBoxCharsOpt.Size = new System.Drawing.Size(250, 20);
+            this.textBoxCharsOpt.Size = new System.Drawing.Size(241, 20);
             this.textBoxCharsOpt.TabIndex = 67;
             // 
             // buttonCharsFromFile
             // 
-            this.buttonCharsFromFile.Location = new System.Drawing.Point(212, 233);
+            this.buttonCharsFromFile.Location = new System.Drawing.Point(229, 256);
             this.buttonCharsFromFile.Name = "buttonCharsFromFile";
-            this.buttonCharsFromFile.Size = new System.Drawing.Size(117, 23);
+            this.buttonCharsFromFile.Size = new System.Drawing.Size(100, 23);
             this.buttonCharsFromFile.TabIndex = 68;
             this.buttonCharsFromFile.Text = "Select File";
             this.buttonCharsFromFile.UseVisualStyleBackColor = true;
             this.buttonCharsFromFile.Click += new System.EventHandler(this.buttonCharsFromFile_Click);
+            // 
+            // textBoxOptFontPath
+            // 
+            this.textBoxOptFontPath.Location = new System.Drawing.Point(88, 164);
+            this.textBoxOptFontPath.Name = "textBoxOptFontPath";
+            this.textBoxOptFontPath.ReadOnly = true;
+            this.textBoxOptFontPath.Size = new System.Drawing.Size(241, 20);
+            this.textBoxOptFontPath.TabIndex = 70;
+            // 
+            // buttonOptFontFromFile
+            // 
+            this.buttonOptFontFromFile.Location = new System.Drawing.Point(12, 162);
+            this.buttonOptFontFromFile.Name = "buttonOptFontFromFile";
+            this.buttonOptFontFromFile.Size = new System.Drawing.Size(70, 23);
+            this.buttonOptFontFromFile.TabIndex = 69;
+            this.buttonOptFontFromFile.Text = "Select";
+            this.buttonOptFontFromFile.UseVisualStyleBackColor = true;
+            this.buttonOptFontFromFile.Click += new System.EventHandler(this.buttonOptFontFromFile_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 541);
+            this.Controls.Add(this.textBoxOptFontPath);
+            this.Controls.Add(this.buttonOptFontFromFile);
             this.Controls.Add(this.buttonCharsFromFile);
             this.Controls.Add(this.textBoxCharsOpt);
             this.Controls.Add(this.labelCharsOpt);
@@ -254,6 +278,8 @@
         private System.Windows.Forms.Label labelCharsOpt;
         private System.Windows.Forms.TextBox textBoxCharsOpt;
         private System.Windows.Forms.Button buttonCharsFromFile;
+        private System.Windows.Forms.TextBox textBoxOptFontPath;
+        private System.Windows.Forms.Button buttonOptFontFromFile;
     }
 }
 

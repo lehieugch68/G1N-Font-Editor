@@ -125,7 +125,7 @@ namespace G1N_Font_Editor
             Bmp = bmp;
             Width = (byte)Bmp.Width;
             Height = (byte)Bmp.Height;
-            XAdv = (byte)Math.Ceiling((glyphTypeface.AdvanceWidths[index] + (glyphTypeface.LeftSideBearings[index] > 0 ? glyphTypeface.LeftSideBearings[index] : 0)) * font.Size);
+            XAdv = (byte)Math.Ceiling(glyphTypeface.AdvanceWidths[index] * font.Size);
             LeftSide = (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
             Baseline = (byte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
             _pixelData = Convert8BppTo4Bpp(Bmp);
