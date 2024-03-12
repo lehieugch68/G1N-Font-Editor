@@ -69,12 +69,11 @@ namespace G1N_Font_Editor
             }
             return Bmp;
         }
-        public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font)
+        public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, Brush brush)
         {
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
             ushort index;
             if (!characterMap.TryGetValue(Character, out index)) return _pixelData;
-            //MessageBox.Show($"{glyphTypeface.AdvanceWidths[index]} / {glyphTypeface.LeftSideBearings[index]} / {glyphTypeface.RightSideBearings[index]}");
             int width = (int)
                 Math.Ceiling(
                     (
@@ -120,7 +119,7 @@ namespace G1N_Font_Editor
                     (int)measureSize.Width,
                     (int)measureSize.Height
                 );
-                g.DrawString(Character.ToString(), font, Brushes.White, rect);
+                g.DrawString(Character.ToString(), font, brush, rect);
             }
             Bmp = bmp;
             Width = (byte)Bmp.Width;

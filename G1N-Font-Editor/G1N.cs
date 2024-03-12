@@ -16,25 +16,15 @@ namespace G1N_Font_Editor
         public int Unk { get; set; }
         public int AtlasOffset { get; set; }
         public int PaletteCount { get; set; }
-        public List<Color[]> Palettes { get; set; }
         public int TableCount { get; set; }
         public int[] TableOffsets { get; set; }
         public List<GlyphTable> GlyphTables { get; set; }
         public string RootFile { get; set; }
         public byte[] RawData { get; set; }
-        public Dictionary<int, GlyphConstant> GlyphConstants { get; set; }
         private struct CharID
         {
             public int CharCode { get; set; }
             public char Character { get; set; }
-        }
-        public class GlyphConstant
-        {
-            public sbyte Unk { get; set; }
-            public GlyphConstant(sbyte unk)
-            {
-                Unk = unk;
-            }
         }
         public G1N(string input)
         {
@@ -56,8 +46,7 @@ namespace G1N_Font_Editor
             TableCount = br.ReadInt32();
             TableOffsets = new int[TableCount];
             GlyphTables = new List<GlyphTable>();
-            GlyphConstants = new Dictionary<int, GlyphConstant>();
-            Palettes = new List<Color[]>();
+            var palettes = new List<Color[]>();
             for (int i = 0; i < TableCount; i++)
             {
                 TableOffsets[i] = br.ReadInt32();
@@ -69,12 +58,13 @@ namespace G1N_Font_Editor
                 {
                     colors.Add(Color.FromArgb(br.ReadInt32()));
                 }
-                Palettes.Add(colors.ToArray());
+                palettes.Add(colors.ToArray());
             }
             for (int i = 0; i < TableCount; i++)
             {
                 int offset = TableOffsets[i];
                 var table = new GlyphTable(i, offset);
+                table.Palettes = palettes[i];
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0xFFFF];
@@ -101,7 +91,6 @@ namespace G1N_Font_Editor
                     int pixelDataOffset = br.ReadInt32();
                     int pixelDataSize = 0;
                     long temp = br.BaseStream.Position;
-                    if (!GlyphConstants.ContainsKey(i)) GlyphConstants.Add(i, new GlyphConstant(unk));
                     if (j >= charCount - 1)
                     {
                         int nextOffset = 0;
@@ -127,7 +116,7 @@ namespace G1N_Font_Editor
                 GlyphTables.Add(table);
             }
         }
-        public byte[] Build()
+        public byte[] Build(GlyphCustomValue glyphCustomValue)
         {
             MemoryStream ms = new MemoryStream();
             using (var bw = new BinaryWriter(ms))
@@ -142,9 +131,9 @@ namespace G1N_Font_Editor
                 long tablePointerOffset = bw.BaseStream.Position;
                 int[] tablePointer = new int[TableCount];
                 bw.BaseStream.Position += PaletteCount * 4;
-                for (int i = 0; i < PaletteCount; i++)
+                foreach (var table in GlyphTables)
                 {
-                    foreach (var color in Palettes[i]) bw.Write(color.ToArgb());
+                    foreach (var color in table.Palettes) bw.Write(color.ToArgb());
                 }
                 int atlasOffset = 0;
                 for (int i = 0; i < TableCount; i++)
@@ -166,11 +155,11 @@ namespace G1N_Font_Editor
                         if (glyph == null) continue;
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Height);
-                        bw.Write(glyph.LeftSide);
-                        bw.Write(glyph.Baseline);
-                        bw.Write(glyph.XAdv);
+                        bw.Write((byte)(glyph.LeftSide + glyphCustomValue.AddCustomLeftSide));
+                        bw.Write((byte)(glyph.Baseline + glyphCustomValue.AddCustomBaseLine));
+                        bw.Write((byte)(glyph.XAdv + glyphCustomValue.AddCustomAdvWidth));
                         bw.Write(glyph.Unk);
-                        bw.Write(glyph.LeftSide);
+                        bw.Write((byte)(glyph.LeftSide + glyphCustomValue.AddCustomLeftSide));
                         bw.Write(glyph.Height);
                         bw.Write(atlasOffset);
                         atlasOffset += glyph.PixelDataSize;

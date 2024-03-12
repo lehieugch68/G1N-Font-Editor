@@ -47,11 +47,25 @@
             this.buttonCharsFromFile = new System.Windows.Forms.Button();
             this.textBoxOptFontPath = new System.Windows.Forms.TextBox();
             this.buttonOptFontFromFile = new System.Windows.Forms.Button();
+            this.labelGlyphOpt = new System.Windows.Forms.Label();
+            this.labelOptBaseline = new System.Windows.Forms.Label();
+            this.textBoxOptBaseline = new System.Windows.Forms.TextBox();
+            this.textBoxOptLeftSide = new System.Windows.Forms.TextBox();
+            this.labelOptLeftSide = new System.Windows.Forms.Label();
+            this.textBoxOptAdvWidth = new System.Windows.Forms.TextBox();
+            this.labelOptAdvWidth = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxOptPalette = new System.Windows.Forms.PictureBox();
+            this.buttonSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
+            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.pictureBox.Location = new System.Drawing.Point(340, 12);
             this.pictureBox.Name = "pictureBox";
@@ -110,9 +124,9 @@
             this.labelBuildOptions.AutoSize = true;
             this.labelBuildOptions.Location = new System.Drawing.Point(12, 115);
             this.labelBuildOptions.Name = "labelBuildOptions";
-            this.labelBuildOptions.Size = new System.Drawing.Size(69, 13);
+            this.labelBuildOptions.Size = new System.Drawing.Size(67, 13);
             this.labelBuildOptions.TabIndex = 6;
-            this.labelBuildOptions.Text = "Build Options";
+            this.labelBuildOptions.Text = "Font Options";
             // 
             // labelOptFont
             // 
@@ -158,7 +172,7 @@
             this.textBoxOptFontSize.Location = new System.Drawing.Point(88, 195);
             this.textBoxOptFontSize.Name = "textBoxOptFontSize";
             this.textBoxOptFontSize.ShortcutsEnabled = false;
-            this.textBoxOptFontSize.Size = new System.Drawing.Size(76, 20);
+            this.textBoxOptFontSize.Size = new System.Drawing.Size(80, 20);
             this.textBoxOptFontSize.TabIndex = 62;
             // 
             // labelOptFontSize
@@ -172,7 +186,7 @@
             // 
             // buttonBuild
             // 
-            this.buttonBuild.Location = new System.Drawing.Point(12, 288);
+            this.buttonBuild.Location = new System.Drawing.Point(12, 475);
             this.buttonBuild.Name = "buttonBuild";
             this.buttonBuild.Size = new System.Drawing.Size(317, 23);
             this.buttonBuild.TabIndex = 65;
@@ -183,7 +197,7 @@
             // labelCharsOpt
             // 
             this.labelCharsOpt.AutoSize = true;
-            this.labelCharsOpt.Location = new System.Drawing.Point(12, 233);
+            this.labelCharsOpt.Location = new System.Drawing.Point(12, 230);
             this.labelCharsOpt.Name = "labelCharsOpt";
             this.labelCharsOpt.Size = new System.Drawing.Size(61, 13);
             this.labelCharsOpt.TabIndex = 66;
@@ -191,7 +205,7 @@
             // 
             // textBoxCharsOpt
             // 
-            this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 230);
+            this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 227);
             this.textBoxCharsOpt.Multiline = true;
             this.textBoxCharsOpt.Name = "textBoxCharsOpt";
             this.textBoxCharsOpt.Size = new System.Drawing.Size(241, 20);
@@ -199,7 +213,7 @@
             // 
             // buttonCharsFromFile
             // 
-            this.buttonCharsFromFile.Location = new System.Drawing.Point(229, 256);
+            this.buttonCharsFromFile.Location = new System.Drawing.Point(229, 255);
             this.buttonCharsFromFile.Name = "buttonCharsFromFile";
             this.buttonCharsFromFile.Size = new System.Drawing.Size(100, 23);
             this.buttonCharsFromFile.TabIndex = 68;
@@ -225,11 +239,111 @@
             this.buttonOptFontFromFile.UseVisualStyleBackColor = true;
             this.buttonOptFontFromFile.Click += new System.EventHandler(this.buttonOptFontFromFile_Click);
             // 
+            // labelGlyphOpt
+            // 
+            this.labelGlyphOpt.AutoSize = true;
+            this.labelGlyphOpt.Location = new System.Drawing.Point(12, 275);
+            this.labelGlyphOpt.Name = "labelGlyphOpt";
+            this.labelGlyphOpt.Size = new System.Drawing.Size(73, 13);
+            this.labelGlyphOpt.TabIndex = 71;
+            this.labelGlyphOpt.Text = "Glyph Options";
+            // 
+            // labelOptBaseline
+            // 
+            this.labelOptBaseline.AutoSize = true;
+            this.labelOptBaseline.Location = new System.Drawing.Point(12, 300);
+            this.labelOptBaseline.Name = "labelOptBaseline";
+            this.labelOptBaseline.Size = new System.Drawing.Size(110, 13);
+            this.labelOptBaseline.TabIndex = 72;
+            this.labelOptBaseline.Text = "Add Custom Baseline:";
+            // 
+            // textBoxOptBaseline
+            // 
+            this.textBoxOptBaseline.Location = new System.Drawing.Point(169, 297);
+            this.textBoxOptBaseline.Name = "textBoxOptBaseline";
+            this.textBoxOptBaseline.ShortcutsEnabled = false;
+            this.textBoxOptBaseline.Size = new System.Drawing.Size(160, 20);
+            this.textBoxOptBaseline.TabIndex = 73;
+            // 
+            // textBoxOptLeftSide
+            // 
+            this.textBoxOptLeftSide.Location = new System.Drawing.Point(169, 323);
+            this.textBoxOptLeftSide.Name = "textBoxOptLeftSide";
+            this.textBoxOptLeftSide.ShortcutsEnabled = false;
+            this.textBoxOptLeftSide.Size = new System.Drawing.Size(160, 20);
+            this.textBoxOptLeftSide.TabIndex = 75;
+            // 
+            // labelOptLeftSide
+            // 
+            this.labelOptLeftSide.AutoSize = true;
+            this.labelOptLeftSide.Location = new System.Drawing.Point(12, 326);
+            this.labelOptLeftSide.Name = "labelOptLeftSide";
+            this.labelOptLeftSide.Size = new System.Drawing.Size(109, 13);
+            this.labelOptLeftSide.TabIndex = 74;
+            this.labelOptLeftSide.Text = "Add Custom LeftSide:";
+            // 
+            // textBoxOptAdvWidth
+            // 
+            this.textBoxOptAdvWidth.Location = new System.Drawing.Point(169, 349);
+            this.textBoxOptAdvWidth.Name = "textBoxOptAdvWidth";
+            this.textBoxOptAdvWidth.ShortcutsEnabled = false;
+            this.textBoxOptAdvWidth.Size = new System.Drawing.Size(160, 20);
+            this.textBoxOptAdvWidth.TabIndex = 77;
+            // 
+            // labelOptAdvWidth
+            // 
+            this.labelOptAdvWidth.AutoSize = true;
+            this.labelOptAdvWidth.Location = new System.Drawing.Point(12, 352);
+            this.labelOptAdvWidth.Name = "labelOptAdvWidth";
+            this.labelOptAdvWidth.Size = new System.Drawing.Size(141, 13);
+            this.labelOptAdvWidth.TabIndex = 76;
+            this.labelOptAdvWidth.Text = "Add Custom AdvanceWidth:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 385);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 78;
+            this.label1.Text = "Palettes";
+            // 
+            // pictureBoxOptPalette
+            // 
+            this.pictureBoxOptPalette.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.pictureBoxOptPalette.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 405);
+            this.pictureBoxOptPalette.Name = "pictureBoxOptPalette";
+            this.pictureBoxOptPalette.Size = new System.Drawing.Size(317, 40);
+            this.pictureBoxOptPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxOptPalette.TabIndex = 79;
+            this.pictureBoxOptPalette.TabStop = false;
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(12, 501);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(317, 23);
+            this.buttonSave.TabIndex = 80;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 541);
+            this.Controls.Add(this.buttonSave);
+            this.Controls.Add(this.pictureBoxOptPalette);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBoxOptAdvWidth);
+            this.Controls.Add(this.labelOptAdvWidth);
+            this.Controls.Add(this.textBoxOptLeftSide);
+            this.Controls.Add(this.labelOptLeftSide);
+            this.Controls.Add(this.textBoxOptBaseline);
+            this.Controls.Add(this.labelOptBaseline);
+            this.Controls.Add(this.labelGlyphOpt);
             this.Controls.Add(this.textBoxOptFontPath);
             this.Controls.Add(this.buttonOptFontFromFile);
             this.Controls.Add(this.buttonCharsFromFile);
@@ -254,6 +368,7 @@
             this.Text = "G1N Font Editor by LeHieu - VietHoaGame";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -280,6 +395,16 @@
         private System.Windows.Forms.Button buttonCharsFromFile;
         private System.Windows.Forms.TextBox textBoxOptFontPath;
         private System.Windows.Forms.Button buttonOptFontFromFile;
+        private System.Windows.Forms.Label labelGlyphOpt;
+        private System.Windows.Forms.Label labelOptBaseline;
+        private System.Windows.Forms.TextBox textBoxOptBaseline;
+        private System.Windows.Forms.TextBox textBoxOptLeftSide;
+        private System.Windows.Forms.Label labelOptLeftSide;
+        private System.Windows.Forms.TextBox textBoxOptAdvWidth;
+        private System.Windows.Forms.Label labelOptAdvWidth;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pictureBoxOptPalette;
+        private System.Windows.Forms.Button buttonSave;
     }
 }
 

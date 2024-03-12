@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Text;
-using System.Collections.ObjectModel;
 
 namespace G1N_Font_Editor
 {
@@ -72,7 +71,7 @@ namespace G1N_Font_Editor
                     catch (Exception ex)
                     {
                         Global.IS_BUSY = false;
-                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                        MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
                     }
                 }).GetAwaiter().OnCompleted(() =>
                 {
@@ -96,11 +95,17 @@ namespace G1N_Font_Editor
                     try
                     {
                         var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
-                        Bitmap bmp = glyphTable.GetBitmap();
+                        Bitmap texPic = glyphTable.GetTablePreview();
                         pictureBox.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBox.BackColor = Color.Black;
-                            pictureBox.Image = bmp;
+                            pictureBox.Image = texPic;
+                        });
+                        Bitmap palettePic = glyphTable.GetPalettePreview();
+                        pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBoxOptPalette.BackColor = Color.Transparent;
+                            pictureBoxOptPalette.Image = palettePic;
                         });
                     }
                     catch (Exception ex)
@@ -161,6 +166,11 @@ namespace G1N_Font_Editor
                 var fontSize = int.Parse(textBoxOptFontSize.Text);
                 var fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
                 var chars = textBoxCharsOpt.Text.ToCharArray();
+                int addCustomBaseLine = 0, addCustomLeftSide = 0, addCustomAdvWidth = 0;
+                int.TryParse(textBoxOptBaseline.Text, out addCustomBaseLine);
+                int.TryParse(textBoxOptLeftSide.Text, out addCustomLeftSide);
+                int.TryParse(textBoxOptAdvWidth.Text, out addCustomAdvWidth);
+                var glyphCustomValue = new GlyphCustomValue(addCustomBaseLine, addCustomLeftSide, addCustomAdvWidth);
                 Task.Run(() =>
                 {
                     try
@@ -169,15 +179,19 @@ namespace G1N_Font_Editor
                         var font = new Font(Global.TTF_FONT_FAMILY, fontSize, fontStyle);
                         var glyphTable = Global.G1N_FILE.GlyphTables.Find(table => table.Index == fontId);
                         glyphTable.Build(glyphTypeface, font, chars);
-                        var newData = Global.G1N_FILE.Build();
-                        //
-                        File.WriteAllBytes("test.g1n", newData);
-                        glyphTable.ReloadBitmap();
-                        Bitmap bmp = glyphTable.GetBitmap();
+                        var newData = Global.G1N_FILE.Build(glyphCustomValue);
+                        glyphTable.ReloadTablePreview();
+                        Bitmap texPic = glyphTable.GetTablePreview();
                         pictureBox.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBox.BackColor = Color.Black;
-                            pictureBox.Image = bmp;
+                            pictureBox.Image = texPic;
+                        });
+                        Bitmap palettePic = glyphTable.GetPalettePreview();
+                        pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBoxOptPalette.BackColor = Color.Transparent;
+                            pictureBoxOptPalette.Image = palettePic;
                         });
 
                     }
@@ -266,6 +280,22 @@ namespace G1N_Font_Editor
                 }
             });
             
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            string filePath = Utils.SaveFile("", Global.G1N_FILE_FILTER);
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                try
+                {
+                    File.WriteAllBytes(filePath, Global.G1N_FILE.RawData);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                }
+            }
         }
     }
 }

@@ -18,6 +18,8 @@ namespace G1N_Font_Editor
         public static int DEFAULT_TTF_FONT_SIZE = 36;
         public static int DEFAULT_TEX_WIDTH = 128;
         public static int DEFAULT_TEX_HEIGHT = 128;
+        public static int DEFAULT_PALETTE_PICTURE_WIDTH = 320;
+        public static int DEFAULT_PALETTE_PICTURE_HEIGHT = 40;
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string G1N_FILE_FILTER = "G1N Files (*.g1n)|*.g1n|All Files (*.*)|*.*";
         public static readonly string TXT_FILE_FILTER = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";

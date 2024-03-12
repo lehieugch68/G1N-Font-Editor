@@ -18,6 +18,18 @@ namespace G1N_Font_Editor
             return Text;
         }
     }
+    public class GlyphCustomValue
+    {
+        public int AddCustomBaseLine { get; set; }
+        public int AddCustomLeftSide { get; set; }
+        public int AddCustomAdvWidth { get; set; }
+        public GlyphCustomValue(int addCustomBaseLine, int addCustomLeftSide, int addCustomAdvWidth)
+        {
+            AddCustomBaseLine = addCustomBaseLine;
+            AddCustomLeftSide = addCustomLeftSide;
+            AddCustomAdvWidth = addCustomAdvWidth;
+        }
+    }
     public class Utils
     {
         public static string FolderBrowser(string filename)

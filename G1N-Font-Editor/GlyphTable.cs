@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
+using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {
@@ -13,15 +14,18 @@ namespace G1N_Font_Editor
         public int Index { get; set; }
         public int Offset { get; set; }
         public List<Glyph> Glyphs { get; set; }
-        private Bitmap _bmpPreview;
-        public Bitmap BmpPreview { get { return _bmpPreview; } }
+        private Bitmap _tablePreview;
+        public Bitmap TablePreview { get { return _tablePreview; } }
+        public Color[] Palettes { get; set; }
+        private Bitmap _palettePreview;
+        public Bitmap PalettePreview { get { return _palettePreview; } }
         public GlyphTable(int index, int offset)
         {
             Index = index;
             Offset = offset;
             Glyphs = new List<Glyph>();
         }
-        public Bitmap ReloadBitmap(int padx = 4, int pady = 4)
+        public Bitmap ReloadTablePreview(int padx = 4, int pady = 4)
         {
             int width = Constant.MIN_WIDTH;
             int height = Constant.MIN_HEIGHT;
@@ -44,16 +48,45 @@ namespace G1N_Font_Editor
                     }
                 }
             }
-            _bmpPreview = result;
+            _tablePreview = result;
             return result;
         }
-        public Bitmap GetBitmap()
+        public Bitmap GetTablePreview()
         {
-            if (_bmpPreview != null)
+            if (_tablePreview != null)
             {
-                return _bmpPreview;
+                return _tablePreview;
             }
-            return ReloadBitmap();
+            return ReloadTablePreview();
+        }
+        public Bitmap ReloadPalettePreview()
+        {
+            int width = Constant.PALETTE_PICTURE_WIDTH;
+            int height = Constant.PALETTE_PICTURE_HEIGHT;
+            Bitmap result = new Bitmap(width, height);
+            var colorWidth = width / Palettes.Length;
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                for (int i = 0; i < Palettes.Length; i++)
+                {
+                    var rect = new Rectangle(colorWidth * i, 0, colorWidth, height);
+                    using (Brush brush = new SolidBrush(Palettes[i]))
+                    {
+                        g.FillRectangle(brush, rect);
+                    }
+                    
+                }
+            }
+            _palettePreview = result;
+            return result;
+        }
+        public Bitmap GetPalettePreview()
+        {
+            if (_palettePreview != null)
+            {
+                return _palettePreview;
+            }
+            return ReloadPalettePreview();
         }
         private bool MeasureBitmapSizeFromGlyphs(List<Glyph> glyphs, int padx, int pady, ref int width, ref int height)
         {
@@ -98,9 +131,10 @@ namespace G1N_Font_Editor
 
                 }
             }
+            Brush brush = new SolidBrush(Palettes.Last());
             foreach (var glyph in Glyphs)
             {
-                glyph.Build(glyphTypeface, font);
+                glyph.Build(glyphTypeface, font, brush);
             }
             Glyphs = Glyphs.OrderBy(g => g.Character).ToList();
         }
@@ -108,6 +142,8 @@ namespace G1N_Font_Editor
         {
             public static readonly int MIN_WIDTH = Global.DEFAULT_TEX_WIDTH;
             public static readonly int MIN_HEIGHT = Global.DEFAULT_TEX_HEIGHT;
+            public static readonly int PALETTE_PICTURE_WIDTH = Global.DEFAULT_PALETTE_PICTURE_WIDTH;
+            public static readonly int PALETTE_PICTURE_HEIGHT = Global.DEFAULT_PALETTE_PICTURE_HEIGHT;
         }
     }
 }
