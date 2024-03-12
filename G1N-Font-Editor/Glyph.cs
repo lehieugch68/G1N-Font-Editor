@@ -24,7 +24,7 @@ namespace G1N_Font_Editor
         public long PixelDataPointer { get; set; }
         private byte[] _pixelData;
         public byte[] PixelData { get { return _pixelData; } }
-        private Bitmap Bmp;
+        private Bitmap _bmp;
         public Rectangle Rect;
         public Rectangle BoxRect;
         public Glyph(int charCode, char character, byte width, byte height, byte leftSide, byte baseline, byte xadv, sbyte unk, int dataOffset, int pixelDataSize, byte[] pixelData)
@@ -50,24 +50,30 @@ namespace G1N_Font_Editor
         }
         public Bitmap GetBitmap()
         {
-            if (Bmp != null)
+            if (_bmp != null)
             {
-                return Bmp;
+                return _bmp;
             }
             int index = 0;
             var convertedData = Convert4BppTo8Bpp(_pixelData);
             int imgWidth = Width % 2 == 0 ? Width : Width + 1;
-            Bmp = new Bitmap(imgWidth, Height);
-            for (int y = 0; y < Bmp.Height; y++)
+            _bmp = new Bitmap(imgWidth, Height);
+            for (int y = 0; y < _bmp.Height; y++)
             {
-                for (int x = 0; x < Bmp.Width; x++)
+                for (int x = 0; x < _bmp.Width; x++)
                 {
                     var pixel = convertedData[index++];
                     var color = Color.FromArgb(pixel << 0x18 | pixel << 0x10 | pixel << 8 | pixel);
-                    Bmp.SetPixel(x, y, color);
+                    _bmp.SetPixel(x, y, color);
                 }
             }
-            return Bmp;
+            return _bmp;
+        }
+        public Bitmap SetBimap(Bitmap bmp)
+        {
+            _bmp = bmp;
+            _pixelData = Convert8BppTo4Bpp(_bmp);
+            return _bmp;
         }
         public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, Brush brush)
         {
@@ -121,13 +127,13 @@ namespace G1N_Font_Editor
                 );
                 g.DrawString(Character.ToString(), font, brush, rect);
             }
-            Bmp = bmp;
-            Width = (byte)Bmp.Width;
-            Height = (byte)Bmp.Height;
+            _bmp = bmp;
+            Width = (byte)_bmp.Width;
+            Height = (byte)_bmp.Height;
             XAdv = (byte)Math.Ceiling(glyphTypeface.AdvanceWidths[index] * font.Size);
             LeftSide = (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
             Baseline = (byte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
-            _pixelData = Convert8BppTo4Bpp(Bmp);
+            _pixelData = Convert8BppTo4Bpp(_bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);
             PixelDataSize = _pixelData.Length;
             return _pixelData;

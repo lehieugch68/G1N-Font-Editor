@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Text;
+using System.Drawing.Imaging;
 
 namespace G1N_Font_Editor
 {
@@ -17,6 +18,7 @@ namespace G1N_Font_Editor
         public MainForm()
         {
             InitializeComponent();
+            contextMenuGlyph.Items.Insert(0, new ToolStripLabel(Global.LABEL_NOT_AVAILABLE));
         }
 
         private void LoadSytemFonts()
@@ -166,11 +168,6 @@ namespace G1N_Font_Editor
                 var fontSize = int.Parse(textBoxOptFontSize.Text);
                 var fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
                 var chars = textBoxCharsOpt.Text.ToCharArray();
-                int addCustomBaseLine = 0, addCustomLeftSide = 0, addCustomAdvWidth = 0;
-                int.TryParse(textBoxOptBaseline.Text, out addCustomBaseLine);
-                int.TryParse(textBoxOptLeftSide.Text, out addCustomLeftSide);
-                int.TryParse(textBoxOptAdvWidth.Text, out addCustomAdvWidth);
-                var glyphCustomValue = new GlyphCustomValue(addCustomBaseLine, addCustomLeftSide, addCustomAdvWidth);
                 Task.Run(() =>
                 {
                     try
@@ -179,7 +176,6 @@ namespace G1N_Font_Editor
                         var font = new Font(Global.TTF_FONT_FAMILY, fontSize, fontStyle);
                         var glyphTable = Global.G1N_FILE.GlyphTables.Find(table => table.Index == fontId);
                         glyphTable.Build(glyphTypeface, font, chars);
-                        var newData = Global.G1N_FILE.Build(glyphCustomValue);
                         glyphTable.ReloadTablePreview();
                         Bitmap texPic = glyphTable.GetTablePreview();
                         pictureBox.BeginInvoke((MethodInvoker)delegate
@@ -284,12 +280,118 @@ namespace G1N_Font_Editor
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            string filePath = Utils.SaveFile("", Global.G1N_FILE_FILTER);
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                string filePath = Utils.SaveFile("", Global.G1N_FILE_FILTER);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    Global.IS_BUSY = true;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            int addCustomBaseLine = 0, addCustomLeftSide = 0, addCustomAdvWidth = 0;
+                            int.TryParse(textBoxOptBaseline.Text, out addCustomBaseLine);
+                            int.TryParse(textBoxOptLeftSide.Text, out addCustomLeftSide);
+                            int.TryParse(textBoxOptAdvWidth.Text, out addCustomAdvWidth);
+                            var glyphCustomValue = new GlyphCustomValue(addCustomBaseLine, addCustomLeftSide, addCustomAdvWidth);
+                            var result = Global.G1N_FILE.Build(glyphCustomValue);
+                            File.WriteAllBytes(filePath, Global.G1N_FILE.RawData);
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.IS_BUSY = false;
+                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                    });
+
+                }
+            }
+        }
+
+        private void pictureBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right || Global.G1N_FILE == null || pictureBox.Image == null) return;
+            try
+            {
+                var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == comboBoxFont.SelectedIndex);
+                var scaleX = (float)pictureBox.Width / (float)table.TablePreview.Width;
+                var scaleY = (float)pictureBox.Height / (float)table.TablePreview.Height;
+                var point = new Point((int)(e.X / scaleX), (int)(e.Y / scaleY));
+                var glyph = table.Glyphs.Find(g => g.Rect.Contains(point));
+                if (glyph == null) return;
+                Global.CONTEXT_MENU_SELECTED_GLYPH = glyph;
+                contextMenuGlyph.Items[0].Text = $"{glyph.Character} ({glyph.CharCode})";
+                contextMenuGlyph.Show(Cursor.Position);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+            }
+        }
+
+        private void toolStripMenuGlyphImport_Click(object sender, EventArgs e)
+        {
+            if (Global.CONTEXT_MENU_SELECTED_GLYPH == null) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                string filePath = Utils.FileBrowser("", Global.IMAGE_FILE_FILTER);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    Global.IS_BUSY = true;
+                    var tableIndex = comboBoxFont.SelectedIndex;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            var bmp = new Bitmap(filePath);
+                            var currBmp = Global.CONTEXT_MENU_SELECTED_GLYPH.GetBitmap();
+                            int currX = currBmp.Width, 
+                                currY = currBmp.Height;
+                            Global.CONTEXT_MENU_SELECTED_GLYPH.SetBimap(bmp);
+                            var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == tableIndex);
+                            Bitmap texPic = table.ReloadTablePreview(bmp.Width != currX || bmp.Height != currY);
+                            pictureBox.BeginInvoke((MethodInvoker)delegate
+                            {
+                                pictureBox.BackColor = Color.Black;
+                                pictureBox.Image = texPic;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.IS_BUSY = false;
+                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                    });
+
+                }
+            }
+        }
+
+        private void toolStripMenuGlyphExport_Click(object sender, EventArgs e)
+        {
+            if (Global.CONTEXT_MENU_SELECTED_GLYPH == null) return;
+            string filePath = Utils.SaveFile("", Global.PNG_FILE_FILTER);
             if (!string.IsNullOrEmpty(filePath))
             {
                 try
                 {
-                    File.WriteAllBytes(filePath, Global.G1N_FILE.RawData);
+                    var bmp = Global.CONTEXT_MENU_SELECTED_GLYPH.GetBitmap();
+                    bmp.Save(filePath, ImageFormat.Png);
                 }
                 catch (Exception ex)
                 {

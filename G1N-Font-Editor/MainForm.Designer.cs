@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.btnSelect = new System.Windows.Forms.Button();
             this.textBoxFilePath = new System.Windows.Forms.TextBox();
@@ -57,8 +58,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBoxOptPalette = new System.Windows.Forms.PictureBox();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripGlyphSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuGlyphMetrics = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
+            this.contextMenuGlyph.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -73,6 +80,7 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseClick);
             // 
             // btnSelect
             // 
@@ -190,7 +198,7 @@
             this.buttonBuild.Name = "buttonBuild";
             this.buttonBuild.Size = new System.Drawing.Size(317, 23);
             this.buttonBuild.TabIndex = 65;
-            this.buttonBuild.Text = "Build";
+            this.buttonBuild.Text = "Build From TrueType Font";
             this.buttonBuild.UseVisualStyleBackColor = true;
             this.buttonBuild.Click += new System.EventHandler(this.buttonBuild_Click);
             // 
@@ -199,9 +207,9 @@
             this.labelCharsOpt.AutoSize = true;
             this.labelCharsOpt.Location = new System.Drawing.Point(12, 230);
             this.labelCharsOpt.Name = "labelCharsOpt";
-            this.labelCharsOpt.Size = new System.Drawing.Size(61, 13);
+            this.labelCharsOpt.Size = new System.Drawing.Size(59, 13);
             this.labelCharsOpt.TabIndex = 66;
-            this.labelCharsOpt.Text = "Characters:";
+            this.labelCharsOpt.Text = "Add Chars:";
             // 
             // textBoxCharsOpt
             // 
@@ -213,11 +221,11 @@
             // 
             // buttonCharsFromFile
             // 
-            this.buttonCharsFromFile.Location = new System.Drawing.Point(229, 255);
+            this.buttonCharsFromFile.Location = new System.Drawing.Point(199, 253);
             this.buttonCharsFromFile.Name = "buttonCharsFromFile";
-            this.buttonCharsFromFile.Size = new System.Drawing.Size(100, 23);
+            this.buttonCharsFromFile.Size = new System.Drawing.Size(130, 23);
             this.buttonCharsFromFile.TabIndex = 68;
-            this.buttonCharsFromFile.Text = "Select File";
+            this.buttonCharsFromFile.Text = "Select Chars From File";
             this.buttonCharsFromFile.UseVisualStyleBackColor = true;
             this.buttonCharsFromFile.Click += new System.EventHandler(this.buttonCharsFromFile_Click);
             // 
@@ -302,7 +310,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 385);
+            this.label1.Location = new System.Drawing.Point(12, 380);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 78;
@@ -312,7 +320,7 @@
             // 
             this.pictureBoxOptPalette.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.pictureBoxOptPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 405);
+            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 400);
             this.pictureBoxOptPalette.Name = "pictureBoxOptPalette";
             this.pictureBoxOptPalette.Size = new System.Drawing.Size(317, 40);
             this.pictureBoxOptPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -325,9 +333,44 @@
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(317, 23);
             this.buttonSave.TabIndex = 80;
-            this.buttonSave.Text = "Save";
+            this.buttonSave.Text = "Save As G1N";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // contextMenuGlyph
+            // 
+            this.contextMenuGlyph.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripGlyphSeparator,
+            this.toolStripMenuGlyphImport,
+            this.toolStripMenuGlyphExport,
+            this.toolStripMenuGlyphMetrics});
+            this.contextMenuGlyph.Name = "contextMenuGlyph";
+            this.contextMenuGlyph.Size = new System.Drawing.Size(114, 76);
+            // 
+            // toolStripMenuGlyphExport
+            // 
+            this.toolStripMenuGlyphExport.Name = "toolStripMenuGlyphExport";
+            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphExport.Text = "Export";
+            this.toolStripMenuGlyphExport.Click += new System.EventHandler(this.toolStripMenuGlyphExport_Click);
+            // 
+            // toolStripMenuGlyphImport
+            // 
+            this.toolStripMenuGlyphImport.Name = "toolStripMenuGlyphImport";
+            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphImport.Text = "Import";
+            this.toolStripMenuGlyphImport.Click += new System.EventHandler(this.toolStripMenuGlyphImport_Click);
+            // 
+            // toolStripGlyphSeparator
+            // 
+            this.toolStripGlyphSeparator.Name = "toolStripGlyphSeparator";
+            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripMenuGlyphMetrics
+            // 
+            this.toolStripMenuGlyphMetrics.Name = "toolStripMenuGlyphMetrics";
+            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphMetrics.Text = "Metrics";
             // 
             // MainForm
             // 
@@ -369,6 +412,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).EndInit();
+            this.contextMenuGlyph.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -405,6 +449,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBoxOptPalette;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.ContextMenuStrip contextMenuGlyph;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphImport;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphExport;
+        private System.Windows.Forms.ToolStripSeparator toolStripGlyphSeparator;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphMetrics;
     }
 }
 

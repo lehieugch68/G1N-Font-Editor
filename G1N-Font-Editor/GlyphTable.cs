@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 using System.Windows.Forms;
 
 namespace G1N_Font_Editor
@@ -25,12 +24,20 @@ namespace G1N_Font_Editor
             Offset = offset;
             Glyphs = new List<Glyph>();
         }
-        public Bitmap ReloadTablePreview(int padx = 4, int pady = 4)
+        public Bitmap ReloadTablePreview(bool isReMeasure = true, int padx = 4, int pady = 4)
         {
-            int width = Constant.MIN_WIDTH;
-            int height = Constant.MIN_HEIGHT;
-            MeasureBitmapSizeFromGlyphs(Glyphs, padx, pady, ref width, ref height);
-            Bitmap result = new Bitmap(width, height);
+            int width = Constant.MIN_WIDTH, 
+                height = Constant.MIN_HEIGHT;
+            if (_tablePreview == null || isReMeasure)
+            {
+                MeasureBitmapSizeFromGlyphs(Glyphs, padx, pady, ref width, ref height);
+            }
+            else
+            {
+                width = _tablePreview.Width;
+                height = _tablePreview.Height;
+            }
+            var result = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(result))
             {
                 foreach (var glyph in Glyphs)
@@ -74,7 +81,6 @@ namespace G1N_Font_Editor
                     {
                         g.FillRectangle(brush, rect);
                     }
-                    
                 }
             }
             _palettePreview = result;
