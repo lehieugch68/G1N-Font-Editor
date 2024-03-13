@@ -47,7 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontHelper.cs" />
+    <Compile Include="Components\GlyphMetricForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\GlyphMetricForm.Designer.cs">
+      <DependentUpon>GlyphMetricForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\FontHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,9 +65,11 @@
     <Compile Include="G1N.cs" />
     <Compile Include="Glyph.cs" />
     <Compile Include="GlyphTable.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Extension.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Components\GlyphMetricForm.resx">
+      <DependentUpon>GlyphMetricForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

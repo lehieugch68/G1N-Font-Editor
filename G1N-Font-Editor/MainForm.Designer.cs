@@ -59,9 +59,9 @@
             this.pictureBoxOptPalette = new System.Windows.Forms.PictureBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGlyphSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphMetrics = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
@@ -182,6 +182,7 @@
             this.textBoxOptFontSize.ShortcutsEnabled = false;
             this.textBoxOptFontSize.Size = new System.Drawing.Size(80, 20);
             this.textBoxOptFontSize.TabIndex = 62;
+            this.textBoxOptFontSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxOptFontSize_KeyPress);
             // 
             // labelOptFontSize
             // 
@@ -214,7 +215,6 @@
             // textBoxCharsOpt
             // 
             this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 227);
-            this.textBoxCharsOpt.Multiline = true;
             this.textBoxCharsOpt.Name = "textBoxCharsOpt";
             this.textBoxCharsOpt.Size = new System.Drawing.Size(241, 20);
             this.textBoxCharsOpt.TabIndex = 67;
@@ -347,30 +347,31 @@
             this.contextMenuGlyph.Name = "contextMenuGlyph";
             this.contextMenuGlyph.Size = new System.Drawing.Size(114, 76);
             // 
-            // toolStripMenuGlyphExport
+            // toolStripGlyphSeparator
             // 
-            this.toolStripMenuGlyphExport.Name = "toolStripMenuGlyphExport";
-            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuGlyphExport.Text = "Export";
-            this.toolStripMenuGlyphExport.Click += new System.EventHandler(this.toolStripMenuGlyphExport_Click);
+            this.toolStripGlyphSeparator.Name = "toolStripGlyphSeparator";
+            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(110, 6);
             // 
             // toolStripMenuGlyphImport
             // 
             this.toolStripMenuGlyphImport.Name = "toolStripMenuGlyphImport";
-            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(113, 22);
             this.toolStripMenuGlyphImport.Text = "Import";
             this.toolStripMenuGlyphImport.Click += new System.EventHandler(this.toolStripMenuGlyphImport_Click);
             // 
-            // toolStripGlyphSeparator
+            // toolStripMenuGlyphExport
             // 
-            this.toolStripGlyphSeparator.Name = "toolStripGlyphSeparator";
-            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuGlyphExport.Name = "toolStripMenuGlyphExport";
+            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(113, 22);
+            this.toolStripMenuGlyphExport.Text = "Export";
+            this.toolStripMenuGlyphExport.Click += new System.EventHandler(this.toolStripMenuGlyphExport_Click);
             // 
             // toolStripMenuGlyphMetrics
             // 
             this.toolStripMenuGlyphMetrics.Name = "toolStripMenuGlyphMetrics";
-            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(113, 22);
             this.toolStripMenuGlyphMetrics.Text = "Metrics";
+            this.toolStripMenuGlyphMetrics.Click += new System.EventHandler(this.toolStripMenuGlyphMetrics_Click);
             // 
             // MainForm
             // 

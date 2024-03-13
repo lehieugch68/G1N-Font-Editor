@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
-namespace G1N_Font_Editor
+namespace G1N_Font_Editor.Helpers
 {
     public static class FontHelper
     {
@@ -54,6 +54,18 @@ namespace G1N_Font_Editor
                 var charSize = measureGraphics.MeasureString(character.ToString(), font);
                 return charSize;
             }
+        }
+        public static string[] GetFontStyles(FontFamily fontFamily)
+        {
+            var result = new List<string>();
+            foreach (FontStyle style in Enum.GetValues(typeof(FontStyle)))
+            {
+                if (fontFamily.IsStyleAvailable(style))
+                {
+                    result.Add(Enum.GetName(typeof(FontStyle), style));
+                }
+            }
+            return result.ToArray();
         }
     }
 }

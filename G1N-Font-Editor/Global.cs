@@ -13,8 +13,9 @@ namespace G1N_Font_Editor
         public static G1N G1N_FILE;
         public static readonly string MESSAGEBOX_TITLE = "G1N Font Editor";
         public static FontFamily TTF_FONT_FAMILY;
-        public static Glyph CONTEXT_MENU_SELECTED_GLYPH;
         public static string TTF_FONT_FAMILY_NAME;
+        public static Glyph CONTEXT_MENU_SELECTED_GLYPH;
+        public static int SELECTED_G1N_FONT_ID;
         public static int DEFAULT_TTF_FONT_SIZE = 36;
         public static int DEFAULT_TEX_WIDTH = 256;
         public static int DEFAULT_TEX_HEIGHT = 256;

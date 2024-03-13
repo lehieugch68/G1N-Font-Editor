@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace G1N_Font_Editor
+namespace G1N_Font_Editor.Helpers
 {
     public class ComboboxItem
     {
@@ -76,6 +76,22 @@ namespace G1N_Font_Editor
         public static string RemoveDuplicates(string input)
         {
             return new string(input.ToCharArray().Distinct().ToArray());
+        }
+        public static void AcceptNumberOnly(KeyPressEventArgs e, string input, int min = short.MinValue, int max = short.MaxValue)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+            if (!char.IsDigit(e.KeyChar))
+            {
+                if (e.KeyChar == '-' && input.Length <= 0) return;
+                e.Handled = true;
+            }
+            int num;
+            var result = $"{input}{e.KeyChar}";
+            if (int.TryParse(result, out num))
+            {
+                if (num < min || num > max) e.Handled = true;
+            }
+            else e.Handled = true;
         }
     }
 }

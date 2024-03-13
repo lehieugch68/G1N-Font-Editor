@@ -6,6 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using G1N_Font_Editor.Helpers;
 
 namespace G1N_Font_Editor
 {
