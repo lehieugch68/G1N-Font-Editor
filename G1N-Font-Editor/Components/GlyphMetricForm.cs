@@ -19,9 +19,9 @@ namespace G1N_Font_Editor.Components
         public GlyphMetricForm(Glyph glyph)
         {
             InitializeComponent();
-            textBoxGlyphMetricBaseline.Text = $"{glyph.Baseline}";
-            textBoxGlyphMetricLeftSide.Text = $"{glyph.LeftSide}";
-            textBoxGlyphMetricAdvWidth.Text = $"{glyph.XAdv}";
+            numericGlyphMetricBaseline.Value = glyph.Baseline;
+            numericGlyphMetricLeftSide.Value = glyph.LeftSide;
+            numericGlyphMetricXAdv.Value = glyph.XAdv;
             pictureBoxGlyphMetric.BackColor = Color.Black;
             pictureBoxGlyphMetric.Image = glyph.GetBitmap();
             labelGlyphMetricCharValue.Text = $"{glyph.Character} ({ string.Format(@"0x{0:X2}", (ushort)glyph.Character) })";
@@ -29,15 +29,9 @@ namespace G1N_Font_Editor.Components
 
         private void buttonGlyphMetricSave_Click(object sender, EventArgs e)
         {
-            int baseline,
-                leftSide,
-                xadv;
-            int.TryParse(textBoxGlyphMetricBaseline.Text, out baseline);
-            int.TryParse(textBoxGlyphMetricLeftSide.Text, out leftSide);
-            int.TryParse(textBoxGlyphMetricAdvWidth.Text, out xadv);
-            this.Baseline = baseline;
-            this.LeftSide = leftSide;
-            this.AdvanceWidth = xadv;
+            this.Baseline = Convert.ToByte(numericGlyphMetricBaseline.Value);
+            this.LeftSide = Convert.ToByte(numericGlyphMetricLeftSide.Value);
+            this.AdvanceWidth = Convert.ToByte(numericGlyphMetricXAdv.Value);
             this.DialogResult = DialogResult.OK;
         }
     }

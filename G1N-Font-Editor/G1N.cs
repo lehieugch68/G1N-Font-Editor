@@ -20,8 +20,10 @@ namespace G1N_Font_Editor
         public int TableCount { get; set; }
         public int[] TableOffsets { get; set; }
         public List<GlyphTable> GlyphTables { get; set; }
-        public string RootFile { get; set; }
-        public byte[] RawData { get; set; }
+        private string _rootFile;
+        public string RootFile { get { return _rootFile; } }
+        public byte[] _rawData;
+        public byte[] RawData { get { return _rawData; } }
         private struct CharID
         {
             public int CharCode { get; set; }
@@ -29,13 +31,13 @@ namespace G1N_Font_Editor
         }
         public G1N(string input)
         {
-            RootFile = input;
-            RawData = File.ReadAllBytes(RootFile);
+            _rootFile = input;
+            _rawData = File.ReadAllBytes(_rootFile);
             LoadData();
         }
         public void LoadData()
         {
-            var ms = new MemoryStream(RawData);
+            var ms = new MemoryStream(_rawData);
             var br = new BinaryReader(ms);
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             Magic = br.ReadBytes(8);
@@ -185,8 +187,8 @@ namespace G1N_Font_Editor
                     bw.Write(tablePointer[i]);
                 }
             }
-            RawData = ms.ToArray();
-            return RawData;
+            _rawData = ms.ToArray();
+            return _rawData;
         }
     }
 }

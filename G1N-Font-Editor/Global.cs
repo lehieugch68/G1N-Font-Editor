@@ -20,7 +20,8 @@ namespace G1N_Font_Editor
         public static int DEFAULT_TEX_WIDTH = 256;
         public static int DEFAULT_TEX_HEIGHT = 256;
         public static int DEFAULT_PALETTE_PICTURE_WIDTH = 320;
-        public static int DEFAULT_PALETTE_PICTURE_HEIGHT = 40;
+        public static int DEFAULT_PALETTE_PICTURE_HEIGHT = 50;
+        public static readonly string LABEL_PAGE = "Page";
         public static readonly string LABEL_NOT_AVAILABLE = "N/A";
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string G1N_FILE_FILTER = "G1N Files (*.g1n)|*.g1n|All Files (*.*)|*.*";

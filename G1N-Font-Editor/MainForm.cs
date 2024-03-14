@@ -41,49 +41,6 @@ namespace G1N_Font_Editor
             }
             catch (Exception ex) { }
         }
-        private void btnSelect_Click(object sender, EventArgs e)
-        {
-            if (Global.IS_BUSY)
-            {
-                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
-            }
-            else
-            {
-                Global.IS_BUSY = true;
-                string filePath = Utils.FileBrowser("", Global.G1N_FILE_FILTER);
-                if (!string.IsNullOrEmpty(filePath))
-                {
-                    textBoxFilePath.Text = filePath;
-                }
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        Global.G1N_FILE = new G1N(textBoxFilePath.Text);
-                        comboBoxFont.BeginInvoke((MethodInvoker)delegate
-                        {
-                            comboBoxFont.Items.Clear();
-                            foreach (var fontId in Global.G1N_FILE.GlyphTables)
-                            {
-                                ComboboxItem item = new ComboboxItem();
-                                item.Text = $"Font {fontId.Index}";
-                                item.Value = fontId.Index;
-                                comboBoxFont.Items.Add(item);
-                            }
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Global.IS_BUSY = false;
-                        MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
-                    }
-                }).GetAwaiter().OnCompleted(() =>
-                {
-                    Global.IS_BUSY = false;
-                    if (comboBoxFont.Items.Count > 0) comboBoxFont.SelectedIndex = 0;
-                });
-            }
-        }
         private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Global.IS_BUSY)
@@ -93,7 +50,7 @@ namespace G1N_Font_Editor
             else
             {
                 Global.IS_BUSY = true;
-                int fontId = (int)((ComboboxItem)comboBoxFont.Items[comboBoxFont.SelectedIndex]).Value;
+                int fontId = (int)((ComboboxItem)comboBoxPage.Items[comboBoxPage.SelectedIndex]).Value;
                 Task.Run(() =>
                 {
                     try
@@ -129,7 +86,7 @@ namespace G1N_Font_Editor
         {
             try
             {
-                textBoxOptFontSize.Text = Global.DEFAULT_TTF_FONT_SIZE.ToString();
+                numericOptFontSize.Value = Global.DEFAULT_TTF_FONT_SIZE;
                 Task.Run(() =>
                 {
                     LoadSytemFonts();
@@ -162,7 +119,7 @@ namespace G1N_Font_Editor
             {
                 MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
             }
-            else if (Global.G1N_FILE == null || Global.TTF_FONT_FAMILY == null || textBoxOptFontSize.Text.Length <= 0 || comboBoxOptFontStyle.SelectedIndex < 0)
+            else if (Global.G1N_FILE == null || Global.TTF_FONT_FAMILY == null || comboBoxOptFontStyle.SelectedIndex < 0)
             {
 
             }
@@ -170,7 +127,7 @@ namespace G1N_Font_Editor
             {
                 Global.IS_BUSY = true;
                 var fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), comboBoxOptFontStyle.SelectedItem.ToString());
-                var fontSize = int.Parse(textBoxOptFontSize.Text);
+                var fontSize = (float)numericOptFontSize.Value;
                 var chars = textBoxCharsOpt.Text.ToCharArray();
                 Task.Run(() =>
                 {
@@ -251,44 +208,6 @@ namespace G1N_Font_Editor
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
-                }
-            }
-        }
-
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            if (Global.IS_BUSY)
-            {
-                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
-            }
-            else
-            {
-                string filePath = Utils.SaveFile("", Global.G1N_FILE_FILTER);
-                if (!string.IsNullOrEmpty(filePath))
-                {
-                    Global.IS_BUSY = true;
-                    Task.Run(() =>
-                    {
-                        try
-                        {
-                            int addCustomBaseLine = 0, addCustomLeftSide = 0, addCustomAdvWidth = 0;
-                            int.TryParse(textBoxOptBaseline.Text, out addCustomBaseLine);
-                            int.TryParse(textBoxOptLeftSide.Text, out addCustomLeftSide);
-                            int.TryParse(textBoxOptAdvWidth.Text, out addCustomAdvWidth);
-                            var glyphCustomValue = new GlyphCustomValue(addCustomBaseLine, addCustomLeftSide, addCustomAdvWidth);
-                            var result = Global.G1N_FILE.Build(glyphCustomValue);
-                            File.WriteAllBytes(filePath, Global.G1N_FILE.RawData);
-                        }
-                        catch (Exception ex)
-                        {
-                            Global.IS_BUSY = false;
-                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
-                        }
-                    }).GetAwaiter().OnCompleted(() =>
-                    {
-                        Global.IS_BUSY = false;
-                    });
-
                 }
             }
         }
@@ -399,9 +318,9 @@ namespace G1N_Font_Editor
                     var result = glyphForm.ShowDialog();
                     if (result == DialogResult.OK)
                     {
-                        Global.CONTEXT_MENU_SELECTED_GLYPH.Baseline = (byte)glyphForm.Baseline;
-                        Global.CONTEXT_MENU_SELECTED_GLYPH.LeftSide = (byte)glyphForm.LeftSide;
-                        Global.CONTEXT_MENU_SELECTED_GLYPH.XAdv = (byte)glyphForm.AdvanceWidth;
+                        Global.CONTEXT_MENU_SELECTED_GLYPH.Baseline = Convert.ToByte(glyphForm.Baseline);
+                        Global.CONTEXT_MENU_SELECTED_GLYPH.LeftSide = Convert.ToByte(glyphForm.LeftSide);
+                        Global.CONTEXT_MENU_SELECTED_GLYPH.XAdv = Convert.ToByte(glyphForm.AdvanceWidth);
                     }
                 }
                 catch (Exception ex)
@@ -416,9 +335,125 @@ namespace G1N_Font_Editor
             handleGlyphMetricDialog();
         }
 
-        private void textBoxOptFontSize_KeyPress(object sender, KeyPressEventArgs e)
+        private void toolStripMenuOpenG1N_Click(object sender, EventArgs e)
         {
-            Utils.AcceptNumberOnly(e, textBoxOptFontSize.Text, sbyte.MinValue, sbyte.MaxValue);
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                string filePath = Utils.FileBrowser("", Global.G1N_FILE_FILTER);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    Global.IS_BUSY = true;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            Global.G1N_FILE = new G1N(filePath);
+                            comboBoxPage.BeginInvoke((MethodInvoker)delegate
+                            {
+                                comboBoxPage.Items.Clear();
+                                foreach (var fontId in Global.G1N_FILE.GlyphTables)
+                                {
+                                    ComboboxItem item = new ComboboxItem();
+                                    item.Text = $"{Global.LABEL_PAGE} {fontId.Index}";
+                                    item.Value = fontId.Index;
+                                    comboBoxPage.Items.Add(item);
+                                }
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.IS_BUSY = false;
+                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                        if (comboBoxPage.Items.Count > 0) comboBoxPage.SelectedIndex = 0;
+                    });
+                }
+            }
+        }
+
+        private void toolStripMenuSaveAs_Click(object sender, EventArgs e)
+        {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                if (Global.G1N_FILE == null) return;
+                string filePath = Utils.SaveFile("", Global.G1N_FILE_FILTER);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    Global.IS_BUSY = true;
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            var glyphCustomValue = new GlyphCustomValue(
+                                Convert.ToInt32(numericOptCustomBaseline.Value),
+                                Convert.ToInt32(numericOptCustomLeftSide.Value),
+                                Convert.ToInt32(numericOptCustomXAdv.Value)
+                            );
+                            var result = Global.G1N_FILE.Build(glyphCustomValue);
+                            File.WriteAllBytes(filePath, Global.G1N_FILE.RawData);
+                        }
+                        catch (Exception ex)
+                        {
+                            Global.IS_BUSY = false;
+                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                    });
+
+                }
+            }
+        }
+
+        private void toolStripMenuSaveG1N_Click(object sender, EventArgs e)
+        {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                if (Global.G1N_FILE == null) return;
+                Global.IS_BUSY = true;
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphCustomValue = new GlyphCustomValue(
+                            Convert.ToInt32(numericOptCustomBaseline.Value),
+                            Convert.ToInt32(numericOptCustomLeftSide.Value),
+                            Convert.ToInt32(numericOptCustomXAdv.Value)
+                        );
+                        var result = Global.G1N_FILE.Build(glyphCustomValue);
+                        File.WriteAllBytes(Global.G1N_FILE.RootFile, Global.G1N_FILE.RawData);
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.IS_BUSY = false;
+                        MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                });
+            }
+        }
+
+        private void toolStripMenuExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
