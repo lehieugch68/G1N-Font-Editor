@@ -41,47 +41,6 @@ namespace G1N_Font_Editor
             }
             catch (Exception ex) { }
         }
-        private void comboBoxFont_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Global.IS_BUSY)
-            {
-                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
-            }
-            else
-            {
-                Global.IS_BUSY = true;
-                int fontId = (int)((ComboboxItem)comboBoxPage.Items[comboBoxPage.SelectedIndex]).Value;
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
-                        Bitmap texPic = glyphTable.GetTablePreview();
-                        pictureBox.BeginInvoke((MethodInvoker)delegate
-                        {
-                            pictureBox.BackColor = Color.Black;
-                            pictureBox.Image = texPic;
-                        });
-                        Bitmap palettePic = glyphTable.GetPalettePreview();
-                        pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
-                        {
-                            pictureBoxOptPalette.BackColor = Color.Transparent;
-                            pictureBoxOptPalette.Image = palettePic;
-                        });
-                        Global.SELECTED_G1N_FONT_ID = fontId;
-                    }
-                    catch (Exception ex)
-                    {
-                        Global.IS_BUSY = false;
-                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
-                    }
-                }).GetAwaiter().OnCompleted(() =>
-                {
-                    Global.IS_BUSY = false;
-                });
-            }
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             try
@@ -347,6 +306,9 @@ namespace G1N_Font_Editor
                 if (!string.IsNullOrEmpty(filePath))
                 {
                     Global.IS_BUSY = true;
+                    comboBoxPage.Items.Clear();
+                    comboBoxPage.SelectedIndex = -1;
+                    Global.G1N_FILE = null;
                     Task.Run(() =>
                     {
                         try
@@ -354,7 +316,6 @@ namespace G1N_Font_Editor
                             Global.G1N_FILE = new G1N(filePath);
                             comboBoxPage.BeginInvoke((MethodInvoker)delegate
                             {
-                                comboBoxPage.Items.Clear();
                                 foreach (var fontId in Global.G1N_FILE.GlyphTables)
                                 {
                                     ComboboxItem item = new ComboboxItem();
@@ -454,6 +415,55 @@ namespace G1N_Font_Editor
         private void toolStripMenuExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void comboBoxPage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int fontId = (int)((ComboboxItem)comboBoxPage.Items[comboBoxPage.SelectedIndex]).Value;
+            if (Global.SELECTED_G1N_FONT_ID != -1 && fontId == Global.SELECTED_G1N_FONT_ID) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                Global.IS_BUSY = true;
+                comboBoxPage.Enabled = false;
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == fontId);
+                        Bitmap texPic = glyphTable.GetTablePreview();
+                        pictureBox.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBox.BackColor = Color.Black;
+                            pictureBox.Image = texPic;
+                        });
+                        Bitmap palettePic = glyphTable.GetPalettePreview();
+                        pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                        {
+                            pictureBoxOptPalette.BackColor = Color.Transparent;
+                            pictureBoxOptPalette.Image = palettePic;
+                        });
+                        Global.SELECTED_G1N_FONT_ID = fontId;
+                    }
+                    catch (Exception ex)
+                    {
+                        Global.IS_BUSY = false;
+                        comboBoxPage.BeginInvoke((MethodInvoker)delegate
+                        {
+                            comboBoxPage.Enabled = true;
+                        });
+                        comboBoxPage.SelectedIndex = Global.SELECTED_G1N_FONT_ID;
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                    comboBoxPage.Enabled = true;
+                });
+            }
         }
     }
 }

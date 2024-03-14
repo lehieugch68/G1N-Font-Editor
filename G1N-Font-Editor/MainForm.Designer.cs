@@ -72,7 +72,7 @@
             this.toolStripMenuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.labelStatusValue = new System.Windows.Forms.Label();
+            this.labelStatusText = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.contextMenuGlyph.SuspendLayout();
@@ -104,7 +104,7 @@
             this.comboBoxPage.Name = "comboBoxPage";
             this.comboBoxPage.Size = new System.Drawing.Size(241, 21);
             this.comboBoxPage.TabIndex = 4;
-            this.comboBoxPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxFont_SelectedIndexChanged);
+            this.comboBoxPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxPage_SelectedIndexChanged);
             // 
             // labelFont
             // 
@@ -493,21 +493,21 @@
             this.labelStatus.TabIndex = 86;
             this.labelStatus.Text = "Status:";
             // 
-            // labelStatusValue
+            // labelStatusText
             // 
-            this.labelStatusValue.AutoSize = true;
-            this.labelStatusValue.Location = new System.Drawing.Point(58, 535);
-            this.labelStatusValue.Name = "labelStatusValue";
-            this.labelStatusValue.Size = new System.Drawing.Size(27, 13);
-            this.labelStatusValue.TabIndex = 87;
-            this.labelStatusValue.Text = "N/A";
+            this.labelStatusText.AutoSize = true;
+            this.labelStatusText.Location = new System.Drawing.Point(58, 535);
+            this.labelStatusText.Name = "labelStatusText";
+            this.labelStatusText.Size = new System.Drawing.Size(27, 13);
+            this.labelStatusText.TabIndex = 87;
+            this.labelStatusText.Text = "N/A";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 561);
-            this.Controls.Add(this.labelStatusValue);
+            this.Controls.Add(this.labelStatusText);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.numericOptCustomXAdv);
             this.Controls.Add(this.numericOptCustomLeftSide);
@@ -599,7 +599,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuGuide;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuAbout;
         private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Label labelStatusValue;
+        private System.Windows.Forms.Label labelStatusText;
     }
 }
 

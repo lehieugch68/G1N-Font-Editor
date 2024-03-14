@@ -15,7 +15,7 @@ namespace G1N_Font_Editor
         public static FontFamily TTF_FONT_FAMILY;
         public static string TTF_FONT_FAMILY_NAME;
         public static Glyph CONTEXT_MENU_SELECTED_GLYPH;
-        public static int SELECTED_G1N_FONT_ID;
+        public static int SELECTED_G1N_FONT_ID = -1;
         public static int DEFAULT_TTF_FONT_SIZE = 36;
         public static int DEFAULT_TEX_WIDTH = 256;
         public static int DEFAULT_TEX_HEIGHT = 256;
@@ -32,6 +32,12 @@ namespace G1N_Font_Editor
         public static Dictionary<string, string> MESSAGEBOX_MESSAGES = new Dictionary<string, string>()
         {
             { "InProgress", "An error occurred: Another process in progress." }
+        };
+        public static Dictionary<string, string> PROGRESS_MESSAGES = new Dictionary<string, string>()
+        {
+            { "Done", "Done" },
+            { "ReadingG1N", "Reading G1N file..." },
+            { "PreaparingBMP", "Preparing bitmap image..." },
         };
     }
 }
