@@ -5,16 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace G1N_Font_Editor.Components
 {
     public partial class GlyphMetricForm : Form
     {
-        public int Baseline { get; set; }
-        public int LeftSide { get; set; }
-        public int AdvanceWidth { get; set; }
+        private int _baseline;
+        public int Baseline { get { return _baseline; } }
+        private int _leftSide;
+        public int LeftSide { get { return _leftSide; } }
+        private int _advanceWidth;
+        public int AdvanceWidth { get { return _advanceWidth; } }
         
         public GlyphMetricForm(Glyph glyph)
         {
@@ -29,10 +31,10 @@ namespace G1N_Font_Editor.Components
 
         private void buttonGlyphMetricSave_Click(object sender, EventArgs e)
         {
-            this.Baseline = Convert.ToByte(numericGlyphMetricBaseline.Value);
-            this.LeftSide = Convert.ToByte(numericGlyphMetricLeftSide.Value);
-            this.AdvanceWidth = Convert.ToByte(numericGlyphMetricXAdv.Value);
-            this.DialogResult = DialogResult.OK;
+            _baseline = Convert.ToSByte(numericGlyphMetricBaseline.Value);
+            _leftSide = Convert.ToSByte(numericGlyphMetricLeftSide.Value);
+            _advanceWidth = Convert.ToByte(numericGlyphMetricXAdv.Value);
+            DialogResult = DialogResult.OK;
         }
     }
 }

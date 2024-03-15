@@ -147,15 +147,10 @@
             // 
             this.numericGlyphMetricXAdv.Location = new System.Drawing.Point(110, 95);
             this.numericGlyphMetricXAdv.Maximum = new decimal(new int[] {
-            127,
+            255,
             0,
             0,
             0});
-            this.numericGlyphMetricXAdv.Minimum = new decimal(new int[] {
-            127,
-            0,
-            0,
-            -2147483648});
             this.numericGlyphMetricXAdv.Name = "numericGlyphMetricXAdv";
             this.numericGlyphMetricXAdv.Size = new System.Drawing.Size(130, 20);
             this.numericGlyphMetricXAdv.TabIndex = 89;

@@ -29,6 +29,16 @@ namespace G1N_Font_Editor
         public static readonly string FONT_FILE_FILTER = "Font Files (*.ttf)|*.ttf|All Files (*.*)|*.*";
         public static readonly string PNG_FILE_FILTER = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
         public static readonly string IMAGE_FILE_FILTER = "Image Files|*.bmp;*.jpg;*.png|All Files|*.*";
+        public static readonly byte[] G1N_DEFAULT_SIGNATURE_BYTES = new byte[]
+        {
+            0x5F, 0x4E, 0x31, 0x47, 0x30, 0x30, 0x30, 0x30
+        };
+        public static readonly int G1N_DEFAULT_HEADER_SIZE = 0x20;
+        public static readonly int G1N_DEFAULT_COLOR_COUNT = 0x10;
+        public static readonly byte[] G1N_DEFAULT_RGB_COLOR = new byte[]
+        {
+            0xFF, 0xFF, 0xFF
+        };
         public static Dictionary<string, string> MESSAGEBOX_MESSAGES = new Dictionary<string, string>()
         {
             { "InProgress", "An error occurred: Another process in progress." }

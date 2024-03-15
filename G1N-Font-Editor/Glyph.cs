@@ -16,8 +16,8 @@ namespace G1N_Font_Editor
         public char Character { get; set; }
         public byte Width { get; set; }
         public byte Height { get; set; }
-        public byte LeftSide { get; set; }
-        public byte Baseline { get; set; }
+        public sbyte LeftSide { get; set; }
+        public sbyte Baseline { get; set; }
         public byte XAdv { get; set; }
         public sbyte Unk { get; set; }
         public int DataOffset { get; set; }
@@ -28,7 +28,7 @@ namespace G1N_Font_Editor
         private Bitmap _bmp;
         public Rectangle Rect;
         public Rectangle BoxRect;
-        public Glyph(int charCode, char character, byte width, byte height, byte leftSide, byte baseline, byte xadv, sbyte unk, int dataOffset, int pixelDataSize, byte[] pixelData)
+        public Glyph(int charCode, char character, byte width, byte height, sbyte leftSide, sbyte baseline, byte xadv, sbyte unk, int dataOffset, int pixelDataSize, byte[] pixelData)
         {
             CharCode = charCode;
             Character = character;
@@ -76,7 +76,7 @@ namespace G1N_Font_Editor
             _pixelData = Convert8BppTo4Bpp(_bmp);
             return _bmp;
         }
-        public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, Brush brush)
+        public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font)
         {
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
             ushort index;
@@ -126,14 +126,14 @@ namespace G1N_Font_Editor
                     (int)measureSize.Width,
                     (int)measureSize.Height
                 );
-                g.DrawString(Character.ToString(), font, brush, rect);
+                g.DrawString(Character.ToString(), font, Brushes.White, rect);
             }
             _bmp = bmp;
             Width = (byte)_bmp.Width;
             Height = (byte)_bmp.Height;
             XAdv = (byte)Math.Ceiling(glyphTypeface.AdvanceWidths[index] * font.Size);
-            LeftSide = (byte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
-            Baseline = (byte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
+            LeftSide = (sbyte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
+            Baseline = (sbyte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
             _pixelData = Convert8BppTo4Bpp(_bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);
             PixelDataSize = _pixelData.Length;

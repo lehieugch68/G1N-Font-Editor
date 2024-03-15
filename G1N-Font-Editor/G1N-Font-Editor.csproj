@@ -53,6 +53,12 @@
     <Compile Include="Components\GlyphMetricForm.Designer.cs">
       <DependentUpon>GlyphMetricForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\NewG1NForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\NewG1NForm.Designer.cs">
+      <DependentUpon>NewG1NForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\FontHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -69,6 +75,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Components\GlyphMetricForm.resx">
       <DependentUpon>GlyphMetricForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\NewG1NForm.resx">
+      <DependentUpon>NewG1NForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

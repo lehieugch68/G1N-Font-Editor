@@ -11,17 +11,15 @@ namespace G1N_Font_Editor
     public class GlyphTable
     {
         public int Index { get; set; }
-        public int Offset { get; set; }
         public List<Glyph> Glyphs { get; set; }
         private Bitmap _tablePreview;
         public Bitmap TablePreview { get { return _tablePreview; } }
         public Color[] Palettes { get; set; }
         private Bitmap _palettePreview;
         public Bitmap PalettePreview { get { return _palettePreview; } }
-        public GlyphTable(int index, int offset)
+        public GlyphTable(int index)
         {
             Index = index;
-            Offset = offset;
             Glyphs = new List<Glyph>();
         }
         public Bitmap ReloadTablePreview(bool isReMeasure = true, int padx = 4, int pady = 4)
@@ -134,13 +132,11 @@ namespace G1N_Font_Editor
                         glyph = new Glyph(ch);
                         Glyphs.Add(glyph);
                     }
-
                 }
             }
-            Brush brush = new SolidBrush(Palettes.Last());
             foreach (var glyph in Glyphs)
             {
-                glyph.Build(glyphTypeface, font, brush);
+                glyph.Build(glyphTypeface, font);
             }
             Glyphs = Glyphs.OrderBy(g => g.Character).ToList();
         }

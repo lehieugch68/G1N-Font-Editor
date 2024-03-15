@@ -77,5 +77,15 @@ namespace G1N_Font_Editor.Helpers
         {
             return new string(input.ToCharArray().Distinct().ToArray());
         }
+        public static Color[] GenerateDefaultPalettes()
+        {
+            var colors = new Color[0x10];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                var rgba = Global.G1N_DEFAULT_RGB_COLOR.Concat(new byte[] { (byte)(i + (i * 0x10)) }).ToArray();
+                colors[i] = Color.FromArgb(BitConverter.ToInt32(rgba, 0));
+            }
+            return colors;
+        }
     }
 }

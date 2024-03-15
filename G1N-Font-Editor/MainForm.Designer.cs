@@ -55,6 +55,7 @@
             this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphMetrics = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.numericOptFontSize = new System.Windows.Forms.NumericUpDown();
             this.numericOptCustomBaseline = new System.Windows.Forms.NumericUpDown();
             this.numericOptCustomLeftSide = new System.Windows.Forms.NumericUpDown();
@@ -67,7 +68,6 @@
             this.toolStripMenuSaveG1N = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -321,6 +321,13 @@
             this.toolStripMenuGlyphMetrics.Text = "Metrics";
             this.toolStripMenuGlyphMetrics.Click += new System.EventHandler(this.toolStripMenuGlyphMetrics_Click);
             // 
+            // toolStripMenuExit
+            // 
+            this.toolStripMenuExit.Name = "toolStripMenuExit";
+            this.toolStripMenuExit.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuExit.Text = "Exit";
+            this.toolStripMenuExit.Click += new System.EventHandler(this.toolStripMenuExit_Click);
+            // 
             // numericOptFontSize
             // 
             this.numericOptFontSize.Location = new System.Drawing.Point(88, 168);
@@ -424,6 +431,7 @@
             this.toolStripMenuNewG1N.Name = "toolStripMenuNewG1N";
             this.toolStripMenuNewG1N.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuNewG1N.Text = "New";
+            this.toolStripMenuNewG1N.Click += new System.EventHandler(this.toolStripMenuNewG1N_Click);
             // 
             // toolStripMenuOpenG1N
             // 
@@ -456,13 +464,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
-            // toolStripMenuExit
-            // 
-            this.toolStripMenuExit.Name = "toolStripMenuExit";
-            this.toolStripMenuExit.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuExit.Text = "Exit";
-            this.toolStripMenuExit.Click += new System.EventHandler(this.toolStripMenuExit_Click);
-            // 
             // toolStripMenuHelp
             // 
             this.toolStripMenuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -475,13 +476,13 @@
             // toolStripMenuGuide
             // 
             this.toolStripMenuGuide.Name = "toolStripMenuGuide";
-            this.toolStripMenuGuide.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGuide.Size = new System.Drawing.Size(107, 22);
             this.toolStripMenuGuide.Text = "Guide";
             // 
             // toolStripMenuAbout
             // 
             this.toolStripMenuAbout.Name = "toolStripMenuAbout";
-            this.toolStripMenuAbout.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuAbout.Size = new System.Drawing.Size(107, 22);
             this.toolStripMenuAbout.Text = "About";
             // 
             // labelStatus
