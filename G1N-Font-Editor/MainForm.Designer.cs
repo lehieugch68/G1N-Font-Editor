@@ -323,7 +323,9 @@
             // toolStripMenuExit
             // 
             this.toolStripMenuExit.Name = "toolStripMenuExit";
-            this.toolStripMenuExit.Size = new System.Drawing.Size(114, 22);
+            this.toolStripMenuExit.ShortcutKeyDisplayString = "Alt+F4";
+            this.toolStripMenuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.toolStripMenuExit.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuExit.Text = "Exit";
             this.toolStripMenuExit.Click += new System.EventHandler(this.toolStripMenuExit_Click);
             // 
@@ -428,14 +430,18 @@
             // toolStripMenuNewG1N
             // 
             this.toolStripMenuNewG1N.Name = "toolStripMenuNewG1N";
-            this.toolStripMenuNewG1N.Size = new System.Drawing.Size(114, 22);
+            this.toolStripMenuNewG1N.ShortcutKeyDisplayString = "Ctrl+N";
+            this.toolStripMenuNewG1N.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.toolStripMenuNewG1N.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuNewG1N.Text = "New";
             this.toolStripMenuNewG1N.Click += new System.EventHandler(this.toolStripMenuNewG1N_Click);
             // 
             // toolStripMenuOpenG1N
             // 
             this.toolStripMenuOpenG1N.Name = "toolStripMenuOpenG1N";
-            this.toolStripMenuOpenG1N.Size = new System.Drawing.Size(114, 22);
+            this.toolStripMenuOpenG1N.ShortcutKeyDisplayString = "Ctrl+O";
+            this.toolStripMenuOpenG1N.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.toolStripMenuOpenG1N.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuOpenG1N.Text = "Open";
             this.toolStripMenuOpenG1N.Click += new System.EventHandler(this.toolStripMenuOpenG1N_Click);
             // 
@@ -447,14 +453,19 @@
             // toolStripMenuSaveG1N
             // 
             this.toolStripMenuSaveG1N.Name = "toolStripMenuSaveG1N";
-            this.toolStripMenuSaveG1N.Size = new System.Drawing.Size(114, 22);
+            this.toolStripMenuSaveG1N.ShortcutKeyDisplayString = "Ctrl+S";
+            this.toolStripMenuSaveG1N.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.toolStripMenuSaveG1N.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuSaveG1N.Text = "Save";
             this.toolStripMenuSaveG1N.Click += new System.EventHandler(this.toolStripMenuSaveG1N_Click);
             // 
             // toolStripMenuSaveAs
             // 
             this.toolStripMenuSaveAs.Name = "toolStripMenuSaveAs";
-            this.toolStripMenuSaveAs.Size = new System.Drawing.Size(114, 22);
+            this.toolStripMenuSaveAs.ShortcutKeyDisplayString = "Ctrl+Shift+S";
+            this.toolStripMenuSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.toolStripMenuSaveAs.Size = new System.Drawing.Size(186, 22);
             this.toolStripMenuSaveAs.Text = "Save As";
             this.toolStripMenuSaveAs.Click += new System.EventHandler(this.toolStripMenuSaveAs_Click);
             // 
