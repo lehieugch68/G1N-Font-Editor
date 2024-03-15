@@ -189,8 +189,9 @@ namespace G1N_Font_Editor
                         handleGlyphMetricDialog();
                         break;
                     case MouseButtons.Right:
+                        var pos = (sender as Control).PointToScreen(e.Location);
                         contextMenuGlyph.Items[0].Text = $"{glyph.Character} ({string.Format(@"0x{0:X2}", (ushort)glyph.Character)})";
-                        contextMenuGlyph.Show(Cursor.Position);
+                        contextMenuGlyph.Show(pos.X, pos.Y);
                         break;
                     default: break;
                 }

@@ -23,5 +23,10 @@ namespace G1N_Font_Editor.Components
             _totalPage = (int)numericNewG1NTotalPage.Value;
             DialogResult = DialogResult.OK;
         }
+
+        private void NewG1NForm_Load(object sender, EventArgs e)
+        {
+            numericNewG1NTotalPage.Focus();
+        }
     }
 }

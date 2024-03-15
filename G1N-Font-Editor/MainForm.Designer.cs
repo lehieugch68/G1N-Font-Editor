@@ -292,39 +292,38 @@
             this.toolStripMenuGlyphExport,
             this.toolStripMenuGlyphMetrics});
             this.contextMenuGlyph.Name = "contextMenuGlyph";
-            this.contextMenuGlyph.OwnerItem = this.toolStripMenuExit;
-            this.contextMenuGlyph.Size = new System.Drawing.Size(114, 76);
+            this.contextMenuGlyph.Size = new System.Drawing.Size(148, 76);
             // 
             // toolStripGlyphSeparator
             // 
             this.toolStripGlyphSeparator.Name = "toolStripGlyphSeparator";
-            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(110, 6);
+            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuGlyphImport
             // 
             this.toolStripMenuGlyphImport.Name = "toolStripMenuGlyphImport";
-            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(113, 22);
-            this.toolStripMenuGlyphImport.Text = "Import";
+            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphImport.Text = "Import Image";
             this.toolStripMenuGlyphImport.Click += new System.EventHandler(this.toolStripMenuGlyphImport_Click);
             // 
             // toolStripMenuGlyphExport
             // 
             this.toolStripMenuGlyphExport.Name = "toolStripMenuGlyphExport";
-            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(113, 22);
-            this.toolStripMenuGlyphExport.Text = "Export";
+            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphExport.Text = "Export Image";
             this.toolStripMenuGlyphExport.Click += new System.EventHandler(this.toolStripMenuGlyphExport_Click);
             // 
             // toolStripMenuGlyphMetrics
             // 
             this.toolStripMenuGlyphMetrics.Name = "toolStripMenuGlyphMetrics";
-            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(113, 22);
-            this.toolStripMenuGlyphMetrics.Text = "Metrics";
+            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphMetrics.Text = "Glyph Metrics";
             this.toolStripMenuGlyphMetrics.Click += new System.EventHandler(this.toolStripMenuGlyphMetrics_Click);
             // 
             // toolStripMenuExit
             // 
             this.toolStripMenuExit.Name = "toolStripMenuExit";
-            this.toolStripMenuExit.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuExit.Size = new System.Drawing.Size(114, 22);
             this.toolStripMenuExit.Text = "Exit";
             this.toolStripMenuExit.Click += new System.EventHandler(this.toolStripMenuExit_Click);
             // 
@@ -429,40 +428,40 @@
             // toolStripMenuNewG1N
             // 
             this.toolStripMenuNewG1N.Name = "toolStripMenuNewG1N";
-            this.toolStripMenuNewG1N.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuNewG1N.Size = new System.Drawing.Size(114, 22);
             this.toolStripMenuNewG1N.Text = "New";
             this.toolStripMenuNewG1N.Click += new System.EventHandler(this.toolStripMenuNewG1N_Click);
             // 
             // toolStripMenuOpenG1N
             // 
             this.toolStripMenuOpenG1N.Name = "toolStripMenuOpenG1N";
-            this.toolStripMenuOpenG1N.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuOpenG1N.Size = new System.Drawing.Size(114, 22);
             this.toolStripMenuOpenG1N.Text = "Open";
             this.toolStripMenuOpenG1N.Click += new System.EventHandler(this.toolStripMenuOpenG1N_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // toolStripMenuSaveG1N
             // 
             this.toolStripMenuSaveG1N.Name = "toolStripMenuSaveG1N";
-            this.toolStripMenuSaveG1N.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuSaveG1N.Size = new System.Drawing.Size(114, 22);
             this.toolStripMenuSaveG1N.Text = "Save";
             this.toolStripMenuSaveG1N.Click += new System.EventHandler(this.toolStripMenuSaveG1N_Click);
             // 
             // toolStripMenuSaveAs
             // 
             this.toolStripMenuSaveAs.Name = "toolStripMenuSaveAs";
-            this.toolStripMenuSaveAs.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuSaveAs.Size = new System.Drawing.Size(114, 22);
             this.toolStripMenuSaveAs.Text = "Save As";
             this.toolStripMenuSaveAs.Click += new System.EventHandler(this.toolStripMenuSaveAs_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
             // 
             // toolStripMenuHelp
             // 

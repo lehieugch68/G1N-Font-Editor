@@ -88,6 +88,7 @@
             this.MinimumSize = new System.Drawing.Size(250, 140);
             this.Name = "NewG1NForm";
             this.Text = "New G1N";
+            this.Load += new System.EventHandler(this.NewG1NForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericNewG1NTotalPage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
