@@ -17,15 +17,23 @@ namespace G1N_Font_Editor
         public Color[] Palettes { get; set; }
         private Bitmap _palettePreview;
         public Bitmap PalettePreview { get { return _palettePreview; } }
-        public GlyphTable(int index)
+        public GlyphTable(int index, Color[] palettes)
         {
             Index = index;
             Glyphs = new List<Glyph>();
+            Palettes = new Color[0x10];
+            Array.Copy(palettes, Palettes, 0x10);
+        }
+        public void AddGlyph(Glyph glyph)
+        {
+            if (Glyphs.Any(g => g.Character == glyph.Character))
+                throw new Exception(Global.MESSAGEBOX_MESSAGES["CharExists"]);
+            Glyphs.Add(glyph);
         }
         public Bitmap ReloadTablePreview(bool isReMeasure = true, int padx = 4, int pady = 4)
         {
-            int width = Constant.MIN_WIDTH, 
-                height = Constant.MIN_HEIGHT;
+            int width = _tablePreview == null ? Constant.MIN_WIDTH : _tablePreview.Width,
+                height = _tablePreview == null ? Constant.MIN_HEIGHT : _tablePreview.Height;
             if (_tablePreview == null || isReMeasure)
             {
                 MeasureBitmapSizeFromGlyphs(Glyphs, padx, pady, ref width, ref height);
@@ -114,7 +122,6 @@ namespace G1N_Font_Editor
                 while (rects.Any(r => r.IntersectsWith(boxRect))) boxRect.Y++;
                 if (boxRect.Y + boxRect.Height < lowestRowHeight) lowestRowHeight = boxRect.Y + boxRect.Height;
                 rects.Add(boxRect);
-                glyphs[i].BoxRect = boxRect;
                 glyphs[i].Rect = new Rectangle(boxRect.X, boxRect.Y, glyphs[i].Width, glyphs[i].Height);
                 currX += glyphs[i].Width + padx;
             }

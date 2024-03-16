@@ -30,17 +30,17 @@
         {
             this.labelGlyphMetricChar = new System.Windows.Forms.Label();
             this.labelGlyphMetricAdvWidth = new System.Windows.Forms.Label();
-            this.labelGlyphMetricLeftSide = new System.Windows.Forms.Label();
+            this.labelGlyphMetricXOffset = new System.Windows.Forms.Label();
             this.labelGlyphMetricBaseline = new System.Windows.Forms.Label();
             this.pictureBoxGlyphMetric = new System.Windows.Forms.PictureBox();
             this.buttonGlyphMetricSave = new System.Windows.Forms.Button();
             this.labelGlyphMetricCharValue = new System.Windows.Forms.Label();
             this.numericGlyphMetricBaseline = new System.Windows.Forms.NumericUpDown();
-            this.numericGlyphMetricLeftSide = new System.Windows.Forms.NumericUpDown();
+            this.numericGlyphMetricXOffset = new System.Windows.Forms.NumericUpDown();
             this.numericGlyphMetricXAdv = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGlyphMetric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricBaseline)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricLeftSide)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricXOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricXAdv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,18 +58,18 @@
             this.labelGlyphMetricAdvWidth.AutoSize = true;
             this.labelGlyphMetricAdvWidth.Location = new System.Drawing.Point(12, 97);
             this.labelGlyphMetricAdvWidth.Name = "labelGlyphMetricAdvWidth";
-            this.labelGlyphMetricAdvWidth.Size = new System.Drawing.Size(81, 13);
+            this.labelGlyphMetricAdvWidth.Size = new System.Drawing.Size(60, 13);
             this.labelGlyphMetricAdvWidth.TabIndex = 82;
-            this.labelGlyphMetricAdvWidth.Text = "AdvanceWidth:";
+            this.labelGlyphMetricAdvWidth.Text = "XAdvance:";
             // 
-            // labelGlyphMetricLeftSide
+            // labelGlyphMetricXOffset
             // 
-            this.labelGlyphMetricLeftSide.AutoSize = true;
-            this.labelGlyphMetricLeftSide.Location = new System.Drawing.Point(12, 71);
-            this.labelGlyphMetricLeftSide.Name = "labelGlyphMetricLeftSide";
-            this.labelGlyphMetricLeftSide.Size = new System.Drawing.Size(49, 13);
-            this.labelGlyphMetricLeftSide.TabIndex = 80;
-            this.labelGlyphMetricLeftSide.Text = "LeftSide:";
+            this.labelGlyphMetricXOffset.AutoSize = true;
+            this.labelGlyphMetricXOffset.Location = new System.Drawing.Point(12, 71);
+            this.labelGlyphMetricXOffset.Name = "labelGlyphMetricXOffset";
+            this.labelGlyphMetricXOffset.Size = new System.Drawing.Size(45, 13);
+            this.labelGlyphMetricXOffset.TabIndex = 80;
+            this.labelGlyphMetricXOffset.Text = "XOffset:";
             // 
             // labelGlyphMetricBaseline
             // 
@@ -126,22 +126,22 @@
             this.numericGlyphMetricBaseline.Size = new System.Drawing.Size(130, 20);
             this.numericGlyphMetricBaseline.TabIndex = 87;
             // 
-            // numericGlyphMetricLeftSide
+            // numericGlyphMetricXOffset
             // 
-            this.numericGlyphMetricLeftSide.Location = new System.Drawing.Point(110, 69);
-            this.numericGlyphMetricLeftSide.Maximum = new decimal(new int[] {
+            this.numericGlyphMetricXOffset.Location = new System.Drawing.Point(110, 69);
+            this.numericGlyphMetricXOffset.Maximum = new decimal(new int[] {
             127,
             0,
             0,
             0});
-            this.numericGlyphMetricLeftSide.Minimum = new decimal(new int[] {
+            this.numericGlyphMetricXOffset.Minimum = new decimal(new int[] {
             127,
             0,
             0,
             -2147483648});
-            this.numericGlyphMetricLeftSide.Name = "numericGlyphMetricLeftSide";
-            this.numericGlyphMetricLeftSide.Size = new System.Drawing.Size(130, 20);
-            this.numericGlyphMetricLeftSide.TabIndex = 88;
+            this.numericGlyphMetricXOffset.Name = "numericGlyphMetricXOffset";
+            this.numericGlyphMetricXOffset.Size = new System.Drawing.Size(130, 20);
+            this.numericGlyphMetricXOffset.TabIndex = 88;
             // 
             // numericGlyphMetricXAdv
             // 
@@ -161,13 +161,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 171);
             this.Controls.Add(this.numericGlyphMetricXAdv);
-            this.Controls.Add(this.numericGlyphMetricLeftSide);
+            this.Controls.Add(this.numericGlyphMetricXOffset);
             this.Controls.Add(this.numericGlyphMetricBaseline);
             this.Controls.Add(this.labelGlyphMetricCharValue);
             this.Controls.Add(this.buttonGlyphMetricSave);
             this.Controls.Add(this.pictureBoxGlyphMetric);
             this.Controls.Add(this.labelGlyphMetricAdvWidth);
-            this.Controls.Add(this.labelGlyphMetricLeftSide);
+            this.Controls.Add(this.labelGlyphMetricXOffset);
             this.Controls.Add(this.labelGlyphMetricBaseline);
             this.Controls.Add(this.labelGlyphMetricChar);
             this.MaximizeBox = false;
@@ -177,7 +177,7 @@
             this.Text = "Glyph Metrics";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGlyphMetric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricBaseline)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricLeftSide)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricXOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericGlyphMetricXAdv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -188,13 +188,13 @@
 
         private System.Windows.Forms.Label labelGlyphMetricChar;
         private System.Windows.Forms.Label labelGlyphMetricAdvWidth;
-        private System.Windows.Forms.Label labelGlyphMetricLeftSide;
+        private System.Windows.Forms.Label labelGlyphMetricXOffset;
         private System.Windows.Forms.Label labelGlyphMetricBaseline;
         private System.Windows.Forms.PictureBox pictureBoxGlyphMetric;
         private System.Windows.Forms.Button buttonGlyphMetricSave;
         private System.Windows.Forms.Label labelGlyphMetricCharValue;
         private System.Windows.Forms.NumericUpDown numericGlyphMetricBaseline;
-        private System.Windows.Forms.NumericUpDown numericGlyphMetricLeftSide;
+        private System.Windows.Forms.NumericUpDown numericGlyphMetricXOffset;
         private System.Windows.Forms.NumericUpDown numericGlyphMetricXAdv;
     }
 }

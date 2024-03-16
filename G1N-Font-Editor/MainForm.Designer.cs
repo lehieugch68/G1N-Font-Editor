@@ -46,11 +46,11 @@
             this.buttonOptFontFromFile = new System.Windows.Forms.Button();
             this.labelGlyphOpt = new System.Windows.Forms.Label();
             this.labelOptBaseline = new System.Windows.Forms.Label();
-            this.labelOptLeftSide = new System.Windows.Forms.Label();
-            this.labelOptAdvWidth = new System.Windows.Forms.Label();
+            this.labelOptXOffset = new System.Windows.Forms.Label();
+            this.labelOptXAdv = new System.Windows.Forms.Label();
             this.labelPalettes = new System.Windows.Forms.Label();
             this.pictureBoxOptPalette = new System.Windows.Forms.PictureBox();
-            this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuSelectedGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripGlyphSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +58,7 @@
             this.toolStripMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.numericOptFontSize = new System.Windows.Forms.NumericUpDown();
             this.numericOptCustomBaseline = new System.Windows.Forms.NumericUpDown();
-            this.numericOptCustomLeftSide = new System.Windows.Forms.NumericUpDown();
+            this.numericOptCustomXOffset = new System.Windows.Forms.NumericUpDown();
             this.numericOptCustomXAdv = new System.Windows.Forms.NumericUpDown();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,19 +68,34 @@
             this.toolStripMenuSaveG1N = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuEditAddPage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuEditRemovePage = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuEditAddGlyph = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.labelStatus = new System.Windows.Forms.Label();
             this.labelStatusText = new System.Windows.Forms.Label();
+            this.buttonSelectColor = new System.Windows.Forms.Button();
+            this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuGlyphAdd = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuGlyphRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxASCII = new System.Windows.Forms.CheckBox();
+            this.toolStripMenuCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
-            this.contextMenuGlyph.SuspendLayout();
+            this.contextMenuSelectedGlyph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericOptFontSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomBaseline)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomLeftSide)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomXOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomXAdv)).BeginInit();
             this.menuStrip.SuspendLayout();
+            this.contextMenuGlyph.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -118,7 +133,7 @@
             // labelBuildOptions
             // 
             this.labelBuildOptions.AutoSize = true;
-            this.labelBuildOptions.Location = new System.Drawing.Point(12, 75);
+            this.labelBuildOptions.Location = new System.Drawing.Point(12, 70);
             this.labelBuildOptions.Name = "labelBuildOptions";
             this.labelBuildOptions.Size = new System.Drawing.Size(116, 13);
             this.labelBuildOptions.TabIndex = 6;
@@ -127,7 +142,7 @@
             // labelOptFont
             // 
             this.labelOptFont.AutoSize = true;
-            this.labelOptFont.Location = new System.Drawing.Point(12, 105);
+            this.labelOptFont.Location = new System.Drawing.Point(12, 95);
             this.labelOptFont.Name = "labelOptFont";
             this.labelOptFont.Size = new System.Drawing.Size(31, 13);
             this.labelOptFont.TabIndex = 7;
@@ -139,7 +154,7 @@
             this.comboBoxOptFont.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxOptFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptFont.FormattingEnabled = true;
-            this.comboBoxOptFont.Location = new System.Drawing.Point(88, 102);
+            this.comboBoxOptFont.Location = new System.Drawing.Point(88, 92);
             this.comboBoxOptFont.Name = "comboBoxOptFont";
             this.comboBoxOptFont.Size = new System.Drawing.Size(241, 21);
             this.comboBoxOptFont.TabIndex = 8;
@@ -148,7 +163,7 @@
             // labelOptFontStyle
             // 
             this.labelOptFontStyle.AutoSize = true;
-            this.labelOptFontStyle.Location = new System.Drawing.Point(187, 170);
+            this.labelOptFontStyle.Location = new System.Drawing.Point(187, 160);
             this.labelOptFontStyle.Name = "labelOptFontStyle";
             this.labelOptFontStyle.Size = new System.Drawing.Size(36, 13);
             this.labelOptFontStyle.TabIndex = 64;
@@ -158,7 +173,7 @@
             // 
             this.comboBoxOptFontStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptFontStyle.FormattingEnabled = true;
-            this.comboBoxOptFontStyle.Location = new System.Drawing.Point(229, 167);
+            this.comboBoxOptFontStyle.Location = new System.Drawing.Point(229, 157);
             this.comboBoxOptFontStyle.Name = "comboBoxOptFontStyle";
             this.comboBoxOptFontStyle.Size = new System.Drawing.Size(100, 21);
             this.comboBoxOptFontStyle.TabIndex = 63;
@@ -166,7 +181,7 @@
             // labelOptFontSize
             // 
             this.labelOptFontSize.AutoSize = true;
-            this.labelOptFontSize.Location = new System.Drawing.Point(12, 170);
+            this.labelOptFontSize.Location = new System.Drawing.Point(12, 160);
             this.labelOptFontSize.Name = "labelOptFontSize";
             this.labelOptFontSize.Size = new System.Drawing.Size(33, 13);
             this.labelOptFontSize.TabIndex = 61;
@@ -174,7 +189,7 @@
             // 
             // buttonBuild
             // 
-            this.buttonBuild.Location = new System.Drawing.Point(12, 285);
+            this.buttonBuild.Location = new System.Drawing.Point(12, 275);
             this.buttonBuild.Name = "buttonBuild";
             this.buttonBuild.Size = new System.Drawing.Size(317, 25);
             this.buttonBuild.TabIndex = 65;
@@ -185,7 +200,7 @@
             // labelCharsOpt
             // 
             this.labelCharsOpt.AutoSize = true;
-            this.labelCharsOpt.Location = new System.Drawing.Point(12, 205);
+            this.labelCharsOpt.Location = new System.Drawing.Point(12, 195);
             this.labelCharsOpt.Name = "labelCharsOpt";
             this.labelCharsOpt.Size = new System.Drawing.Size(59, 13);
             this.labelCharsOpt.TabIndex = 66;
@@ -193,7 +208,7 @@
             // 
             // textBoxCharsOpt
             // 
-            this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 202);
+            this.textBoxCharsOpt.Location = new System.Drawing.Point(88, 192);
             this.textBoxCharsOpt.Multiline = true;
             this.textBoxCharsOpt.Name = "textBoxCharsOpt";
             this.textBoxCharsOpt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -202,7 +217,7 @@
             // 
             // buttonCharsFromFile
             // 
-            this.buttonCharsFromFile.Location = new System.Drawing.Point(12, 249);
+            this.buttonCharsFromFile.Location = new System.Drawing.Point(12, 239);
             this.buttonCharsFromFile.Name = "buttonCharsFromFile";
             this.buttonCharsFromFile.Size = new System.Drawing.Size(70, 23);
             this.buttonCharsFromFile.TabIndex = 68;
@@ -212,7 +227,7 @@
             // 
             // textBoxOptFontPath
             // 
-            this.textBoxOptFontPath.Location = new System.Drawing.Point(88, 132);
+            this.textBoxOptFontPath.Location = new System.Drawing.Point(88, 122);
             this.textBoxOptFontPath.Name = "textBoxOptFontPath";
             this.textBoxOptFontPath.ReadOnly = true;
             this.textBoxOptFontPath.Size = new System.Drawing.Size(241, 20);
@@ -220,7 +235,7 @@
             // 
             // buttonOptFontFromFile
             // 
-            this.buttonOptFontFromFile.Location = new System.Drawing.Point(12, 130);
+            this.buttonOptFontFromFile.Location = new System.Drawing.Point(12, 120);
             this.buttonOptFontFromFile.Name = "buttonOptFontFromFile";
             this.buttonOptFontFromFile.Size = new System.Drawing.Size(70, 23);
             this.buttonOptFontFromFile.TabIndex = 69;
@@ -231,7 +246,7 @@
             // labelGlyphOpt
             // 
             this.labelGlyphOpt.AutoSize = true;
-            this.labelGlyphOpt.Location = new System.Drawing.Point(9, 330);
+            this.labelGlyphOpt.Location = new System.Drawing.Point(9, 315);
             this.labelGlyphOpt.Name = "labelGlyphOpt";
             this.labelGlyphOpt.Size = new System.Drawing.Size(73, 13);
             this.labelGlyphOpt.TabIndex = 71;
@@ -240,83 +255,84 @@
             // labelOptBaseline
             // 
             this.labelOptBaseline.AutoSize = true;
-            this.labelOptBaseline.Location = new System.Drawing.Point(9, 357);
+            this.labelOptBaseline.Location = new System.Drawing.Point(9, 340);
             this.labelOptBaseline.Name = "labelOptBaseline";
             this.labelOptBaseline.Size = new System.Drawing.Size(110, 13);
             this.labelOptBaseline.TabIndex = 72;
             this.labelOptBaseline.Text = "Add Custom Baseline:";
             // 
-            // labelOptLeftSide
+            // labelOptXOffset
             // 
-            this.labelOptLeftSide.AutoSize = true;
-            this.labelOptLeftSide.Location = new System.Drawing.Point(9, 386);
-            this.labelOptLeftSide.Name = "labelOptLeftSide";
-            this.labelOptLeftSide.Size = new System.Drawing.Size(109, 13);
-            this.labelOptLeftSide.TabIndex = 74;
-            this.labelOptLeftSide.Text = "Add Custom LeftSide:";
+            this.labelOptXOffset.AutoSize = true;
+            this.labelOptXOffset.Location = new System.Drawing.Point(9, 368);
+            this.labelOptXOffset.Name = "labelOptXOffset";
+            this.labelOptXOffset.Size = new System.Drawing.Size(105, 13);
+            this.labelOptXOffset.TabIndex = 74;
+            this.labelOptXOffset.Text = "Add Custom XOffset:";
             // 
-            // labelOptAdvWidth
+            // labelOptXAdv
             // 
-            this.labelOptAdvWidth.AutoSize = true;
-            this.labelOptAdvWidth.Location = new System.Drawing.Point(9, 415);
-            this.labelOptAdvWidth.Name = "labelOptAdvWidth";
-            this.labelOptAdvWidth.Size = new System.Drawing.Size(141, 13);
-            this.labelOptAdvWidth.TabIndex = 76;
-            this.labelOptAdvWidth.Text = "Add Custom AdvanceWidth:";
+            this.labelOptXAdv.AutoSize = true;
+            this.labelOptXAdv.Location = new System.Drawing.Point(9, 397);
+            this.labelOptXAdv.Name = "labelOptXAdv";
+            this.labelOptXAdv.Size = new System.Drawing.Size(120, 13);
+            this.labelOptXAdv.TabIndex = 76;
+            this.labelOptXAdv.Text = "Add Custom XAdvance:";
             // 
             // labelPalettes
             // 
             this.labelPalettes.AutoSize = true;
-            this.labelPalettes.Location = new System.Drawing.Point(12, 450);
+            this.labelPalettes.Location = new System.Drawing.Point(12, 430);
             this.labelPalettes.Name = "labelPalettes";
-            this.labelPalettes.Size = new System.Drawing.Size(45, 13);
+            this.labelPalettes.Size = new System.Drawing.Size(72, 13);
             this.labelPalettes.TabIndex = 78;
-            this.labelPalettes.Text = "Palettes";
+            this.labelPalettes.Text = "Color Palettes";
             // 
             // pictureBoxOptPalette
             // 
             this.pictureBoxOptPalette.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.pictureBoxOptPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 470);
+            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 450);
             this.pictureBoxOptPalette.Name = "pictureBoxOptPalette";
             this.pictureBoxOptPalette.Size = new System.Drawing.Size(317, 50);
             this.pictureBoxOptPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxOptPalette.TabIndex = 79;
             this.pictureBoxOptPalette.TabStop = false;
             // 
-            // contextMenuGlyph
+            // contextMenuSelectedGlyph
             // 
-            this.contextMenuGlyph.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuSelectedGlyph.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripGlyphSeparator,
             this.toolStripMenuGlyphImport,
             this.toolStripMenuGlyphExport,
-            this.toolStripMenuGlyphMetrics});
-            this.contextMenuGlyph.Name = "contextMenuGlyph";
-            this.contextMenuGlyph.Size = new System.Drawing.Size(148, 76);
+            this.toolStripMenuGlyphMetrics,
+            this.toolStripSeparator4,
+            this.toolStripMenuGlyphRemove});
+            this.contextMenuSelectedGlyph.Name = "contextMenuGlyph";
+            this.contextMenuSelectedGlyph.Size = new System.Drawing.Size(152, 104);
             // 
             // toolStripGlyphSeparator
             // 
             this.toolStripGlyphSeparator.Name = "toolStripGlyphSeparator";
-            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(177, 6);
+            this.toolStripGlyphSeparator.Size = new System.Drawing.Size(148, 6);
             // 
             // toolStripMenuGlyphImport
             // 
             this.toolStripMenuGlyphImport.Name = "toolStripMenuGlyphImport";
-            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphImport.Size = new System.Drawing.Size(151, 22);
             this.toolStripMenuGlyphImport.Text = "Import Image";
             this.toolStripMenuGlyphImport.Click += new System.EventHandler(this.toolStripMenuGlyphImport_Click);
             // 
             // toolStripMenuGlyphExport
             // 
             this.toolStripMenuGlyphExport.Name = "toolStripMenuGlyphExport";
-            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphExport.Size = new System.Drawing.Size(151, 22);
             this.toolStripMenuGlyphExport.Text = "Export Image";
             this.toolStripMenuGlyphExport.Click += new System.EventHandler(this.toolStripMenuGlyphExport_Click);
             // 
             // toolStripMenuGlyphMetrics
             // 
             this.toolStripMenuGlyphMetrics.Name = "toolStripMenuGlyphMetrics";
-            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(151, 22);
             this.toolStripMenuGlyphMetrics.Text = "Glyph Metrics";
             this.toolStripMenuGlyphMetrics.Click += new System.EventHandler(this.toolStripMenuGlyphMetrics_Click);
             // 
@@ -331,7 +347,7 @@
             // 
             // numericOptFontSize
             // 
-            this.numericOptFontSize.Location = new System.Drawing.Point(88, 168);
+            this.numericOptFontSize.Location = new System.Drawing.Point(88, 158);
             this.numericOptFontSize.Maximum = new decimal(new int[] {
             255,
             0,
@@ -353,7 +369,7 @@
             // 
             // numericOptCustomBaseline
             // 
-            this.numericOptCustomBaseline.Location = new System.Drawing.Point(166, 355);
+            this.numericOptCustomBaseline.Location = new System.Drawing.Point(166, 338);
             this.numericOptCustomBaseline.Maximum = new decimal(new int[] {
             127,
             0,
@@ -368,26 +384,26 @@
             this.numericOptCustomBaseline.Size = new System.Drawing.Size(160, 20);
             this.numericOptCustomBaseline.TabIndex = 82;
             // 
-            // numericOptCustomLeftSide
+            // numericOptCustomXOffset
             // 
-            this.numericOptCustomLeftSide.Location = new System.Drawing.Point(166, 384);
-            this.numericOptCustomLeftSide.Maximum = new decimal(new int[] {
+            this.numericOptCustomXOffset.Location = new System.Drawing.Point(166, 366);
+            this.numericOptCustomXOffset.Maximum = new decimal(new int[] {
             127,
             0,
             0,
             0});
-            this.numericOptCustomLeftSide.Minimum = new decimal(new int[] {
+            this.numericOptCustomXOffset.Minimum = new decimal(new int[] {
             127,
             0,
             0,
             -2147483648});
-            this.numericOptCustomLeftSide.Name = "numericOptCustomLeftSide";
-            this.numericOptCustomLeftSide.Size = new System.Drawing.Size(160, 20);
-            this.numericOptCustomLeftSide.TabIndex = 83;
+            this.numericOptCustomXOffset.Name = "numericOptCustomXOffset";
+            this.numericOptCustomXOffset.Size = new System.Drawing.Size(160, 20);
+            this.numericOptCustomXOffset.TabIndex = 83;
             // 
             // numericOptCustomXAdv
             // 
-            this.numericOptCustomXAdv.Location = new System.Drawing.Point(166, 413);
+            this.numericOptCustomXAdv.Location = new System.Drawing.Point(166, 395);
             this.numericOptCustomXAdv.Maximum = new decimal(new int[] {
             127,
             0,
@@ -406,6 +422,7 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuFile,
+            this.toolStripMenuEdit,
             this.toolStripMenuHelp});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -448,7 +465,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
             // 
             // toolStripMenuSaveG1N
             // 
@@ -472,13 +489,52 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(183, 6);
+            // 
+            // toolStripMenuEdit
+            // 
+            this.toolStripMenuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuEditAddPage,
+            this.toolStripMenuEditRemovePage,
+            this.toolStripSeparator3,
+            this.toolStripMenuEditAddGlyph});
+            this.toolStripMenuEdit.Name = "toolStripMenuEdit";
+            this.toolStripMenuEdit.Size = new System.Drawing.Size(39, 20);
+            this.toolStripMenuEdit.Text = "Edit";
+            // 
+            // toolStripMenuEditAddPage
+            // 
+            this.toolStripMenuEditAddPage.Name = "toolStripMenuEditAddPage";
+            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddPage.Text = "Add Page";
+            this.toolStripMenuEditAddPage.Click += new System.EventHandler(this.toolStripMenuEditAddPage_Click);
+            // 
+            // toolStripMenuEditRemovePage
+            // 
+            this.toolStripMenuEditRemovePage.Name = "toolStripMenuEditRemovePage";
+            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditRemovePage.Text = "Remove Page";
+            this.toolStripMenuEditRemovePage.Click += new System.EventHandler(this.toolStripMenuEditRemovePage_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripMenuEditAddGlyph
+            // 
+            this.toolStripMenuEditAddGlyph.Name = "toolStripMenuEditAddGlyph";
+            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddGlyph.Text = "Add Glyph";
+            this.toolStripMenuEditAddGlyph.Click += new System.EventHandler(this.toolStripMenuEditAddGlyph_Click);
             // 
             // toolStripMenuHelp
             // 
             this.toolStripMenuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuGuide,
-            this.toolStripMenuAbout});
+            this.toolStripMenuAbout,
+            this.toolStripSeparator5,
+            this.toolStripMenuCheckUpdate});
             this.toolStripMenuHelp.Name = "toolStripMenuHelp";
             this.toolStripMenuHelp.Size = new System.Drawing.Size(44, 20);
             this.toolStripMenuHelp.Text = "Help";
@@ -486,14 +542,16 @@
             // toolStripMenuGuide
             // 
             this.toolStripMenuGuide.Name = "toolStripMenuGuide";
-            this.toolStripMenuGuide.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuGuide.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuGuide.Text = "Guide";
+            this.toolStripMenuGuide.Click += new System.EventHandler(this.toolStripMenuGuide_Click);
             // 
             // toolStripMenuAbout
             // 
             this.toolStripMenuAbout.Name = "toolStripMenuAbout";
-            this.toolStripMenuAbout.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuAbout.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuAbout.Text = "About";
+            this.toolStripMenuAbout.Click += new System.EventHandler(this.toolStripMenuAbout_Click);
             // 
             // labelStatus
             // 
@@ -513,22 +571,82 @@
             this.labelStatusText.TabIndex = 87;
             this.labelStatusText.Text = "N/A";
             // 
+            // buttonSelectColor
+            // 
+            this.buttonSelectColor.Location = new System.Drawing.Point(239, 506);
+            this.buttonSelectColor.Name = "buttonSelectColor";
+            this.buttonSelectColor.Size = new System.Drawing.Size(90, 23);
+            this.buttonSelectColor.TabIndex = 88;
+            this.buttonSelectColor.Text = "Change Color";
+            this.buttonSelectColor.UseVisualStyleBackColor = true;
+            this.buttonSelectColor.Click += new System.EventHandler(this.buttonSelectColor_Click);
+            // 
+            // contextMenuGlyph
+            // 
+            this.contextMenuGlyph.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuGlyphAdd});
+            this.contextMenuGlyph.Name = "contextMenuGlyph";
+            this.contextMenuGlyph.Size = new System.Drawing.Size(131, 26);
+            // 
+            // toolStripMenuGlyphAdd
+            // 
+            this.toolStripMenuGlyphAdd.Name = "toolStripMenuGlyphAdd";
+            this.toolStripMenuGlyphAdd.Size = new System.Drawing.Size(130, 22);
+            this.toolStripMenuGlyphAdd.Text = "Add Glyph";
+            this.toolStripMenuGlyphAdd.Click += new System.EventHandler(this.toolStripMenuGlyphAdd_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
+            // 
+            // toolStripMenuGlyphRemove
+            // 
+            this.toolStripMenuGlyphRemove.Name = "toolStripMenuGlyphRemove";
+            this.toolStripMenuGlyphRemove.Size = new System.Drawing.Size(151, 22);
+            this.toolStripMenuGlyphRemove.Text = "Remove Glyph";
+            this.toolStripMenuGlyphRemove.Click += new System.EventHandler(this.toolStripMenuGlyphRemove_Click);
+            // 
+            // checkBoxASCII
+            // 
+            this.checkBoxASCII.AutoSize = true;
+            this.checkBoxASCII.Location = new System.Drawing.Point(15, 216);
+            this.checkBoxASCII.Name = "checkBoxASCII";
+            this.checkBoxASCII.Size = new System.Drawing.Size(53, 17);
+            this.checkBoxASCII.TabIndex = 89;
+            this.checkBoxASCII.Text = "ASCII";
+            this.checkBoxASCII.UseVisualStyleBackColor = true;
+            // 
+            // toolStripMenuCheckUpdate
+            // 
+            this.toolStripMenuCheckUpdate.Name = "toolStripMenuCheckUpdate";
+            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuCheckUpdate.Text = "Check for Updates";
+            this.toolStripMenuCheckUpdate.Click += new System.EventHandler(this.toolStripMenuCheckUpdate_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 561);
+            this.Controls.Add(this.checkBoxASCII);
+            this.Controls.Add(this.buttonSelectColor);
             this.Controls.Add(this.labelStatusText);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.numericOptCustomXAdv);
-            this.Controls.Add(this.numericOptCustomLeftSide);
+            this.Controls.Add(this.numericOptCustomXOffset);
             this.Controls.Add(this.numericOptCustomBaseline);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.numericOptFontSize);
             this.Controls.Add(this.pictureBoxOptPalette);
             this.Controls.Add(this.labelPalettes);
-            this.Controls.Add(this.labelOptAdvWidth);
-            this.Controls.Add(this.labelOptLeftSide);
+            this.Controls.Add(this.labelOptXAdv);
+            this.Controls.Add(this.labelOptXOffset);
             this.Controls.Add(this.labelOptBaseline);
             this.Controls.Add(this.labelGlyphOpt);
             this.Controls.Add(this.textBoxOptFontPath);
@@ -549,17 +667,18 @@
             this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(880, 600);
             this.Name = "MainForm";
-            this.Text = "G1N Font Editor by LeHieu - VietHoaGame";
+            this.Text = "G1N Font Editor by LeHieu - viethoagame.com";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).EndInit();
-            this.contextMenuGlyph.ResumeLayout(false);
+            this.contextMenuSelectedGlyph.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericOptFontSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomBaseline)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomLeftSide)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomXOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomXAdv)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.contextMenuGlyph.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -584,18 +703,18 @@
         private System.Windows.Forms.Button buttonOptFontFromFile;
         private System.Windows.Forms.Label labelGlyphOpt;
         private System.Windows.Forms.Label labelOptBaseline;
-        private System.Windows.Forms.Label labelOptLeftSide;
-        private System.Windows.Forms.Label labelOptAdvWidth;
+        private System.Windows.Forms.Label labelOptXOffset;
+        private System.Windows.Forms.Label labelOptXAdv;
         private System.Windows.Forms.Label labelPalettes;
         private System.Windows.Forms.PictureBox pictureBoxOptPalette;
-        private System.Windows.Forms.ContextMenuStrip contextMenuGlyph;
+        private System.Windows.Forms.ContextMenuStrip contextMenuSelectedGlyph;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphImport;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphExport;
         private System.Windows.Forms.ToolStripSeparator toolStripGlyphSeparator;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphMetrics;
         private System.Windows.Forms.NumericUpDown numericOptFontSize;
         private System.Windows.Forms.NumericUpDown numericOptCustomBaseline;
-        private System.Windows.Forms.NumericUpDown numericOptCustomLeftSide;
+        private System.Windows.Forms.NumericUpDown numericOptCustomXOffset;
         private System.Windows.Forms.NumericUpDown numericOptCustomXAdv;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuFile;
@@ -611,6 +730,20 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuAbout;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Label labelStatusText;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuEdit;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuEditAddPage;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuEditAddGlyph;
+        private System.Windows.Forms.Button buttonSelectColor;
+        private System.Windows.Forms.ContextMenuStrip contextMenuGlyph;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphAdd;
+        private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuEditRemovePage;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphRemove;
+        private System.Windows.Forms.CheckBox checkBoxASCII;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuCheckUpdate;
     }
 }
 

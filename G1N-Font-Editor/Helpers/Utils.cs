@@ -6,27 +6,19 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace G1N_Font_Editor.Helpers
 {
-    public class ComboboxItem
-    {
-        public string Text { get; set; }
-        public object Value { get; set; }
-        public override string ToString()
-        {
-            return Text;
-        }
-    }
     public class GlyphCustomValue
     {
         public int AddCustomBaseLine { get; set; }
-        public int AddCustomLeftSide { get; set; }
+        public int AddCustomXOffset { get; set; }
         public int AddCustomAdvWidth { get; set; }
-        public GlyphCustomValue(int addCustomBaseLine, int addCustomLeftSide, int addCustomAdvWidth)
+        public GlyphCustomValue(int addCustomBaseLine, int addCustomXOffset, int addCustomAdvWidth)
         {
             AddCustomBaseLine = addCustomBaseLine;
-            AddCustomLeftSide = addCustomLeftSide;
+            AddCustomXOffset = addCustomXOffset;
             AddCustomAdvWidth = addCustomAdvWidth;
         }
     }
@@ -77,15 +69,28 @@ namespace G1N_Font_Editor.Helpers
         {
             return new string(input.ToCharArray().Distinct().ToArray());
         }
-        public static Color[] GenerateDefaultPalettes()
+        public static Color[] GeneratePalettes(byte[] rgb)
         {
             var colors = new Color[0x10];
             for (int i = 0; i < colors.Length; i++)
             {
-                var rgba = Global.G1N_DEFAULT_RGB_COLOR.Concat(new byte[] { (byte)(i + (i * 0x10)) }).ToArray();
+                var rgba = rgb.Concat(new byte[] { (byte)(i + (i * 0x10)) }).ToArray();
                 colors[i] = Color.FromArgb(BitConverter.ToInt32(rgba, 0));
             }
             return colors;
+        }
+        public static char[] GetNonControlASCIICharacters()
+        {
+            char[] result = Enumerable.Range(0, 0xFF)
+                .Select(c => (char)c)
+                .Where(c => !char.IsControl(c))
+                .ToArray();
+            return result;
+        }
+        public static void OpenUrl(string url)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo(url);
+            Process.Start(sInfo);
         }
     }
 }

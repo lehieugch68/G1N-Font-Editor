@@ -16,30 +16,24 @@ namespace G1N_Font_Editor
         public char Character { get; set; }
         public byte Width { get; set; }
         public byte Height { get; set; }
-        public sbyte LeftSide { get; set; }
+        public sbyte XOffset { get; set; }
         public sbyte Baseline { get; set; }
-        public byte XAdv { get; set; }
+        public byte XAdvance { get; set; }
         public sbyte Unk { get; set; }
-        public int DataOffset { get; set; }
-        public int PixelDataSize { get; set; }
-        public long PixelDataPointer { get; set; }
         private byte[] _pixelData;
         public byte[] PixelData { get { return _pixelData; } }
         private Bitmap _bmp;
-        public Rectangle Rect;
-        public Rectangle BoxRect;
-        public Glyph(int charCode, char character, byte width, byte height, sbyte leftSide, sbyte baseline, byte xadv, sbyte unk, int dataOffset, int pixelDataSize, byte[] pixelData)
+        public Rectangle Rect { get; set; }
+        public Glyph(int charCode, char character, byte width, byte height, sbyte baseline, byte xAdvance, sbyte xOffset, sbyte unk, byte[] pixelData)
         {
             CharCode = charCode;
             Character = character;
             Width = width;
             Height = height;
-            LeftSide = leftSide;
+            XOffset = xOffset;
             Baseline = baseline;
-            XAdv = xadv;
+            XAdvance = xAdvance;
             Unk = unk;
-            DataOffset = dataOffset;
-            PixelDataSize = pixelDataSize;
             _pixelData = pixelData;
             GetBitmap();
         }
@@ -47,7 +41,17 @@ namespace G1N_Font_Editor
         {
             CharCode = (int)character;
             Character = character;
-            PixelDataSize = 0;
+        }
+        public Glyph(char character, Bitmap bitmap, sbyte baseline, byte xAdvance, sbyte xOffset)
+        {
+            Character = character;
+            CharCode = (int)character;
+            _bmp = bitmap;
+            Width = (byte)bitmap.Width;
+            Height = (byte)bitmap.Height;
+            XOffset = xOffset;
+            Baseline = baseline;
+            XAdvance = xAdvance;
         }
         public Bitmap GetBitmap()
         {
@@ -70,9 +74,14 @@ namespace G1N_Font_Editor
             }
             return _bmp;
         }
-        public Bitmap SetBimap(Bitmap bmp)
+        public Bitmap SetBimap(string filePath)
         {
-            _bmp = bmp;
+            var bitmap = new Bitmap(filePath);
+            if (bitmap.Width > sbyte.MaxValue || bitmap.Height > sbyte.MaxValue) 
+                throw new Exception(Global.MESSAGEBOX_MESSAGES["ImageTooLarge"]);
+            _bmp = bitmap;
+            Width = Convert.ToByte(bitmap.Width);
+            Height = Convert.ToByte(bitmap.Height);
             _pixelData = Convert8BppTo4Bpp(_bmp);
             return _bmp;
         }
@@ -81,8 +90,9 @@ namespace G1N_Font_Editor
             IDictionary<int, ushort> characterMap = glyphTypeface.CharacterToGlyphMap;
             ushort index;
             if (!characterMap.TryGetValue(Character, out index)) return _pixelData;
-            int width = (int)
-                Math.Ceiling(
+            var measureSize = FontHelper.MeasureSize(Character, font);
+            int width = 
+                (int)Math.Ceiling(
                     (
                         glyphTypeface.AdvanceWidths[index]
                         + Math.Abs(glyphTypeface.LeftSideBearings[index])
@@ -109,7 +119,6 @@ namespace G1N_Font_Editor
                 );
             while (height % 2 != 0 || height <= 0)
                 height++;
-            var measureSize = FontHelper.MeasureSize(Character, font);
             Bitmap bmp = new Bitmap(width, height);
             bmp.SetResolution(72, 72);
             int startX = (int)Math.Ceiling((width - measureSize.Width) / 2);
@@ -131,12 +140,12 @@ namespace G1N_Font_Editor
             _bmp = bmp;
             Width = (byte)_bmp.Width;
             Height = (byte)_bmp.Height;
-            XAdv = (byte)Math.Ceiling(glyphTypeface.AdvanceWidths[index] * font.Size);
-            LeftSide = (sbyte)Math.Floor(glyphTypeface.LeftSideBearings[index] * font.Size);
-            Baseline = (sbyte)Math.Ceiling((glyphTypeface.Baseline * font.Size));
+            XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? 
+                (byte)Math.Round((glyphTypeface.AdvanceWidths[index] + Math.Abs(glyphTypeface.LeftSideBearings[index])) * font.Size) : (byte)0;
+            XOffset = (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size * (glyphTypeface.LeftSideBearings[index] < 0 ? 1 : -1));
+            Baseline = (sbyte)Math.Round((glyphTypeface.Baseline * font.Size));
             _pixelData = Convert8BppTo4Bpp(_bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);
-            PixelDataSize = _pixelData.Length;
             return _pixelData;
         }
         private byte[] Convert4BppTo8Bpp(byte[] input)

@@ -19,8 +19,7 @@ namespace G1N_Font_Editor
         public int PaletteCount { get; set; }
         public int TableCount { get; set; }
         public List<GlyphTable> GlyphTables { get; set; }
-        private string _rootFile;
-        public string RootFile { get { return _rootFile; } }
+        public string RootFile { get; set; }
         public byte[] _rawData;
         public byte[] RawData { get { return _rawData; } }
         private struct CharID
@@ -30,8 +29,8 @@ namespace G1N_Font_Editor
         }
         public G1N(string input)
         {
-            _rootFile = input;
-            _rawData = File.ReadAllBytes(_rootFile);
+            RootFile = input;
+            _rawData = File.ReadAllBytes(RootFile);
             LoadData();
         }
         public G1N(int totalPage)
@@ -42,10 +41,10 @@ namespace G1N_Font_Editor
             PaletteCount = totalPage;
             HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (totalPage * (4 + (4 * 0x10)));
             GlyphTables = new List<GlyphTable>();
+            var palettes = Utils.GeneratePalettes(Global.G1N_DEFAULT_RGB_COLOR);
             for (int i = 0; i < TableCount; i++)
             {
-                var table = new GlyphTable(i);
-                table.Palettes = Utils.GenerateDefaultPalettes();
+                var table = new GlyphTable(i, palettes);
                 GlyphTables.Add(table);
             }
         }
@@ -55,6 +54,8 @@ namespace G1N_Font_Editor
             var br = new BinaryReader(ms);
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             Signature = br.ReadBytes(8);
+            if (!Signature.SequenceEqual(Global.G1N_DEFAULT_SIGNATURE_BYTES))
+                throw new Exception(Global.MESSAGEBOX_MESSAGES["UnsupportedFormat"]);
             FileSize = br.ReadInt32();
             HeaderSize = br.ReadInt32();
             ColorCount = br.ReadInt32();
@@ -80,8 +81,7 @@ namespace G1N_Font_Editor
             for (int i = 0; i < TableCount; i++)
             {
                 int offset = tableOffsets[i];
-                var table = new GlyphTable(i);
-                table.Palettes = palettes[i];
+                var table = new GlyphTable(i, palettes[i]);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0xFFFF];
@@ -100,7 +100,7 @@ namespace G1N_Font_Editor
                 {
                     var width = br.ReadByte();
                     var height = br.ReadByte();
-                    var leftSide = br.ReadSByte();
+                    var xoff = br.ReadSByte();
                     var baseline = br.ReadSByte();
                     var xadv = br.ReadByte();
                     var unk = br.ReadSByte();
@@ -127,11 +127,38 @@ namespace G1N_Font_Editor
                     br.BaseStream.Position = AtlasOffset + pixelDataOffset;
                     var pixelData = br.ReadBytes(pixelDataSize);
                     br.BaseStream.Position = temp;
-                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, leftSide, baseline, xadv, unk, pixelDataOffset, pixelDataSize, pixelData);
+                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, baseline, xadv, xoff, unk, pixelData);
                     table.Glyphs.Add(glyph);
                 }
                 GlyphTables.Add(table);
             }
+        }
+        private void CalculateHeaderData()
+        {
+            TableCount = GlyphTables.Count;
+            PaletteCount = GlyphTables.Count;
+            HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (GlyphTables.Count * (4 + (4 * 0x10)));
+        }
+        public void AddGlyphTables(int num = 1)
+        {
+            var palettes = Utils.GeneratePalettes(Global.G1N_DEFAULT_RGB_COLOR);
+            for (int i = 0; i < num; i++)
+            {
+                var table = new GlyphTable(GlyphTables.Count, palettes);
+                GlyphTables.Add(table);
+            }
+            CalculateHeaderData();
+        }
+        public void RemoveGlyphTable(int index)
+        {
+            if (GlyphTables.Count <= 1)
+                throw new Exception(Global.MESSAGEBOX_MESSAGES["EmptyG1N"]);
+            GlyphTables.RemoveAt(index);
+            for (int i = 0; i < GlyphTables.Count; i++)
+            {
+                GlyphTables[i].Index = i;
+            }
+            CalculateHeaderData();
         }
         public byte[] Build(GlyphCustomValue glyphCustomValue)
         {
@@ -172,14 +199,14 @@ namespace G1N_Font_Editor
                         if (glyph == null) continue;
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Height);
-                        bw.Write((byte)(glyph.LeftSide + glyphCustomValue.AddCustomLeftSide));
+                        bw.Write((byte)(glyph.XOffset + glyphCustomValue.AddCustomXOffset));
                         bw.Write((byte)(glyph.Baseline + glyphCustomValue.AddCustomBaseLine));
-                        bw.Write((byte)(glyph.XAdv + glyphCustomValue.AddCustomAdvWidth));
+                        bw.Write((byte)(glyph.XAdvance + glyphCustomValue.AddCustomAdvWidth));
                         bw.Write(glyph.Unk);
-                        bw.Write((byte)(glyph.LeftSide + glyphCustomValue.AddCustomLeftSide));
+                        bw.Write((byte)(glyph.XOffset + glyphCustomValue.AddCustomXOffset));
                         bw.Write(glyph.Height);
                         bw.Write(atlasOffset);
-                        atlasOffset += glyph.PixelDataSize;
+                        atlasOffset += glyph.PixelData.Length;
                     }  
                 }
                 AtlasOffset = (int)bw.BaseStream.Position;
