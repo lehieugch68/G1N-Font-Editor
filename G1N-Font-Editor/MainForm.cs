@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Text;
 using System.Drawing.Imaging;
-using System.Net;
+using System.Net.Http;
 using System.Web.Script.Serialization;
 using G1N_Font_Editor.Helpers;
 using G1N_Font_Editor.Components;
-using System.Net.Http;
+using G1N_Font_Editor.Components.Singleton;
 
 namespace G1N_Font_Editor
 {
@@ -791,7 +788,8 @@ namespace G1N_Font_Editor
 
         private void toolStripMenuAbout_Click(object sender, EventArgs e)
         {
-
+            var form = AboutFormInstance.GetForm;
+            form.Show();
         }
 
         private void toolStripMenuCheckUpdate_Click(object sender, EventArgs e)

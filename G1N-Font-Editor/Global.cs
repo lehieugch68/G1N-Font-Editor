@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
 
 namespace G1N_Font_Editor
@@ -72,6 +69,7 @@ namespace G1N_Font_Editor
         };
         public static Dictionary<string, string> APP_URLS = new Dictionary<string, string>()
         {
+            { "Repository", "https://github.com/lehieugch68/G1N-Font-Editor" },
             { "Guide", "https://github.com/lehieugch68/G1N-Font-Editor" },
             { "Info", "https://lehieugch68.github.io/G1N/app-info.json" },
             { "VHGForum", "https://viethoagame.com/" }

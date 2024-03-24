@@ -36,6 +36,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Singleton\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\Singleton\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\GlyphMetricForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +73,7 @@
     <Compile Include="Components\NewGlyphForm.Designer.cs">
       <DependentUpon>NewGlyphForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\Singleton\AboutFormInstance.cs" />
     <Compile Include="Helpers\FontHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -80,6 +88,9 @@
     <Compile Include="GlyphTable.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Components\Singleton\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Components\GlyphMetricForm.resx">
       <DependentUpon>GlyphMetricForm.cs</DependentUpon>
     </EmbeddedResource>

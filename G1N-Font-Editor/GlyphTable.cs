@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {

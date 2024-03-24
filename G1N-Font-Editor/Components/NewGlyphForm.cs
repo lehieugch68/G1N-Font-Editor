@@ -1,12 +1,7 @@
 ﻿using G1N_Font_Editor.Helpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace G1N_Font_Editor.Components
