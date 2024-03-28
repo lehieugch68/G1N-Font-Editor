@@ -632,6 +632,10 @@ namespace G1N_Font_Editor
                     comboBoxPage.Enabled = true;
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                     if (isError) return;
+                    for (int i = 0; i < comboBoxPage.Items.Count; i++)
+                    {
+                        comboBoxPage.Items[i] = $"{Global.LABEL_PAGE} {i}";
+                    }
                     comboBoxPage.SelectedIndex = comboBoxPage.Items.Count - 1;
                 });
             }
@@ -670,6 +674,10 @@ namespace G1N_Font_Editor
                     var currIndex = Global.SELECTED_G1N_FONT_ID;
                     Global.SELECTED_G1N_FONT_ID = -1;
                     comboBoxPage.Items.RemoveAt(currIndex);
+                    for (int i = 0; i < comboBoxPage.Items.Count; i++)
+                    {
+                        comboBoxPage.Items[i] = $"{Global.LABEL_PAGE} {i}";
+                    }
                     comboBoxPage.SelectedIndex = comboBoxPage.Items.Count > 1 ? currIndex : 0;
                     
                 });
