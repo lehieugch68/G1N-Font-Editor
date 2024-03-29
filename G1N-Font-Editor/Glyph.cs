@@ -49,6 +49,7 @@ namespace G1N_Font_Editor
             XOffset = xOffset;
             Baseline = baseline;
             XAdvance = xAdvance;
+            _pixelData = Convert8BppTo4Bpp(bitmap);
         }
         public Bitmap GetBitmap()
         {
