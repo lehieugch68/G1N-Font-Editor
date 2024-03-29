@@ -55,6 +55,8 @@
             this.toolStripMenuGlyphImport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGlyphMetrics = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuGlyphRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.numericOptFontSize = new System.Windows.Forms.NumericUpDown();
             this.numericOptCustomBaseline = new System.Windows.Forms.NumericUpDown();
@@ -76,17 +78,15 @@
             this.toolStripMenuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.labelStatus = new System.Windows.Forms.Label();
             this.labelStatusText = new System.Windows.Forms.Label();
             this.buttonSelectColor = new System.Windows.Forms.Button();
             this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuGlyphAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuGlyphRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBoxASCII = new System.Windows.Forms.CheckBox();
-            this.toolStripMenuCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.contextMenuSelectedGlyph.SuspendLayout();
@@ -193,7 +193,7 @@
             this.buttonBuild.Name = "buttonBuild";
             this.buttonBuild.Size = new System.Drawing.Size(317, 25);
             this.buttonBuild.TabIndex = 65;
-            this.buttonBuild.Text = "Build From TrueType Font";
+            this.buttonBuild.Text = "Generate Bitmap from TrueType Font";
             this.buttonBuild.UseVisualStyleBackColor = true;
             this.buttonBuild.Click += new System.EventHandler(this.buttonBuild_Click);
             // 
@@ -335,6 +335,18 @@
             this.toolStripMenuGlyphMetrics.Size = new System.Drawing.Size(151, 22);
             this.toolStripMenuGlyphMetrics.Text = "Glyph Metrics";
             this.toolStripMenuGlyphMetrics.Click += new System.EventHandler(this.toolStripMenuGlyphMetrics_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
+            // 
+            // toolStripMenuGlyphRemove
+            // 
+            this.toolStripMenuGlyphRemove.Name = "toolStripMenuGlyphRemove";
+            this.toolStripMenuGlyphRemove.Size = new System.Drawing.Size(151, 22);
+            this.toolStripMenuGlyphRemove.Text = "Remove Glyph";
+            this.toolStripMenuGlyphRemove.Click += new System.EventHandler(this.toolStripMenuGlyphRemove_Click);
             // 
             // toolStripMenuExit
             // 
@@ -505,26 +517,26 @@
             // toolStripMenuEditAddPage
             // 
             this.toolStripMenuEditAddPage.Name = "toolStripMenuEditAddPage";
-            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditAddPage.Text = "Add Page";
             this.toolStripMenuEditAddPage.Click += new System.EventHandler(this.toolStripMenuEditAddPage_Click);
             // 
             // toolStripMenuEditRemovePage
             // 
             this.toolStripMenuEditRemovePage.Name = "toolStripMenuEditRemovePage";
-            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditRemovePage.Text = "Remove Page";
             this.toolStripMenuEditRemovePage.Click += new System.EventHandler(this.toolStripMenuEditRemovePage_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // toolStripMenuEditAddGlyph
             // 
             this.toolStripMenuEditAddGlyph.Name = "toolStripMenuEditAddGlyph";
-            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditAddGlyph.Text = "Add Glyph";
             this.toolStripMenuEditAddGlyph.Click += new System.EventHandler(this.toolStripMenuEditAddGlyph_Click);
             // 
@@ -542,16 +554,28 @@
             // toolStripMenuGuide
             // 
             this.toolStripMenuGuide.Name = "toolStripMenuGuide";
-            this.toolStripMenuGuide.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGuide.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuGuide.Text = "Guide";
             this.toolStripMenuGuide.Click += new System.EventHandler(this.toolStripMenuGuide_Click);
             // 
             // toolStripMenuAbout
             // 
             this.toolStripMenuAbout.Name = "toolStripMenuAbout";
-            this.toolStripMenuAbout.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuAbout.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuAbout.Text = "About";
             this.toolStripMenuAbout.Click += new System.EventHandler(this.toolStripMenuAbout_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(168, 6);
+            // 
+            // toolStripMenuCheckUpdate
+            // 
+            this.toolStripMenuCheckUpdate.Name = "toolStripMenuCheckUpdate";
+            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuCheckUpdate.Text = "Check for Updates";
+            this.toolStripMenuCheckUpdate.Click += new System.EventHandler(this.toolStripMenuCheckUpdate_Click);
             // 
             // labelStatus
             // 
@@ -595,18 +619,6 @@
             this.toolStripMenuGlyphAdd.Text = "Add Glyph";
             this.toolStripMenuGlyphAdd.Click += new System.EventHandler(this.toolStripMenuGlyphAdd_Click);
             // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(148, 6);
-            // 
-            // toolStripMenuGlyphRemove
-            // 
-            this.toolStripMenuGlyphRemove.Name = "toolStripMenuGlyphRemove";
-            this.toolStripMenuGlyphRemove.Size = new System.Drawing.Size(151, 22);
-            this.toolStripMenuGlyphRemove.Text = "Remove Glyph";
-            this.toolStripMenuGlyphRemove.Click += new System.EventHandler(this.toolStripMenuGlyphRemove_Click);
-            // 
             // checkBoxASCII
             // 
             this.checkBoxASCII.AutoSize = true;
@@ -616,18 +628,6 @@
             this.checkBoxASCII.TabIndex = 89;
             this.checkBoxASCII.Text = "ASCII";
             this.checkBoxASCII.UseVisualStyleBackColor = true;
-            // 
-            // toolStripMenuCheckUpdate
-            // 
-            this.toolStripMenuCheckUpdate.Name = "toolStripMenuCheckUpdate";
-            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuCheckUpdate.Text = "Check for Updates";
-            this.toolStripMenuCheckUpdate.Click += new System.EventHandler(this.toolStripMenuCheckUpdate_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // MainForm
             // 

@@ -35,6 +35,7 @@ namespace G1N_Font_Editor.Components
                     MessageBox.Show(Global.MESSAGEBOX_MESSAGES["ImageTooLarge"], Global.MESSAGEBOX_TITLE);
                     return;
                 } 
+                textBoxNewGlyphImgPath.Text = filePath;
                 _glyphBitmap = bmp;
                 numericNewGlyphWidth.Value = _glyphBitmap.Width;
                 numericNewGlyphHeight.Value = _glyphBitmap.Height;
