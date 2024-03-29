@@ -9,6 +9,8 @@ namespace G1N_Font_Editor.Components
         public AboutForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.AppIcon;
+            this.pictureBoxAboutImg.Image = Properties.Resources.AppLogo;
         }
 
         private void AboutForm_Load(object sender, EventArgs e)

@@ -10,6 +10,7 @@ namespace G1N_Font_Editor.Components
         public NewG1NForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.AppIcon;
         }
 
         private void buttonNewG1NCreate_Click(object sender, EventArgs e)

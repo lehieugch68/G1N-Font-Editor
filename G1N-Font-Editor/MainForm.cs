@@ -20,6 +20,7 @@ namespace G1N_Font_Editor
         public MainForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.AppIcon;
             contextMenuSelectedGlyph.Items.Insert(0, new ToolStripLabel(Global.LABEL_NOT_AVAILABLE));
         }
 

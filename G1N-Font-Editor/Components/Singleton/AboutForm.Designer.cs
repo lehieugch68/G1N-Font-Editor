@@ -35,9 +35,9 @@
             this.labelThanksValue2 = new System.Windows.Forms.Label();
             this.linkLabelPjRepository = new System.Windows.Forms.LinkLabel();
             this.linkLabelVHGForum = new System.Windows.Forms.LinkLabel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelVersion = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pictureBoxAboutImg = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAboutImg)).BeginInit();
             this.SuspendLayout();
             // 
             // labelAuthor
@@ -107,14 +107,6 @@
             this.linkLabelVHGForum.Text = "VietHoaGame Forum";
             this.linkLabelVHGForum.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelVHGForum_LinkClicked);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(272, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 100);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
-            // 
             // labelVersion
             // 
             this.labelVersion.AutoSize = true;
@@ -124,13 +116,22 @@
             this.labelVersion.TabIndex = 8;
             this.labelVersion.Text = "Ver. 1.0.0.0";
             // 
+            // pictureBoxAboutImg
+            // 
+            this.pictureBoxAboutImg.Location = new System.Drawing.Point(265, 15);
+            this.pictureBoxAboutImg.Name = "pictureBoxAboutImg";
+            this.pictureBoxAboutImg.Size = new System.Drawing.Size(100, 100);
+            this.pictureBoxAboutImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxAboutImg.TabIndex = 7;
+            this.pictureBoxAboutImg.TabStop = false;
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 211);
             this.Controls.Add(this.labelVersion);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pictureBoxAboutImg);
             this.Controls.Add(this.linkLabelVHGForum);
             this.Controls.Add(this.linkLabelPjRepository);
             this.Controls.Add(this.labelThanksValue2);
@@ -145,7 +146,7 @@
             this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AboutForm_FormClosing);
             this.Load += new System.EventHandler(this.AboutForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAboutImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,7 +161,7 @@
         private System.Windows.Forms.Label labelThanksValue2;
         private System.Windows.Forms.LinkLabel linkLabelPjRepository;
         private System.Windows.Forms.LinkLabel linkLabelVHGForum;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBoxAboutImg;
         private System.Windows.Forms.Label labelVersion;
     }
 }

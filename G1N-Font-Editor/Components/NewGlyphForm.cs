@@ -21,6 +21,7 @@ namespace G1N_Font_Editor.Components
         public NewGlyphForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.AppIcon;
         }
 
         private void buttonNewGlyphImgPath_Click(object sender, EventArgs e)

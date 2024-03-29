@@ -16,6 +16,7 @@ namespace G1N_Font_Editor.Components
         public GlyphMetricForm(Glyph glyph)
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.AppIcon;
             numericGlyphMetricBaseline.Value = glyph.Baseline;
             numericGlyphMetricXOffset.Value = glyph.XOffset;
             numericGlyphMetricXAdv.Value = glyph.XAdvance;
