@@ -458,7 +458,7 @@ namespace G1N_Font_Editor
 
         private void toolStripMenuExit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Environment.Exit(0);
         }
 
         private void comboBoxPage_SelectedIndexChanged(object sender, EventArgs e)
