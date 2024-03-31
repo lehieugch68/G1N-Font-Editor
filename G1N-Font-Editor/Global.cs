@@ -50,7 +50,8 @@ namespace G1N_Font_Editor
             { "EmptyG1N", "The file must have at least one page." },
             { "NoFontChosen", "No TrueType Font chosen." },
             { "NewVer", "There is a new application version available, do you want to update?" },
-            { "LatestVer", "The application is in the latest version." }
+            { "LatestVer", "The application is in the latest version." },
+            { "MissingChar", "The selected TrueType Font does not include a glyph for '{Character}'." }
         };
         public static Dictionary<string, string> PROGRESS_MESSAGES = new Dictionary<string, string>()
         {
@@ -70,7 +71,7 @@ namespace G1N_Font_Editor
         public static Dictionary<string, string> APP_URLS = new Dictionary<string, string>()
         {
             { "Repository", "https://github.com/lehieugch68/G1N-Font-Editor" },
-            { "Guide", "https://github.com/lehieugch68/G1N-Font-Editor" },
+            { "Guide", "https://github.com/lehieugch68/G1N-Font-Editor?tab=readme-ov-file#guide" },
             { "Info", "https://lehieugch68.github.io/G1N/app-info.json" },
             { "VHGForum", "https://viethoagame.com/" }
         };
