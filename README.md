@@ -64,7 +64,7 @@ In addition, you can also customize the color of the characters in the game.
 
 ## Known Issues
 
-- The spacing between characters in Fatal Frame's menus is excessively tight (and possibly in some other games), which seems to be a problem with these games because their fonts have a little extra spacing between characters that other games don't need. To address this, manual adjustment of the XAdvance value is recommended.
+- The spacing between characters in Fatal Frame's menus is excessively tight (and possibly in some other games), which seems to be a problem with these games because their fonts have a little extra spacing between characters that other games don't need. To address this, manual adjustment of the XAdvance value is recommended (Add Custom XAdvance to apply to all glyphs).
 
 ## Bug Report
 
