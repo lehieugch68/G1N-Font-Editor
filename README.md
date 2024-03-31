@@ -71,8 +71,8 @@ In addition, you can also customize the color of the characters in the game.
 If there are any problems with the program or there is an unsupported G1N format, feel free to create an [issue](https://github.com/lehieugch68/G1N-Font-Editor/issues).
 
 ## Helpful Links
-- [Vietnamese Guide](https://viethoagame.com/threads/chia-se-g1n-font-editor-cong-cu-tao-sua-font-g1n.536/).
-- [VietHoaGame Discord](https://discord.com/invite/YE59VVK).
+- [Vietnamese Guide](https://viethoagame.com/threads/chia-se-g1n-font-editor-cong-cu-tao-sua-font-g1n.536/)
+- [VietHoaGame Discord](https://discord.com/invite/YE59VVK)
 
 ## Special Thanks
 - [oblivion](https://viethoagame.com/members/oblivion.4/)
