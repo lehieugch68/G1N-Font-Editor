@@ -2,6 +2,7 @@
 This program allows to create or modify the .g1n font format used in some Koei Tecmo games.
 
 Requires [.NET Framework v4.8.](https://dotnet.microsoft.com/en-us/download/dotnet-framework)
+
 [Download latest release.](https://github.com/lehieugch68/G1N-Font-Editor/releases)
 
 ## Features
