@@ -99,9 +99,10 @@ namespace G1N_Font_Editor
                     (
                         glyphTypeface.AdvanceWidths[index]
                         + Math.Abs(glyphTypeface.LeftSideBearings[index])
+                        + Math.Abs(glyphTypeface.RightSideBearings[index])
                     ) * font.Size
                 );
-            while (width % 2 != 0 || width <= 0 || width <= (int)Math.Round(glyphTypeface.AdvanceWidths[index] * font.Size))
+            while (width % 2 != 0 || width <= 0)
                 width++;
             int height = (int)
                 Math.Ceiling(
@@ -123,7 +124,7 @@ namespace G1N_Font_Editor
                 height++;
             Bitmap bmp = new Bitmap(width, height);
             bmp.SetResolution(72, 72);
-            int startX = (int)Math.Ceiling((width - measureSize.Width) / 2);
+            int startX = (int)Math.Ceiling((width - measureSize.Width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) / 2);
             int startY =
                 glyphTypeface.TopSideBearings[index] < 0
                     ? Math.Abs((int)(glyphTypeface.TopSideBearings[index] * font.Size))
@@ -143,13 +144,13 @@ namespace G1N_Font_Editor
             Width = (byte)_bmp.Width;
             Height = (byte)_bmp.Height;
             
-            /*XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? 
-                (byte)Math.Round((glyphTypeface.AdvanceWidths[index] + Math.Abs(glyphTypeface.LeftSideBearings[index])) * font.Size) : (byte)0;
-            XOffset = (sbyte)(glyphTypeface.LeftSideBearings[index] * font.Size * (glyphTypeface.AdvanceWidths[index] > 0 ? -1 : 1));*/
+            XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? 
+                (byte)Math.Round((glyphTypeface.AdvanceWidths[index] + (glyphTypeface.LeftSideBearings[index] >= 0 ? 0 : Math.Abs(glyphTypeface.LeftSideBearings[index]))) * font.Size) : (byte)0;
+            XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] < 0 ? 0 : glyphTypeface.LeftSideBearings[index] * font.Size * -1) : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
 
-            XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? Width : (byte)0;
-            XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index]);
-            
+            //XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? (byte)Math.Round(width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) : (byte)0;
+            //XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
+
             Baseline = (sbyte)Math.Round(glyphTypeface.Baseline * font.Size);
             _pixelData = Convert8BppTo4Bpp(_bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);

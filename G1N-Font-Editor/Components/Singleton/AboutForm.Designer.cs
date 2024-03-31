@@ -114,7 +114,7 @@
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(62, 13);
             this.labelVersion.TabIndex = 8;
-            this.labelVersion.Text = "Ver. 1.0.0.0";
+            this.labelVersion.Text = "Ver. 1.0.0.1";
             // 
             // pictureBoxAboutImg
             // 

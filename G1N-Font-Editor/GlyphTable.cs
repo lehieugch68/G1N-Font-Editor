@@ -128,14 +128,12 @@ namespace G1N_Font_Editor
         {
             if (chars != null) 
             {
+                var dict = glyphTypeface.CharacterToGlyphMap;
                 foreach (var ch in chars)
                 {
-                    var glyph = Glyphs.Find(g => g.Character == ch);
-                    if (glyph == null)
-                    {
-                        glyph = new Glyph(ch);
-                        Glyphs.Add(glyph);
-                    }
+                    if (Glyphs.FindIndex(g => g.Character == ch) != -1 || !dict.ContainsKey(ch)) continue;
+                    var glyph = new Glyph(ch);
+                    Glyphs.Add(glyph);
                 }
             }
             foreach (var glyph in Glyphs)

@@ -69,7 +69,7 @@ namespace G1N_Font_Editor
             }
             catch (Exception ex) 
             {
-                MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
             }
         }
 
@@ -172,7 +172,7 @@ namespace G1N_Font_Editor
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                    MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
                 }
             }
         }
@@ -214,7 +214,7 @@ namespace G1N_Font_Editor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
             }
         }
 

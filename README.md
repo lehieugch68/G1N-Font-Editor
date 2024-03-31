@@ -58,7 +58,15 @@ Similar to removing a glyph, you can right-click a character on a bitmap to impo
 In addition, you can also customize the color of the characters in the game.
 <p align="center"><img src="https://i.imgur.com/5Mg02xQ.png"></p>
 
-## Issues
+### Result
+
+<p align="center"><img src="https://i.imgur.com/2IPcoRr.png"></p>
+
+## Known Issues
+
+- The spacing between text characters in Fatal Frame's menus is excessively tight (and possibly in some other games), which seems to be a problem with these games because their fonts have a little extra spacing between characters that other games don't need. To address this, manual adjustment of the XAdvance value is recommended.
+
+## Bug Report
 
 If there are any problems with the program or there is an unsupported G1N format, feel free to create an [issue](https://github.com/lehieugch68/G1N-Font-Editor/issues).
 
