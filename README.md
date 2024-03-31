@@ -64,7 +64,7 @@ If there are any problems with the program or there is an unsupported G1N format
 
 ## Helpful Links
 - [Vietnamese Guide](https://viethoagame.com/threads/chia-se-g1n-font-editor-cong-cu-tao-sua-font-g1n.536/).
-- [VietHoaGame Discord](https://viethoagame.com/).
+- [VietHoaGame Discord](https://discord.com/invite/YE59VVK).
 
 ## Special Thanks
 - [oblivion](https://viethoagame.com/members/oblivion.4/)
