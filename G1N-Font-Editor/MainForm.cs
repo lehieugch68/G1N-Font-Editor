@@ -348,7 +348,7 @@ namespace G1N_Font_Editor
                         catch (Exception ex)
                         {
                             isError = true;
-                            MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
                         }
                     }).GetAwaiter().OnCompleted(() =>
                     {

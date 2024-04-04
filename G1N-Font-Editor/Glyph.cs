@@ -59,8 +59,11 @@ namespace G1N_Font_Editor
             }
             int index = 0;
             var convertedData = Convert4BppTo8Bpp(_pixelData);
-            int imgWidth = Width % 2 == 0 ? Width : Width + 1;
-            _bmp = new Bitmap(imgWidth, Height);
+            int imgWidth = Width;
+            int imgHeight = Height;
+            while (imgWidth % 2 != 0 || imgWidth <= 0) imgWidth++;
+            while (imgHeight <= 0) imgHeight++;
+            _bmp = new Bitmap(imgWidth, imgHeight);
             for (int y = 0; y < _bmp.Height; y++)
             {
                 for (int x = 0; x < _bmp.Width; x++)
