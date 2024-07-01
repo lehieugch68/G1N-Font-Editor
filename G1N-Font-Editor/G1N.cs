@@ -80,7 +80,7 @@ namespace G1N_Font_Editor
             for (int i = 0; i < TableCount; i++)
             {
                 int offset = tableOffsets[i];
-                var table = new GlyphTable(i, palettes[i]);
+                var table = PaletteCount > TableCount ? new GlyphTable(i, palettes[i * 2], palettes[(i * 2) + 1]) : new GlyphTable(i, palettes[i]);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0xFFFF];
@@ -173,10 +173,14 @@ namespace G1N_Font_Editor
                 bw.Write(TableCount);
                 long tablePointerOffset = bw.BaseStream.Position;
                 int[] tablePointer = new int[TableCount];
-                bw.BaseStream.Position += PaletteCount * 4;
+                bw.BaseStream.Position += TableCount * 4;
                 foreach (var table in GlyphTables)
                 {
                     foreach (var color in table.Palettes) bw.Write(color.ToArgb());
+                    if (table.AlphaPalettes != null)
+                    {
+                        foreach (var color in table.AlphaPalettes) bw.Write(color.ToArgb());
+                    }
                 }
                 int atlasOffset = 0;
                 for (int i = 0; i < TableCount; i++)

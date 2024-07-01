@@ -14,12 +14,18 @@ namespace G1N_Font_Editor
         public Color[] Palettes { get; set; }
         private Bitmap _palettePreview;
         public Bitmap PalettePreview { get { return _palettePreview; } }
-        public GlyphTable(int index, Color[] palettes)
+        public Color[] AlphaPalettes { get; set; }
+        public GlyphTable(int index, Color[] palettes, Color[] alphaPalettes = null)
         {
             Index = index;
             Glyphs = new List<Glyph>();
             Palettes = new Color[0x10];
             Array.Copy(palettes, Palettes, 0x10);
+            if (alphaPalettes != null )
+            {
+                AlphaPalettes = new Color[0x10];
+                Array.Copy(alphaPalettes, AlphaPalettes, 0x10);
+            }
         }
         public void AddGlyph(Glyph glyph)
         {
