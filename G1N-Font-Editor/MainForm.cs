@@ -837,6 +837,7 @@ namespace G1N_Font_Editor
         {
             if (currentPage.HasValue) Global.CURRENT_TEX_PAGE = currentPage.Value;
             if (totalPage.HasValue) Global.TOTAL_TEX_PAGE = totalPage.Value;
+            if (Global.CURRENT_TEX_PAGE > Global.TOTAL_TEX_PAGE) Global.CURRENT_TEX_PAGE = Global.TOTAL_TEX_PAGE;
             labelPage.BeginInvoke((MethodInvoker)delegate
             {
                 labelPage.Text = $"{Global.CURRENT_TEX_PAGE} / {Global.TOTAL_TEX_PAGE}";
