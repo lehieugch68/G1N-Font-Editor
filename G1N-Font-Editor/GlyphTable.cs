@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {
@@ -9,19 +10,20 @@ namespace G1N_Font_Editor
     {
         public int Index { get; set; }
         public List<Glyph> Glyphs { get; set; }
-        private Bitmap _tablePreview;
-        public Bitmap TablePreview { get { return _tablePreview; } }
         public Color[] Palettes { get; set; }
-        private Bitmap _palettePreview;
-        public Bitmap PalettePreview { get { return _palettePreview; } }
+        private Bitmap _paletteImage;
+        public Bitmap PaletteImage { get { return _paletteImage; } }
         public Color[] AlphaPalettes { get; set; }
+        private List<TablePage> _tablePages;
+        public List<TablePage> TablePages { get { return _tablePages; } }
         public GlyphTable(int index, Color[] palettes, Color[] alphaPalettes = null)
         {
             Index = index;
             Glyphs = new List<Glyph>();
+            _tablePages = new List<TablePage>();
             Palettes = new Color[0x10];
             Array.Copy(palettes, Palettes, 0x10);
-            if (alphaPalettes != null )
+            if (alphaPalettes != null)
             {
                 AlphaPalettes = new Color[0x10];
                 Array.Copy(alphaPalettes, AlphaPalettes, 0x10);
@@ -33,52 +35,23 @@ namespace G1N_Font_Editor
                 throw new Exception(Global.MESSAGEBOX_MESSAGES["CharExists"]);
             Glyphs.Add(glyph);
         }
-        public Bitmap ReloadTablePreview(bool isReMeasure = true, int padx = 4, int pady = 4)
+        public void RemoveGlyph(int charCode)
         {
-            int width = _tablePreview == null ? Constant.MIN_WIDTH : _tablePreview.Width,
-                height = _tablePreview == null ? Constant.MIN_HEIGHT : _tablePreview.Height;
-            if (_tablePreview == null || isReMeasure)
+            var index = Glyphs.FindIndex(g => g.CharCode == charCode);
+            if (index > -1)
             {
-                MeasureBitmapSizeFromGlyphs(Glyphs, padx, pady, ref width, ref height);
-            }
-            else
-            {
-                width = _tablePreview.Width;
-                height = _tablePreview.Height;
-            }
-            var result = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                foreach (var glyph in Glyphs)
+                Glyphs.RemoveAt(index);
+                foreach (var page in _tablePages)
                 {
-                    var bmp = glyph.GetBitmap();
-                    g.DrawImage(bmp, glyph.Rect);
-                    using (Pen pen = new Pen(Color.Red, 1))
-                    {
-                        g.DrawRectangle(
-                            pen,
-                            glyph.Rect.X,
-                            glyph.Rect.Y,
-                            glyph.Rect.Width,
-                            glyph.Rect.Height);
-                    }
+                    var glyphIndex = page.Glyphs.FindIndex(g => g.CharCode == charCode);
+                    if (glyphIndex > -1) page.Glyphs.RemoveAt(glyphIndex);
                 }
             }
-            _tablePreview = result;
-            return result;
         }
-        public Bitmap GetTablePreview()
+        public Bitmap ReloadPaletteImage()
         {
-            if (_tablePreview != null)
-            {
-                return _tablePreview;
-            }
-            return ReloadTablePreview();
-        }
-        public Bitmap ReloadPalettePreview()
-        {
-            int width = Constant.PALETTE_PICTURE_WIDTH;
-            int height = Constant.PALETTE_PICTURE_HEIGHT;
+            int width = Global.DEFAULT_PALETTE_PICTURE_WIDTH;
+            int height = Global.DEFAULT_PALETTE_PICTURE_HEIGHT;
             Bitmap result = new Bitmap(width, height);
             var colorWidth = width / Palettes.Length;
             using (Graphics g = Graphics.FromImage(result))
@@ -92,47 +65,64 @@ namespace G1N_Font_Editor
                     }
                 }
             }
-            _palettePreview = result;
+            _paletteImage = result;
             return result;
         }
-        public Bitmap GetPalettePreview()
+        public Bitmap GetPaletteImage()
         {
-            if (_palettePreview != null)
+            if (_paletteImage != null)
             {
-                return _palettePreview;
+                return _paletteImage;
             }
-            return ReloadPalettePreview();
+            return ReloadPaletteImage();
         }
-        private bool MeasureBitmapSizeFromGlyphs(List<Glyph> glyphs, int padx, int pady, ref int width, ref int height)
+        public int CalculatePageCount(int padx = 4, int pady = 4)
         {
-            var rects = new List<Rectangle>();
-            int currX = padx, currY = pady, lowestRowHeight = pady;
-            for (int i = 0; i < glyphs.Count(); i++)
+            int count = 0;
+            var tablePages = new List<TablePage>();
+            int width = Global.DEFAULT_TEX_WIDTH, height = Global.DEFAULT_TEX_HEIGHT;
+            var glyphs = Glyphs;
+            while (count < glyphs.Count())
             {
-                if (currX + glyphs[i].Width > width)
+                var isFull = false;
+                var tablePage = new TablePage();
+                var rects = new List<Rectangle>();
+                int currX = padx, currY = pady, lowestRowHeight = pady;
+                while (!isFull && count < glyphs.Count())
                 {
-                    currY = lowestRowHeight;
-                    lowestRowHeight = currY + glyphs[i].Height + pady;
-                    if (lowestRowHeight > height)
+                    if (currX + glyphs[count].Width + padx > width)
                     {
-                        width += Constant.MIN_WIDTH;
-                        height += Constant.MIN_HEIGHT;
-                        return MeasureBitmapSizeFromGlyphs(glyphs, padx, pady, ref width, ref height);
+                        currY = lowestRowHeight;
+                        lowestRowHeight = currY + glyphs[count].Height + pady;
+                        if (lowestRowHeight + (count > 1 ? glyphs[count - 1].Height : 0) > height)
+                        {
+                            isFull = true;
+                            break;
+                        }
+                        currX = padx;
                     }
-                    currX = padx;
+                    var boxRect = new Rectangle(currX, currY, glyphs[count].Width + padx, glyphs[count].Height + pady);
+                    while (rects.Any(r => r.IntersectsWith(boxRect))) boxRect.Y++;
+                    if (boxRect.Y + boxRect.Height < lowestRowHeight) lowestRowHeight = boxRect.Y + boxRect.Height;
+                    rects.Add(boxRect);
+                    glyphs[count].Rect = new Rectangle(boxRect.X, boxRect.Y, glyphs[count].Width, glyphs[count].Height);
+                    currX += glyphs[count].Width + padx;
+                    tablePage.Glyphs.Add(glyphs[count]);
+                    count++;
                 }
-                var boxRect = new Rectangle(currX, currY, glyphs[i].Width + padx, glyphs[i].Height + pady);
-                while (rects.Any(r => r.IntersectsWith(boxRect))) boxRect.Y++;
-                if (boxRect.Y + boxRect.Height < lowestRowHeight) lowestRowHeight = boxRect.Y + boxRect.Height;
-                rects.Add(boxRect);
-                glyphs[i].Rect = new Rectangle(boxRect.X, boxRect.Y, glyphs[i].Width, glyphs[i].Height);
-                currX += glyphs[i].Width + padx;
+                tablePages.Add(tablePage);
             }
-            return true;
+            if (tablePages.Count == 0)
+            {
+                tablePages.Add(new TablePage());
+            }
+            _tablePages = tablePages;
+            ResetReloadStatus();
+            return _tablePages.Count();
         }
         public void Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, char[] chars = null)
         {
-            if (chars != null) 
+            if (chars != null)
             {
                 var dict = glyphTypeface.CharacterToGlyphMap;
                 foreach (var ch in chars)
@@ -148,12 +138,70 @@ namespace G1N_Font_Editor
             }
             Glyphs = Glyphs.OrderBy(g => g.Character).ToList();
         }
-        public static class Constant
+        public void ResetReloadStatus(bool status = true)
         {
-            public static readonly int MIN_WIDTH = Global.DEFAULT_TEX_WIDTH;
-            public static readonly int MIN_HEIGHT = Global.DEFAULT_TEX_HEIGHT;
-            public static readonly int PALETTE_PICTURE_WIDTH = Global.DEFAULT_PALETTE_PICTURE_WIDTH;
-            public static readonly int PALETTE_PICTURE_HEIGHT = Global.DEFAULT_PALETTE_PICTURE_HEIGHT;
+            foreach (var page in _tablePages)
+            {
+                page.IsReloadNeeded = status;
+            }
+        }
+        public class TablePage
+        {
+            public bool IsReloadNeeded { get; set; }
+            public List<Glyph> Glyphs { get; set; }
+            private Bitmap _textureImage;
+            public Bitmap TextureImage { get { return _textureImage; } }
+
+            public TablePage() 
+            { 
+                Glyphs = new List<Glyph>();
+                IsReloadNeeded = true;
+            }
+            public Bitmap GetTextureImage()
+            {
+                if (_textureImage != null && !IsReloadNeeded)
+                {
+                    return _textureImage;
+                }
+                return ReloadTextureImage();
+            }
+            public Bitmap GetTextureImage(bool isReload)
+            {
+                if (!isReload)
+                {
+                    return _textureImage;
+                }
+                return ReloadTextureImage();
+            }
+            public Bitmap ReloadTextureImage()
+            {
+                int width = Global.DEFAULT_TEX_WIDTH,
+                    height = Global.DEFAULT_TEX_HEIGHT;
+                var result = new Bitmap(width, height);
+                if (Glyphs.Count > 0)
+                {
+                    using (Graphics g = Graphics.FromImage(result))
+                    {
+                        foreach (var glyph in Glyphs)
+                        {
+                            var bmp = glyph.GetBitmap();
+                            g.DrawImage(bmp, glyph.Rect);
+                            using (Pen pen = new Pen(Color.Red, 1))
+                            {
+                                g.DrawRectangle(
+                                    pen,
+                                    glyph.Rect.X,
+                                    glyph.Rect.Y,
+                                    glyph.Rect.Width,
+                                    glyph.Rect.Height);
+                            }
+                        }
+                    }
+                }
+                _textureImage = result;
+                IsReloadNeeded = false;
+                return result;
+            }
         }
     }
 }

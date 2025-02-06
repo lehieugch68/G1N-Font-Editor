@@ -82,11 +82,20 @@
             this.toolStripMenuCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.labelStatus = new System.Windows.Forms.Label();
             this.labelStatusText = new System.Windows.Forms.Label();
-            this.buttonSelectColor = new System.Windows.Forms.Button();
             this.contextMenuGlyph = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuGlyphAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.checkBoxASCII = new System.Windows.Forms.CheckBox();
+            this.btnPreviousPage = new System.Windows.Forms.Button();
+            this.btnNextPage = new System.Windows.Forms.Button();
+            this.labelPage = new System.Windows.Forms.Label();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previewSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1024ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1536ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x2048ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.contextMenuSelectedGlyph.SuspendLayout();
@@ -291,12 +300,14 @@
             // pictureBoxOptPalette
             // 
             this.pictureBoxOptPalette.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.pictureBoxOptPalette.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 450);
             this.pictureBoxOptPalette.Name = "pictureBoxOptPalette";
             this.pictureBoxOptPalette.Size = new System.Drawing.Size(317, 50);
             this.pictureBoxOptPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxOptPalette.TabIndex = 79;
             this.pictureBoxOptPalette.TabStop = false;
+            this.pictureBoxOptPalette.Click += new System.EventHandler(this.pictureBoxOptPalette_Click);
             // 
             // contextMenuSelectedGlyph
             // 
@@ -435,6 +446,7 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuFile,
             this.toolStripMenuEdit,
+            this.viewToolStripMenuItem,
             this.toolStripMenuHelp});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -517,26 +529,26 @@
             // toolStripMenuEditAddPage
             // 
             this.toolStripMenuEditAddPage.Name = "toolStripMenuEditAddPage";
-            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(146, 22);
+            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuEditAddPage.Text = "Add Page";
             this.toolStripMenuEditAddPage.Click += new System.EventHandler(this.toolStripMenuEditAddPage_Click);
             // 
             // toolStripMenuEditRemovePage
             // 
             this.toolStripMenuEditRemovePage.Name = "toolStripMenuEditRemovePage";
-            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(146, 22);
+            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuEditRemovePage.Text = "Remove Page";
             this.toolStripMenuEditRemovePage.Click += new System.EventHandler(this.toolStripMenuEditRemovePage_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuEditAddGlyph
             // 
             this.toolStripMenuEditAddGlyph.Name = "toolStripMenuEditAddGlyph";
-            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(146, 22);
+            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuEditAddGlyph.Text = "Add Glyph";
             this.toolStripMenuEditAddGlyph.Click += new System.EventHandler(this.toolStripMenuEditAddGlyph_Click);
             // 
@@ -554,33 +566,34 @@
             // toolStripMenuGuide
             // 
             this.toolStripMenuGuide.Name = "toolStripMenuGuide";
-            this.toolStripMenuGuide.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuGuide.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuGuide.Text = "Guide";
             this.toolStripMenuGuide.Click += new System.EventHandler(this.toolStripMenuGuide_Click);
             // 
             // toolStripMenuAbout
             // 
             this.toolStripMenuAbout.Name = "toolStripMenuAbout";
-            this.toolStripMenuAbout.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuAbout.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuAbout.Text = "About";
             this.toolStripMenuAbout.Click += new System.EventHandler(this.toolStripMenuAbout_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(168, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuCheckUpdate
             // 
             this.toolStripMenuCheckUpdate.Name = "toolStripMenuCheckUpdate";
-            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(171, 22);
+            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuCheckUpdate.Text = "Check for Updates";
             this.toolStripMenuCheckUpdate.Click += new System.EventHandler(this.toolStripMenuCheckUpdate_Click);
             // 
             // labelStatus
             // 
+            this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(12, 535);
+            this.labelStatus.Location = new System.Drawing.Point(11, 561);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(40, 13);
             this.labelStatus.TabIndex = 86;
@@ -588,22 +601,13 @@
             // 
             // labelStatusText
             // 
+            this.labelStatusText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelStatusText.AutoSize = true;
-            this.labelStatusText.Location = new System.Drawing.Point(58, 535);
+            this.labelStatusText.Location = new System.Drawing.Point(57, 561);
             this.labelStatusText.Name = "labelStatusText";
             this.labelStatusText.Size = new System.Drawing.Size(27, 13);
             this.labelStatusText.TabIndex = 87;
             this.labelStatusText.Text = "N/A";
-            // 
-            // buttonSelectColor
-            // 
-            this.buttonSelectColor.Location = new System.Drawing.Point(239, 506);
-            this.buttonSelectColor.Name = "buttonSelectColor";
-            this.buttonSelectColor.Size = new System.Drawing.Size(90, 23);
-            this.buttonSelectColor.TabIndex = 88;
-            this.buttonSelectColor.Text = "Change Color";
-            this.buttonSelectColor.UseVisualStyleBackColor = true;
-            this.buttonSelectColor.Click += new System.EventHandler(this.buttonSelectColor_Click);
             // 
             // contextMenuGlyph
             // 
@@ -629,13 +633,99 @@
             this.checkBoxASCII.Text = "ASCII";
             this.checkBoxASCII.UseVisualStyleBackColor = true;
             // 
+            // btnPreviousPage
+            // 
+            this.btnPreviousPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPreviousPage.Location = new System.Drawing.Point(696, 556);
+            this.btnPreviousPage.Name = "btnPreviousPage";
+            this.btnPreviousPage.Size = new System.Drawing.Size(75, 23);
+            this.btnPreviousPage.TabIndex = 90;
+            this.btnPreviousPage.Text = "Previous";
+            this.btnPreviousPage.UseVisualStyleBackColor = true;
+            this.btnPreviousPage.Click += new System.EventHandler(this.btnPreviousPage_Click);
+            // 
+            // btnNextPage
+            // 
+            this.btnNextPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNextPage.Location = new System.Drawing.Point(777, 556);
+            this.btnNextPage.Name = "btnNextPage";
+            this.btnNextPage.Size = new System.Drawing.Size(75, 23);
+            this.btnNextPage.TabIndex = 91;
+            this.btnNextPage.Text = "Next";
+            this.btnNextPage.UseVisualStyleBackColor = true;
+            this.btnNextPage.Click += new System.EventHandler(this.btnNextPage_Click);
+            // 
+            // labelPage
+            // 
+            this.labelPage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelPage.AutoSize = true;
+            this.labelPage.Location = new System.Drawing.Point(337, 561);
+            this.labelPage.Name = "labelPage";
+            this.labelPage.Size = new System.Drawing.Size(30, 13);
+            this.labelPage.TabIndex = 92;
+            this.labelPage.Text = "1 / 1";
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.previewSizeToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // previewSizeToolStripMenuItem
+            // 
+            this.previewSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x512ToolStripMenuItem,
+            this.x768ToolStripMenuItem,
+            this.x1024ToolStripMenuItem,
+            this.x1536ToolStripMenuItem,
+            this.x2048ToolStripMenuItem});
+            this.previewSizeToolStripMenuItem.Name = "previewSizeToolStripMenuItem";
+            this.previewSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.previewSizeToolStripMenuItem.Text = "Preview Size";
+            this.previewSizeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.previewSizeToolStripMenuItem_DropDownItemClicked);
+            // 
+            // x512ToolStripMenuItem
+            // 
+            this.x512ToolStripMenuItem.Name = "x512ToolStripMenuItem";
+            this.x512ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x512ToolStripMenuItem.Text = "512x512";
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x768ToolStripMenuItem.Text = "768x768";
+            // 
+            // x1024ToolStripMenuItem
+            // 
+            this.x1024ToolStripMenuItem.Name = "x1024ToolStripMenuItem";
+            this.x1024ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x1024ToolStripMenuItem.Text = "1024x1024";
+            // 
+            // x1536ToolStripMenuItem
+            // 
+            this.x1536ToolStripMenuItem.Name = "x1536ToolStripMenuItem";
+            this.x1536ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x1536ToolStripMenuItem.Text = "1536x1536";
+            // 
+            // x2048ToolStripMenuItem
+            // 
+            this.x2048ToolStripMenuItem.Name = "x2048ToolStripMenuItem";
+            this.x2048ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x2048ToolStripMenuItem.Text = "2048x2048";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(864, 561);
+            this.ClientSize = new System.Drawing.Size(864, 591);
+            this.Controls.Add(this.labelPage);
+            this.Controls.Add(this.btnNextPage);
+            this.Controls.Add(this.btnPreviousPage);
             this.Controls.Add(this.checkBoxASCII);
-            this.Controls.Add(this.buttonSelectColor);
             this.Controls.Add(this.labelStatusText);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.numericOptCustomXAdv);
@@ -665,7 +755,7 @@
             this.Controls.Add(this.comboBoxPage);
             this.Controls.Add(this.pictureBox);
             this.MainMenuStrip = this.menuStrip;
-            this.MinimumSize = new System.Drawing.Size(880, 600);
+            this.MinimumSize = new System.Drawing.Size(880, 630);
             this.Name = "MainForm";
             this.Text = "G1N Font Editor by LeHieu - viethoagame.com";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -733,7 +823,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuEdit;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuEditAddPage;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuEditAddGlyph;
-        private System.Windows.Forms.Button buttonSelectColor;
         private System.Windows.Forms.ContextMenuStrip contextMenuGlyph;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuGlyphAdd;
         private System.Windows.Forms.ColorDialog colorDialog;
@@ -744,6 +833,16 @@
         private System.Windows.Forms.CheckBox checkBoxASCII;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuCheckUpdate;
+        private System.Windows.Forms.Button btnPreviousPage;
+        private System.Windows.Forms.Button btnNextPage;
+        private System.Windows.Forms.Label labelPage;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem previewSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x512ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x768ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x1024ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x1536ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x2048ToolStripMenuItem;
     }
 }
 

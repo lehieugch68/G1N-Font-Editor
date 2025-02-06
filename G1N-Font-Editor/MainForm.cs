@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using G1N_Font_Editor.Helpers;
 using G1N_Font_Editor.Components;
 using G1N_Font_Editor.Components.Singleton;
+using System.Text.RegularExpressions;
 
 namespace G1N_Font_Editor
 {
@@ -22,6 +23,14 @@ namespace G1N_Font_Editor
             InitializeComponent();
             this.Icon = Properties.Resources.AppIcon;
             contextMenuSelectedGlyph.Items.Insert(0, new ToolStripLabel(Global.LABEL_NOT_AVAILABLE));
+        }
+
+        private void SetControlsEnabled(bool enabled)
+        {
+            foreach (Control control in this.Controls)
+            {
+                control.Enabled = enabled;
+            }
         }
 
         private void LoadSytemFonts()
@@ -87,6 +96,7 @@ namespace G1N_Font_Editor
             else
             {
                 Global.IS_BUSY = true;
+                SetControlsEnabled(false);
                 labelStatusText.Text = Global.PROGRESS_MESSAGES["Building"];
                 var fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), comboBoxOptFontStyle.SelectedItem.ToString());
                 var fontSize = (float)numericOptFontSize.Value;
@@ -101,15 +111,17 @@ namespace G1N_Font_Editor
                         var font = new Font(Global.TTF_FONT_FAMILY, fontSize, fontStyle);
                         var glyphTable = Global.G1N_FILE.GlyphTables.Find(table => table.Index == Global.SELECTED_G1N_FONT_ID);
                         glyphTable.Build(glyphTypeface, font, chars);
-                        handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreaparingBMP"]);
-                        glyphTable.ReloadTablePreview();
-                        Bitmap texPic = glyphTable.GetTablePreview();
+                        handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                        var totalPage = glyphTable.CalculatePageCount();
+                        handleReloadTablePage(glyphTable, null, totalPage);
+                        var tablePage = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1];
+                        Bitmap texPic = tablePage.GetTextureImage();
                         pictureBox.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBox.BackColor = Color.Black;
                             pictureBox.Image = texPic;
                         });
-                        Bitmap palettePic = glyphTable.GetPalettePreview();
+                        Bitmap palettePic = glyphTable.GetPaletteImage();
                         pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBoxOptPalette.BackColor = Color.Transparent;
@@ -124,6 +136,7 @@ namespace G1N_Font_Editor
                 }).GetAwaiter().OnCompleted(() =>
                 {
                     Global.IS_BUSY = false;
+                    SetControlsEnabled(true);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                 });
             }
@@ -183,10 +196,12 @@ namespace G1N_Font_Editor
             try
             {
                 var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == Global.SELECTED_G1N_FONT_ID);
-                var scaleX = (float)pictureBox.Width / (float)table.TablePreview.Width;
-                var scaleY = (float)pictureBox.Height / (float)table.TablePreview.Height;
+                var tablePage = table.TablePages[Global.CURRENT_TEX_PAGE - 1];
+                var picture = tablePage.GetTextureImage();
+                var scaleX = (float)pictureBox.Width / picture.Width;
+                var scaleY = (float)pictureBox.Height / picture.Height;
                 var point = new Point((int)(e.X / scaleX), (int)(e.Y / scaleY));
-                var glyph = table.Glyphs.Find(g => g.Rect.Contains(point));
+                var glyph = tablePage.Glyphs.Find(g => g.Rect.Contains(point));
                 var pos = (sender as Control).PointToScreen(e.Location);
                 if (glyph != null)
                 {
@@ -231,6 +246,7 @@ namespace G1N_Font_Editor
                 if (!string.IsNullOrEmpty(filePath))
                 {
                     Global.IS_BUSY = true;
+                    SetControlsEnabled(false);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Importing"];
                     Task.Run(() =>
                     {
@@ -241,13 +257,17 @@ namespace G1N_Font_Editor
                                 currY = currBmp.Height;
                             var bmp = Global.CONTEXT_MENU_SELECTED_GLYPH.SetBimap(filePath);
                             var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == Global.SELECTED_G1N_FONT_ID);
-                            handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreaparingBMP"]);
-                            Bitmap texPic = table.ReloadTablePreview(bmp.Width != currX || bmp.Height != currY);
-                            pictureBox.BeginInvoke((MethodInvoker)delegate
+                            handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                            var isReloadNeeded = bmp.Width != currX || bmp.Height != currY;
+                            if (isReloadNeeded)
                             {
-                                pictureBox.BackColor = Color.Black;
-                                pictureBox.Image = texPic;
-                            });
+                                var totalPage = table.CalculatePageCount();
+                                handleReloadTablePage(table, null, totalPage);
+                            } 
+                            else
+                            {
+                                handleReloadTablePage(table, null, null);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -256,6 +276,7 @@ namespace G1N_Font_Editor
                     }).GetAwaiter().OnCompleted(() =>
                     {
                         Global.IS_BUSY = false;
+                        SetControlsEnabled(true);
                         labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                     });
                 }
@@ -326,6 +347,7 @@ namespace G1N_Font_Editor
                 {
                     var isError = false;
                     Global.IS_BUSY = true;
+                    SetControlsEnabled(false);
                     comboBoxPage.Items.Clear();
                     comboBoxPage.SelectedIndex = -1;
                     Global.SELECTED_G1N_FONT_ID = comboBoxPage.SelectedIndex;
@@ -353,6 +375,7 @@ namespace G1N_Font_Editor
                     }).GetAwaiter().OnCompleted(() =>
                     {
                         Global.IS_BUSY = false;
+                        SetControlsEnabled(true);
                         labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                         if (isError) return;
                         if (comboBoxPage.Items.Count > 0) comboBoxPage.SelectedIndex = 0;
@@ -380,6 +403,7 @@ namespace G1N_Font_Editor
                 {
                     Global.IS_BUSY = true;
                     var isError = false;
+                    SetControlsEnabled(false);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Saving"];
                     Task.Run(() =>
                     {
@@ -401,6 +425,7 @@ namespace G1N_Font_Editor
                     }).GetAwaiter().OnCompleted(() =>
                     {
                         Global.IS_BUSY = false;
+                        SetControlsEnabled(true);
                         labelStatusText.Text = Global.PROGRESS_MESSAGES["Saved"];
                         if (isError) return;
                         Global.G1N_FILE.RootFile = filePath;
@@ -430,6 +455,7 @@ namespace G1N_Font_Editor
                     return;
                 }
                 Global.IS_BUSY = true;
+                SetControlsEnabled(false);
                 labelStatusText.Text = Global.PROGRESS_MESSAGES["Saving"];
                 Task.Run(() =>
                 {
@@ -450,6 +476,7 @@ namespace G1N_Font_Editor
                 }).GetAwaiter().OnCompleted(() =>
                 {
                     Global.IS_BUSY = false;
+                    SetControlsEnabled(true);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Saved"];
                 });
             }
@@ -471,20 +498,26 @@ namespace G1N_Font_Editor
             else
             {
                 Global.IS_BUSY = true;
-                comboBoxPage.Enabled = false;
-                labelStatusText.Text = Global.PROGRESS_MESSAGES["PreaparingBMP"];
+                SetControlsEnabled(false);
+                labelStatusText.Text = Global.PROGRESS_MESSAGES["PreparingBMP"];
                 Task.Run(() =>
                 {
                     try
                     {
                         var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == pageIndex);
-                        Bitmap texPic = glyphTable.GetTablePreview();
+                        Global.CURRENT_TEX_PAGE = 1;
+                        Global.TOTAL_TEX_PAGE = glyphTable.CalculatePageCount();
+                        labelPage.BeginInvoke((MethodInvoker)delegate
+                        {
+                            labelPage.Text = $"{Global.CURRENT_TEX_PAGE} / {Global.TOTAL_TEX_PAGE}";
+                        });
+                        Bitmap texPic = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1].GetTextureImage();
                         pictureBox.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBox.BackColor = Color.Black;
                             pictureBox.Image = texPic;
                         });
-                        Bitmap palettePic = glyphTable.GetPalettePreview();
+                        Bitmap palettePic = glyphTable.GetPaletteImage();
                         pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
                         {
                             pictureBoxOptPalette.BackColor = Color.Transparent;
@@ -494,13 +527,16 @@ namespace G1N_Font_Editor
                     }
                     catch (Exception ex)
                     {
-                        comboBoxPage.SelectedIndex = Global.SELECTED_G1N_FONT_ID;
+                        comboBoxPage.BeginInvoke((MethodInvoker)delegate
+                        {
+                            comboBoxPage.SelectedIndex = Global.SELECTED_G1N_FONT_ID;
+                        });
                         MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
                     }
                 }).GetAwaiter().OnCompleted(() =>
                 {
                     Global.IS_BUSY = false;
-                    comboBoxPage.Enabled = true;
+                    SetControlsEnabled(true);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                 });
             }
@@ -519,7 +555,7 @@ namespace G1N_Font_Editor
                 if (result == DialogResult.OK)
                 {
                     Global.IS_BUSY = true;
-                    comboBoxPage.Enabled = false;
+                    SetControlsEnabled(false);
                     var isError = false;
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Initializing"];
                     Task.Run(() =>
@@ -547,7 +583,7 @@ namespace G1N_Font_Editor
                     }).GetAwaiter().OnCompleted(() =>
                     {
                         Global.IS_BUSY = false;
-                        comboBoxPage.Enabled = true;
+                        SetControlsEnabled(true);
                         labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                         if (isError) return;
                         comboBoxPage.SelectedIndex = 0;
@@ -556,46 +592,6 @@ namespace G1N_Font_Editor
             }
         }
 
-        private void buttonSelectColor_Click(object sender, EventArgs e)
-        {
-            if (Global.G1N_FILE == null || Global.SELECTED_G1N_FONT_ID == -1) return;
-            if (Global.IS_BUSY)
-            {
-                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
-            }
-            else
-            {
-                var result = colorDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    Global.IS_BUSY = true;
-                    labelStatusText.Text = Global.PROGRESS_MESSAGES["GeneratingColor"];
-                    Task.Run(() =>
-                    {
-                        try
-                        {
-                            var rgb = new byte[] { colorDialog.Color.B, colorDialog.Color.G, colorDialog.Color.R };
-                            var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
-                            glyphTable.Palettes = Utils.GeneratePalettes(rgb);
-                            Bitmap palettePic = glyphTable.ReloadPalettePreview();
-                            pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
-                            {
-                                pictureBoxOptPalette.BackColor = Color.Transparent;
-                                pictureBoxOptPalette.Image = palettePic;
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
-                        }
-                    }).GetAwaiter().OnCompleted(() =>
-                    {
-                        Global.IS_BUSY = false;
-                        labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
-                    });
-                }
-            }
-        }
         private void toolStripMenuEditAddPage_Click(object sender, EventArgs e)
         {
             if (Global.G1N_FILE == null) return;
@@ -607,7 +603,7 @@ namespace G1N_Font_Editor
             {
                 var isError = false;
                 Global.IS_BUSY = true;
-                comboBoxPage.Enabled = false;
+                SetControlsEnabled(false);
                 labelStatusText.Text = Global.PROGRESS_MESSAGES["Adding"];
                 Task.Run(() =>
                 {
@@ -629,7 +625,7 @@ namespace G1N_Font_Editor
                 }).GetAwaiter().OnCompleted(() =>
                 {
                     Global.IS_BUSY = false;
-                    comboBoxPage.Enabled = true;
+                    SetControlsEnabled(true);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                     if (isError) return;
                     for (int i = 0; i < comboBoxPage.Items.Count; i++)
@@ -652,7 +648,7 @@ namespace G1N_Font_Editor
             {
                 var isError = false;
                 Global.IS_BUSY = true;
-                comboBoxPage.Enabled = false;
+                SetControlsEnabled(false);
                 labelStatusText.Text = Global.PROGRESS_MESSAGES["Removing"];
                 Task.Run(() =>
                 {
@@ -668,7 +664,7 @@ namespace G1N_Font_Editor
                 }).GetAwaiter().OnCompleted(() =>
                 {
                     Global.IS_BUSY = false;
-                    comboBoxPage.Enabled = true;
+                    SetControlsEnabled(true);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                     if (isError) return;
                     var currIndex = Global.SELECTED_G1N_FONT_ID;
@@ -698,7 +694,7 @@ namespace G1N_Font_Editor
                 if (result == DialogResult.OK)
                 {
                     Global.IS_BUSY = true;
-                    comboBoxPage.Enabled = false;
+                    SetControlsEnabled(false);
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Adding"];
                     Task.Run(() =>
                     {
@@ -710,8 +706,10 @@ namespace G1N_Font_Editor
                             var xOff = Convert.ToSByte(newGlyphForm.XOffset);
                             var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff);
                             table.AddGlyph(glyph);
-                            handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreaparingBMP"]);
-                            Bitmap texPic = table.ReloadTablePreview();
+                            handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                            table.CalculatePageCount();
+                            var tablePage = table.TablePages[Global.CURRENT_TEX_PAGE - 1];
+                            Bitmap texPic = tablePage.GetTextureImage();
                             pictureBox.BeginInvoke((MethodInvoker)delegate
                             {
                                 pictureBox.BackColor = Color.Black;
@@ -724,7 +722,7 @@ namespace G1N_Font_Editor
                         }
                     }).GetAwaiter().OnCompleted(() =>
                     {
-                        comboBoxPage.Enabled = true;
+                        SetControlsEnabled(true);
                         Global.IS_BUSY = false;
                         labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                     });
@@ -752,21 +750,19 @@ namespace G1N_Font_Editor
             else
             {
                 Global.IS_BUSY = true;
-                comboBoxPage.Enabled = false;
+                SetControlsEnabled(false);
                 labelStatusText.Text = Global.PROGRESS_MESSAGES["Removing"];
                 Task.Run(() =>
                 {
                     try
                     {
                         var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == Global.SELECTED_G1N_FONT_ID);
-                        table.Glyphs.Remove(Global.CONTEXT_MENU_SELECTED_GLYPH);
-                        handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreaparingBMP"]);
-                        Bitmap texPic = table.ReloadTablePreview(false);
-                        pictureBox.BeginInvoke((MethodInvoker)delegate
-                        {
-                            pictureBox.BackColor = Color.Black;
-                            pictureBox.Image = texPic;
-                        });
+                        table.RemoveGlyph(Global.CONTEXT_MENU_SELECTED_GLYPH.CharCode);
+                        handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                        var totalPage = table.CalculatePageCount();
+                        var currentPage = Global.CURRENT_TEX_PAGE;
+                        if (currentPage > totalPage) currentPage = totalPage;
+                        handleReloadTablePage(table, currentPage, totalPage);
                     }
                     catch (Exception ex)
                     {
@@ -774,7 +770,7 @@ namespace G1N_Font_Editor
                     }
                 }).GetAwaiter().OnCompleted(() =>
                 {
-                    comboBoxPage.Enabled = true;
+                    SetControlsEnabled(true);
                     Global.IS_BUSY = false;
                     labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
                 });
@@ -820,7 +816,9 @@ namespace G1N_Font_Editor
             {
                 if (body == string.Empty) return;
                 Dictionary<string, string> json = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(body);
-                if (json.ContainsKey("AppVersion") && Application.ProductVersion != json["AppVersion"])
+                long currentVer = long.Parse(Application.ProductVersion.Replace(".", ""));
+                long latestVer = long.Parse(json["AppVersion"].Replace(".", ""));
+                if (currentVer < latestVer)
                 {
                     DialogResult confirm = MessageBox.Show(Global.MESSAGEBOX_MESSAGES["NewVer"], Global.MESSAGEBOX_TITLE, MessageBoxButtons.YesNo);
                     if (confirm == DialogResult.Yes)
@@ -833,6 +831,189 @@ namespace G1N_Font_Editor
                     MessageBox.Show(Global.MESSAGEBOX_MESSAGES["LatestVer"], Global.MESSAGEBOX_TITLE);
                 }
             });
+        }
+
+        private void handleReloadTablePage(GlyphTable glyphTable, int? currentPage, int? totalPage)
+        {
+            if (currentPage.HasValue) Global.CURRENT_TEX_PAGE = currentPage.Value;
+            if (totalPage.HasValue) Global.TOTAL_TEX_PAGE = totalPage.Value;
+            labelPage.BeginInvoke((MethodInvoker)delegate
+            {
+                labelPage.Text = $"{Global.CURRENT_TEX_PAGE} / {Global.TOTAL_TEX_PAGE}";
+            });
+            Bitmap texPic = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1].GetTextureImage();
+            pictureBox.BeginInvoke((MethodInvoker)delegate
+            {
+                pictureBox.BackColor = Color.Black;
+                pictureBox.Image = texPic;
+            });
+        }
+
+        private void btnNextPage_Click(object sender, EventArgs e)
+        {
+            if (Global.G1N_FILE == null || Global.SELECTED_G1N_FONT_ID == -1 || Global.TOTAL_TEX_PAGE <= 1) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            } 
+            else
+            {
+                Global.IS_BUSY = true;
+                SetControlsEnabled(false);
+                labelStatusText.Text = Global.PROGRESS_MESSAGES["PreparingBMP"];
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                        var currentPage = Global.CURRENT_TEX_PAGE == Global.TOTAL_TEX_PAGE ? 1 : Global.CURRENT_TEX_PAGE + 1;
+                        handleReloadTablePage(glyphTable, currentPage, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                    SetControlsEnabled(true);
+                    labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
+                });
+            }
+        }
+
+        private void btnPreviousPage_Click(object sender, EventArgs e)
+        {
+            if (Global.G1N_FILE == null || Global.SELECTED_G1N_FONT_ID == -1 || Global.TOTAL_TEX_PAGE <= 1) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                Global.IS_BUSY = true;
+                SetControlsEnabled(false);
+                labelStatusText.Text = Global.PROGRESS_MESSAGES["PreparingBMP"];
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                        var currentPage = Global.CURRENT_TEX_PAGE == 1 ? Global.TOTAL_TEX_PAGE : Global.CURRENT_TEX_PAGE - 1;
+                        handleReloadTablePage(glyphTable, currentPage, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                    }
+                }).GetAwaiter().OnCompleted(() =>
+                {
+                    Global.IS_BUSY = false;
+                    SetControlsEnabled(true);
+                    labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
+                });
+            }
+        }
+
+        private void pictureBoxOptPalette_Click(object sender, EventArgs e)
+        {
+            if (Global.G1N_FILE == null || Global.SELECTED_G1N_FONT_ID == -1) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                var result = colorDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    Global.IS_BUSY = true;
+                    SetControlsEnabled(false);
+                    labelStatusText.Text = Global.PROGRESS_MESSAGES["GeneratingColor"];
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            var rgb = new byte[] { colorDialog.Color.B, colorDialog.Color.G, colorDialog.Color.R };
+                            var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                            glyphTable.Palettes = Utils.GeneratePalettes(rgb);
+                            Bitmap palettePic = glyphTable.ReloadPaletteImage();
+                            pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                            {
+                                pictureBoxOptPalette.BackColor = Color.Transparent;
+                                pictureBoxOptPalette.Image = palettePic;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                        SetControlsEnabled(true);
+                        labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
+                    });
+                }
+            }
+        }
+
+        private void previewSizeToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                ToolStripItem clickedItem = e.ClickedItem;
+                Match match = Global.IMAGE_SIZE_REGEX.Match(clickedItem.Text);
+                if (match.Success)
+                {
+                    int width = int.Parse(match.Groups[1].Value);
+                    int height = int.Parse(match.Groups[2].Value);
+                    var isReloadNeeded = Global.DEFAULT_TEX_WIDTH != width || Global.DEFAULT_TEX_HEIGHT != height;
+                    Global.DEFAULT_TEX_WIDTH = width;
+                    Global.DEFAULT_TEX_HEIGHT = height;
+
+                    if (isReloadNeeded && Global.G1N_FILE != null && Global.SELECTED_G1N_FONT_ID != -1)
+                    {
+                        Global.IS_BUSY = true;
+                        SetControlsEnabled(false);
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                                handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                                var totalPage = glyphTable.CalculatePageCount();
+                                handleReloadTablePage(glyphTable, null, totalPage);
+                                var tablePage = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1];
+                                Bitmap texPic = tablePage.GetTextureImage();
+                                pictureBox.BeginInvoke((MethodInvoker)delegate
+                                {
+                                    pictureBox.BackColor = Color.Black;
+                                    pictureBox.Image = texPic;
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                            }
+                        }).GetAwaiter().OnCompleted(() =>
+                        {
+                            Global.IS_BUSY = false;
+                            SetControlsEnabled(true);
+                            labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
+                        });
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InvalidSizeFormat"], Global.MESSAGEBOX_TITLE);
+                }
+            }    
+                
         }
     }
 }

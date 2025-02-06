@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace G1N_Font_Editor
 {
@@ -13,13 +14,16 @@ namespace G1N_Font_Editor
         public static string TTF_FONT_FAMILY_NAME;
         public static Glyph CONTEXT_MENU_SELECTED_GLYPH;
         public static int SELECTED_G1N_FONT_ID = -1;
+        public static int CURRENT_TEX_PAGE = 1;
+        public static int TOTAL_TEX_PAGE = 1;
         public static int DEFAULT_TTF_FONT_SIZE = 36;
-        public static int DEFAULT_TEX_WIDTH = 256;
-        public static int DEFAULT_TEX_HEIGHT = 256;
+        public static int DEFAULT_TEX_WIDTH = 512;
+        public static int DEFAULT_TEX_HEIGHT = 512;
         public static int DEFAULT_PALETTE_PICTURE_WIDTH = 320;
         public static int DEFAULT_PALETTE_PICTURE_HEIGHT = 50;
         public static readonly string LABEL_PAGE = "Page";
         public static readonly string LABEL_NOT_AVAILABLE = "N/A";
+        public static readonly Regex IMAGE_SIZE_REGEX = new Regex(@"^(\d+)[xX](\d+)$");
         public static readonly string APP_DIRECTORY = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string G1N_FILE_FILTER = "G1N Files (*.g1n)|*.g1n|All Files (*.*)|*.*";
         public static readonly string TXT_FILE_FILTER = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
@@ -51,13 +55,14 @@ namespace G1N_Font_Editor
             { "NoFontChosen", "No TrueType Font chosen." },
             { "NewVer", "There is a new application version available, do you want to update?" },
             { "LatestVer", "The application is in the latest version." },
-            { "MissingChar", "The selected TrueType Font does not include a glyph for '{Character}'." }
+            { "MissingChar", "The selected TrueType Font does not include a glyph for '{Character}'." },
+            { "InvalidSizeFormat", "Invalid image size format." }
         };
         public static Dictionary<string, string> PROGRESS_MESSAGES = new Dictionary<string, string>()
         {
             { "Done", "Done." },
             { "Reading", "Reading file..." },
-            { "PreaparingBMP", "Preparing bitmap image..." },
+            { "PreparingBMP", "Preparing bitmap image..." },
             { "Saving", "Saving file..." },
             { "Saved", "The file has been saved." },
             { "Removing", "Removing..." },
