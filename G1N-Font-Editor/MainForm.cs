@@ -114,13 +114,6 @@ namespace G1N_Font_Editor
                         handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
                         var totalPage = glyphTable.CalculatePageCount();
                         handleReloadTablePage(glyphTable, null, totalPage);
-                        var tablePage = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1];
-                        Bitmap texPic = tablePage.GetTextureImage();
-                        pictureBox.BeginInvoke((MethodInvoker)delegate
-                        {
-                            pictureBox.BackColor = Color.Black;
-                            pictureBox.Image = texPic;
-                        });
                         Bitmap palettePic = glyphTable.GetPaletteImage();
                         pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
                         {
@@ -835,8 +828,8 @@ namespace G1N_Font_Editor
 
         private void handleReloadTablePage(GlyphTable glyphTable, int? currentPage, int? totalPage)
         {
-            if (currentPage.HasValue) Global.CURRENT_TEX_PAGE = currentPage.Value;
-            if (totalPage.HasValue) Global.TOTAL_TEX_PAGE = totalPage.Value;
+            if (currentPage.HasValue) Global.CURRENT_TEX_PAGE = currentPage.Value > 0 ? currentPage.Value : 1;
+            if (totalPage.HasValue) Global.TOTAL_TEX_PAGE = totalPage.Value > 0 ? totalPage.Value : 1;
             if (Global.CURRENT_TEX_PAGE > Global.TOTAL_TEX_PAGE) Global.CURRENT_TEX_PAGE = Global.TOTAL_TEX_PAGE;
             labelPage.BeginInvoke((MethodInvoker)delegate
             {
@@ -989,13 +982,6 @@ namespace G1N_Font_Editor
                                 handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
                                 var totalPage = glyphTable.CalculatePageCount();
                                 handleReloadTablePage(glyphTable, null, totalPage);
-                                var tablePage = glyphTable.TablePages[Global.CURRENT_TEX_PAGE - 1];
-                                Bitmap texPic = tablePage.GetTextureImage();
-                                pictureBox.BeginInvoke((MethodInvoker)delegate
-                                {
-                                    pictureBox.BackColor = Color.Black;
-                                    pictureBox.Image = texPic;
-                                });
                             }
                             catch (Exception ex)
                             {
@@ -1015,6 +1001,42 @@ namespace G1N_Font_Editor
                 }
             }    
                 
+        }
+
+        private void buttonGotoPage_Click(object sender, EventArgs e)
+        {
+            if (Global.G1N_FILE == null || Global.SELECTED_G1N_FONT_ID == -1) return;
+            if (Global.IS_BUSY)
+            {
+                MessageBox.Show(Global.MESSAGEBOX_MESSAGES["InProgress"], Global.MESSAGEBOX_TITLE);
+            }
+            else
+            {
+                var pageNum = (int)numericGotoPage.Value;
+                if (pageNum > 0 && pageNum != Global.CURRENT_TEX_PAGE)
+                {
+                    Global.IS_BUSY = true;
+                    SetControlsEnabled(false);
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                            handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
+                            handleReloadTablePage(glyphTable, pageNum, null);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
+                        }
+                    }).GetAwaiter().OnCompleted(() =>
+                    {
+                        Global.IS_BUSY = false;
+                        SetControlsEnabled(true);
+                        labelStatusText.Text = Global.PROGRESS_MESSAGES["Done"];
+                    });
+                }
+            }
         }
     }
 }

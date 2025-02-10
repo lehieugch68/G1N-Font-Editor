@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using G1N_Font_Editor.Helpers;
+using System.Windows.Forms;
 
 namespace G1N_Font_Editor
 {
@@ -77,10 +78,21 @@ namespace G1N_Font_Editor
                 }
                 palettes.Add(colors.ToArray());
             }
+            var tableWithAlphaCount = Math.Abs(PaletteCount -  TableCount);
             for (int i = 0; i < TableCount; i++)
             {
                 int offset = tableOffsets[i];
-                var table = PaletteCount > TableCount ? new GlyphTable(i, palettes[i * 2], palettes[(i * 2) + 1]) : new GlyphTable(i, palettes[i]);
+                Color[] colors = null, alphaColors = null;
+                if (tableWithAlphaCount > 0 && i < tableWithAlphaCount)
+                {
+                    colors = palettes[i * 2];
+                    alphaColors = palettes[(i * 2) + 1];
+                }
+                else
+                {
+                    colors = palettes[i + tableWithAlphaCount];
+                }
+                var table = new GlyphTable(i, colors, alphaColors);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0xFFFF];

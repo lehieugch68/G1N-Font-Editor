@@ -75,6 +75,13 @@
             this.toolStripMenuEditRemovePage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuEditAddGlyph = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.previewSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1024ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1536ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x2048ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,13 +96,8 @@
             this.btnPreviousPage = new System.Windows.Forms.Button();
             this.btnNextPage = new System.Windows.Forms.Button();
             this.labelPage = new System.Windows.Forms.Label();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.previewSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x512ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x1024ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x1536ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x2048ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.numericGotoPage = new System.Windows.Forms.NumericUpDown();
+            this.buttonGotoPage = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.contextMenuSelectedGlyph.SuspendLayout();
@@ -105,6 +107,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericOptCustomXAdv)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.contextMenuGlyph.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericGotoPage)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -529,28 +532,79 @@
             // toolStripMenuEditAddPage
             // 
             this.toolStripMenuEditAddPage.Name = "toolStripMenuEditAddPage";
-            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddPage.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditAddPage.Text = "Add Page";
             this.toolStripMenuEditAddPage.Click += new System.EventHandler(this.toolStripMenuEditAddPage_Click);
             // 
             // toolStripMenuEditRemovePage
             // 
             this.toolStripMenuEditRemovePage.Name = "toolStripMenuEditRemovePage";
-            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditRemovePage.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditRemovePage.Text = "Remove Page";
             this.toolStripMenuEditRemovePage.Click += new System.EventHandler(this.toolStripMenuEditRemovePage_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // toolStripMenuEditAddGlyph
             // 
             this.toolStripMenuEditAddGlyph.Name = "toolStripMenuEditAddGlyph";
-            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuEditAddGlyph.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuEditAddGlyph.Text = "Add Glyph";
             this.toolStripMenuEditAddGlyph.Click += new System.EventHandler(this.toolStripMenuEditAddGlyph_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.previewSizeToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // previewSizeToolStripMenuItem
+            // 
+            this.previewSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x512ToolStripMenuItem,
+            this.x768ToolStripMenuItem,
+            this.x1024ToolStripMenuItem,
+            this.x1536ToolStripMenuItem,
+            this.x2048ToolStripMenuItem});
+            this.previewSizeToolStripMenuItem.Name = "previewSizeToolStripMenuItem";
+            this.previewSizeToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.previewSizeToolStripMenuItem.Text = "Preview Size";
+            this.previewSizeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.previewSizeToolStripMenuItem_DropDownItemClicked);
+            // 
+            // x512ToolStripMenuItem
+            // 
+            this.x512ToolStripMenuItem.Name = "x512ToolStripMenuItem";
+            this.x512ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.x512ToolStripMenuItem.Text = "512x512";
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.x768ToolStripMenuItem.Text = "768x768";
+            // 
+            // x1024ToolStripMenuItem
+            // 
+            this.x1024ToolStripMenuItem.Name = "x1024ToolStripMenuItem";
+            this.x1024ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.x1024ToolStripMenuItem.Text = "1024x1024";
+            // 
+            // x1536ToolStripMenuItem
+            // 
+            this.x1536ToolStripMenuItem.Name = "x1536ToolStripMenuItem";
+            this.x1536ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.x1536ToolStripMenuItem.Text = "1536x1536";
+            // 
+            // x2048ToolStripMenuItem
+            // 
+            this.x2048ToolStripMenuItem.Name = "x2048ToolStripMenuItem";
+            this.x2048ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.x2048ToolStripMenuItem.Text = "2048x2048";
             // 
             // toolStripMenuHelp
             // 
@@ -566,26 +620,26 @@
             // toolStripMenuGuide
             // 
             this.toolStripMenuGuide.Name = "toolStripMenuGuide";
-            this.toolStripMenuGuide.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuGuide.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuGuide.Text = "Guide";
             this.toolStripMenuGuide.Click += new System.EventHandler(this.toolStripMenuGuide_Click);
             // 
             // toolStripMenuAbout
             // 
             this.toolStripMenuAbout.Name = "toolStripMenuAbout";
-            this.toolStripMenuAbout.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuAbout.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuAbout.Text = "About";
             this.toolStripMenuAbout.Click += new System.EventHandler(this.toolStripMenuAbout_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(168, 6);
             // 
             // toolStripMenuCheckUpdate
             // 
             this.toolStripMenuCheckUpdate.Name = "toolStripMenuCheckUpdate";
-            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuCheckUpdate.Size = new System.Drawing.Size(171, 22);
             this.toolStripMenuCheckUpdate.Text = "Check for Updates";
             this.toolStripMenuCheckUpdate.Click += new System.EventHandler(this.toolStripMenuCheckUpdate_Click);
             // 
@@ -666,62 +720,47 @@
             this.labelPage.TabIndex = 92;
             this.labelPage.Text = "1 / 1";
             // 
-            // viewToolStripMenuItem
+            // numericGotoPage
             // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.previewSizeToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
+            this.numericGotoPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericGotoPage.Location = new System.Drawing.Point(630, 558);
+            this.numericGotoPage.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numericGotoPage.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericGotoPage.Name = "numericGotoPage";
+            this.numericGotoPage.Size = new System.Drawing.Size(50, 20);
+            this.numericGotoPage.TabIndex = 93;
+            this.numericGotoPage.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // previewSizeToolStripMenuItem
+            // buttonGotoPage
             // 
-            this.previewSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x512ToolStripMenuItem,
-            this.x768ToolStripMenuItem,
-            this.x1024ToolStripMenuItem,
-            this.x1536ToolStripMenuItem,
-            this.x2048ToolStripMenuItem});
-            this.previewSizeToolStripMenuItem.Name = "previewSizeToolStripMenuItem";
-            this.previewSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.previewSizeToolStripMenuItem.Text = "Preview Size";
-            this.previewSizeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.previewSizeToolStripMenuItem_DropDownItemClicked);
-            // 
-            // x512ToolStripMenuItem
-            // 
-            this.x512ToolStripMenuItem.Name = "x512ToolStripMenuItem";
-            this.x512ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x512ToolStripMenuItem.Text = "512x512";
-            // 
-            // x768ToolStripMenuItem
-            // 
-            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
-            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x768ToolStripMenuItem.Text = "768x768";
-            // 
-            // x1024ToolStripMenuItem
-            // 
-            this.x1024ToolStripMenuItem.Name = "x1024ToolStripMenuItem";
-            this.x1024ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x1024ToolStripMenuItem.Text = "1024x1024";
-            // 
-            // x1536ToolStripMenuItem
-            // 
-            this.x1536ToolStripMenuItem.Name = "x1536ToolStripMenuItem";
-            this.x1536ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x1536ToolStripMenuItem.Text = "1536x1536";
-            // 
-            // x2048ToolStripMenuItem
-            // 
-            this.x2048ToolStripMenuItem.Name = "x2048ToolStripMenuItem";
-            this.x2048ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x2048ToolStripMenuItem.Text = "2048x2048";
+            this.buttonGotoPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGotoPage.Location = new System.Drawing.Point(549, 556);
+            this.buttonGotoPage.Name = "buttonGotoPage";
+            this.buttonGotoPage.Size = new System.Drawing.Size(75, 23);
+            this.buttonGotoPage.TabIndex = 94;
+            this.buttonGotoPage.Text = "Go To";
+            this.buttonGotoPage.UseVisualStyleBackColor = true;
+            this.buttonGotoPage.Click += new System.EventHandler(this.buttonGotoPage_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 591);
+            this.Controls.Add(this.buttonGotoPage);
+            this.Controls.Add(this.numericGotoPage);
             this.Controls.Add(this.labelPage);
             this.Controls.Add(this.btnNextPage);
             this.Controls.Add(this.btnPreviousPage);
@@ -769,6 +808,7 @@
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.contextMenuGlyph.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericGotoPage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -843,6 +883,8 @@
         private System.Windows.Forms.ToolStripMenuItem x1024ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem x1536ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem x2048ToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown numericGotoPage;
+        private System.Windows.Forms.Button buttonGotoPage;
     }
 }
 
