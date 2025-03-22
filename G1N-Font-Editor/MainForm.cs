@@ -516,6 +516,7 @@ namespace G1N_Font_Editor
                             pictureBoxOptPalette.BackColor = Color.Transparent;
                             pictureBoxOptPalette.Image = palettePic;
                         });
+
                         Global.SELECTED_G1N_FONT_ID = pageIndex;
                     }
                     catch (Exception ex)
@@ -918,6 +919,8 @@ namespace G1N_Font_Editor
             }
             else
             {
+                var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
+                if (glyphTable.Palettes == null) return;
                 var result = colorDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -929,7 +932,6 @@ namespace G1N_Font_Editor
                         try
                         {
                             var rgb = new byte[] { colorDialog.Color.B, colorDialog.Color.G, colorDialog.Color.R };
-                            var glyphTable = Global.G1N_FILE.GlyphTables.Find(g => g.Index == Global.SELECTED_G1N_FONT_ID);
                             glyphTable.Palettes = Utils.GeneratePalettes(rgb);
                             Bitmap palettePic = glyphTable.ReloadPaletteImage();
                             pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate

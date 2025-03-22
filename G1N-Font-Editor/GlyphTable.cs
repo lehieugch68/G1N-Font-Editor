@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using G1N_Font_Editor.Helpers;
 
 namespace G1N_Font_Editor
 {
@@ -16,13 +17,16 @@ namespace G1N_Font_Editor
         public Color[] AlphaPalettes { get; set; }
         private List<TablePage> _tablePages;
         public List<TablePage> TablePages { get { return _tablePages; } }
-        public GlyphTable(int index, Color[] palettes, Color[] alphaPalettes = null)
+        public GlyphTable(int index, Color[] palettes = null, Color[] alphaPalettes = null)
         {
             Index = index;
             Glyphs = new List<Glyph>();
             _tablePages = new List<TablePage>();
             Palettes = new Color[0x10];
-            Array.Copy(palettes, Palettes, 0x10);
+            if (palettes != null)
+            {
+                Array.Copy(palettes, Palettes, 0x10);
+            }
             if (alphaPalettes != null)
             {
                 AlphaPalettes = new Color[0x10];
@@ -53,13 +57,14 @@ namespace G1N_Font_Editor
             int width = Global.DEFAULT_PALETTE_PICTURE_WIDTH;
             int height = Global.DEFAULT_PALETTE_PICTURE_HEIGHT;
             Bitmap result = new Bitmap(width, height);
-            var colorWidth = width / Palettes.Length;
+            var palettes = Palettes == null ? Utils.GeneratePalettes() : Palettes;
+            var colorWidth = width / palettes.Length;
             using (Graphics g = Graphics.FromImage(result))
             {
-                for (int i = 0; i < Palettes.Length; i++)
+                for (int i = 0; i < palettes.Length; i++)
                 {
                     var rect = new Rectangle(colorWidth * i, 0, colorWidth, height);
-                    using (Brush brush = new SolidBrush(Palettes[i]))
+                    using (Brush brush = new SolidBrush(palettes[i]))
                     {
                         g.FillRectangle(brush, rect);
                     }

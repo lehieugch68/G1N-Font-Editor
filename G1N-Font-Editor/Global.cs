@@ -35,7 +35,6 @@ namespace G1N_Font_Editor
             0x5F, 0x4E, 0x31, 0x47, 0x30, 0x30, 0x30, 0x30
         };
         public static readonly int G1N_DEFAULT_HEADER_SIZE = 0x20;
-        public static readonly int G1N_DEFAULT_COLOR_COUNT = 0x10;
         public static readonly byte[] G1N_DEFAULT_RGB_COLOR = new byte[]
         {
             0xFF, 0xFF, 0xFF

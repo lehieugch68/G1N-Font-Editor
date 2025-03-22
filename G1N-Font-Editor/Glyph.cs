@@ -151,8 +151,8 @@ namespace G1N_Font_Editor
                 (byte)Math.Round((glyphTypeface.AdvanceWidths[index] + (glyphTypeface.LeftSideBearings[index] >= 0 ? 0 : Math.Abs(glyphTypeface.LeftSideBearings[index]))) * font.Size) : (byte)0;
             XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] < 0 ? 0 : glyphTypeface.LeftSideBearings[index] * font.Size * -1) : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
 
-            //XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? (byte)Math.Round(width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) : (byte)0;
-            //XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
+            // XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? (byte)Math.Round(width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) : (byte)0;
+            // XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
 
             Baseline = (sbyte)Math.Round(glyphTypeface.Baseline * font.Size);
             _pixelData = Convert8BppTo4Bpp(_bmp);
