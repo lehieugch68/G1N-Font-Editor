@@ -66,8 +66,12 @@ namespace G1N_Font_Editor.Helpers
         {
             return new string(input.ToCharArray().Distinct().ToArray());
         }
-        public static Color[] GeneratePalettes(byte[] rgb)
+        public static Color[] GeneratePalettes(byte[] rgb = null)
         {
+            if (rgb == null)
+            {
+                rgb = Global.G1N_DEFAULT_RGB_COLOR;
+            }
             var colors = new Color[0x10];
             for (int i = 0; i < colors.Length; i++)
             {

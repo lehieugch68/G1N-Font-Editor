@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-using System.Windows.Forms;
+using G1N_Font_Editor.Helpers;
 
 namespace G1N_Font_Editor
 {
     public class GlyphTable
     {
         public int Index { get; set; }
+        public bool Is8Bpp { get; set; }
         public List<Glyph> Glyphs { get; set; }
         public Color[] Palettes { get; set; }
         private Bitmap _paletteImage;
@@ -16,13 +17,17 @@ namespace G1N_Font_Editor
         public Color[] AlphaPalettes { get; set; }
         private List<TablePage> _tablePages;
         public List<TablePage> TablePages { get { return _tablePages; } }
-        public GlyphTable(int index, Color[] palettes, Color[] alphaPalettes = null)
+        public GlyphTable(int index, Color[] palettes = null, Color[] alphaPalettes = null)
         {
             Index = index;
             Glyphs = new List<Glyph>();
             _tablePages = new List<TablePage>();
-            Palettes = new Color[0x10];
-            Array.Copy(palettes, Palettes, 0x10);
+            Is8Bpp = palettes == null;
+            if (palettes != null)
+            {
+                Palettes = new Color[0x10];
+                Array.Copy(palettes, Palettes, 0x10);
+            }
             if (alphaPalettes != null)
             {
                 AlphaPalettes = new Color[0x10];
@@ -34,32 +39,29 @@ namespace G1N_Font_Editor
             if (Glyphs.Any(g => g.Character == glyph.Character))
                 throw new Exception(Global.MESSAGEBOX_MESSAGES["CharExists"]);
             Glyphs.Add(glyph);
+            CalculatePageCount(TablePages.LastOrDefault().GlyphStartIndex);
         }
         public void RemoveGlyph(int charCode)
         {
             var index = Glyphs.FindIndex(g => g.CharCode == charCode);
-            if (index > -1)
-            {
-                Glyphs.RemoveAt(index);
-                foreach (var page in _tablePages)
-                {
-                    var glyphIndex = page.Glyphs.FindIndex(g => g.CharCode == charCode);
-                    if (glyphIndex > -1) page.Glyphs.RemoveAt(glyphIndex);
-                }
-            }
+            if (index == -1) return;
+            Glyphs.RemoveAt(index);
+            var page = _tablePages.Find(p => p.GlyphStartIndex <= index && p.GlyphEndIndex > index);
+            CalculatePageCount(page == null ? 0 : page.GlyphStartIndex);
         }
         public Bitmap ReloadPaletteImage()
         {
             int width = Global.DEFAULT_PALETTE_PICTURE_WIDTH;
             int height = Global.DEFAULT_PALETTE_PICTURE_HEIGHT;
             Bitmap result = new Bitmap(width, height);
-            var colorWidth = width / Palettes.Length;
+            var palettes = Palettes == null ? Utils.GeneratePalettes() : Palettes;
+            var colorWidth = width / palettes.Length;
             using (Graphics g = Graphics.FromImage(result))
             {
-                for (int i = 0; i < Palettes.Length; i++)
+                for (int i = 0; i < palettes.Length; i++)
                 {
                     var rect = new Rectangle(colorWidth * i, 0, colorWidth, height);
-                    using (Brush brush = new SolidBrush(Palettes[i]))
+                    using (Brush brush = new SolidBrush(palettes[i]))
                     {
                         g.FillRectangle(brush, rect);
                     }
@@ -76,48 +78,46 @@ namespace G1N_Font_Editor
             }
             return ReloadPaletteImage();
         }
-        public int CalculatePageCount(int padx = 4, int pady = 4)
+        public int CalculatePageCount(int startIndex = 0, int padx = 4, int pady = 4)
         {
-            int count = 0;
-            var tablePages = new List<TablePage>();
+            int index = startIndex;
+            _tablePages.RemoveAll(t => t.GlyphStartIndex >= index);
             int width = Global.DEFAULT_TEX_WIDTH, height = Global.DEFAULT_TEX_HEIGHT;
-            var glyphs = Glyphs;
-            while (count < glyphs.Count())
+            while (index < Glyphs.Count())
             {
+                Console.WriteLine($"{index} - {Glyphs.Count}");
                 var isFull = false;
-                var tablePage = new TablePage();
+                var tablePage = new TablePage(Glyphs, index);
                 var rects = new List<Rectangle>();
                 int currX = padx, currY = pady, lowestRowHeight = pady;
-                while (!isFull && count < glyphs.Count())
+                while (!isFull && index < Glyphs.Count())
                 {
-                    if (currX + glyphs[count].Width + padx > width)
+                    if (currX + Glyphs[index].Width + padx > width)
                     {
                         currY = lowestRowHeight;
-                        lowestRowHeight = currY + glyphs[count].Height + pady;
-                        if (lowestRowHeight + (count > 1 ? glyphs[count - 1].Height : 0) > height)
+                        lowestRowHeight = currY + Glyphs[index].Height + pady;
+                        if (lowestRowHeight + (index > 1 ? Glyphs[index - 1].Height : 0) > height)
                         {
                             isFull = true;
                             break;
                         }
                         currX = padx;
                     }
-                    var boxRect = new Rectangle(currX, currY, glyphs[count].Width + padx, glyphs[count].Height + pady);
+                    var boxRect = new Rectangle(currX, currY, Glyphs[index].Width + padx, Glyphs[index].Height + pady);
                     while (rects.Any(r => r.IntersectsWith(boxRect))) boxRect.Y++;
                     if (boxRect.Y + boxRect.Height < lowestRowHeight) lowestRowHeight = boxRect.Y + boxRect.Height;
                     rects.Add(boxRect);
-                    glyphs[count].Rect = new Rectangle(boxRect.X, boxRect.Y, glyphs[count].Width, glyphs[count].Height);
-                    currX += glyphs[count].Width + padx;
-                    tablePage.Glyphs.Add(glyphs[count]);
-                    count++;
+                    Glyphs[index].Rect = new Rectangle(boxRect.X, boxRect.Y, Glyphs[index].Width, Glyphs[index].Height);
+                    currX += Glyphs[index].Width + padx;
+                    index++;
                 }
-                tablePages.Add(tablePage);
+                tablePage.GlyphEndIndex = index - 1;
+                _tablePages.Add(tablePage);
             }
-            if (tablePages.Count == 0)
+            if (_tablePages.Count == 0)
             {
-                tablePages.Add(new TablePage());
+                _tablePages.Add(new TablePage(Glyphs));
             }
-            _tablePages = tablePages;
-            ResetReloadStatus();
             return _tablePages.Count();
         }
         public void Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font, char[] chars = null)
@@ -128,7 +128,7 @@ namespace G1N_Font_Editor
                 foreach (var ch in chars)
                 {
                     if (Glyphs.FindIndex(g => g.Character == ch) != -1 || !dict.ContainsKey(ch)) continue;
-                    var glyph = new Glyph(ch);
+                    var glyph = new Glyph(ch, Is8Bpp);
                     Glyphs.Add(glyph);
                 }
             }
@@ -148,13 +148,17 @@ namespace G1N_Font_Editor
         public class TablePage
         {
             public bool IsReloadNeeded { get; set; }
-            public List<Glyph> Glyphs { get; set; }
+            public int GlyphStartIndex { get; set; }
+            public int GlyphEndIndex { get; set; }
+            private List<Glyph> _glyphs;
             private Bitmap _textureImage;
             public Bitmap TextureImage { get { return _textureImage; } }
 
-            public TablePage() 
-            { 
-                Glyphs = new List<Glyph>();
+            public TablePage(List<Glyph> glyphs, int glyphStartIndex = 0, int glyphEndIndex = 0) 
+            {
+                _glyphs = glyphs;
+                GlyphStartIndex = glyphStartIndex;
+                GlyphEndIndex = glyphEndIndex;
                 IsReloadNeeded = true;
             }
             public Bitmap GetTextureImage()
@@ -178,11 +182,12 @@ namespace G1N_Font_Editor
                 int width = Global.DEFAULT_TEX_WIDTH,
                     height = Global.DEFAULT_TEX_HEIGHT;
                 var result = new Bitmap(width, height);
-                if (Glyphs.Count > 0)
+                var glyphs = GetGlyphs();
+                if (glyphs.Count > 0)
                 {
                     using (Graphics g = Graphics.FromImage(result))
                     {
-                        foreach (var glyph in Glyphs)
+                        foreach (var glyph in glyphs)
                         {
                             var bmp = glyph.GetBitmap();
                             g.DrawImage(bmp, glyph.Rect);
@@ -201,6 +206,10 @@ namespace G1N_Font_Editor
                 _textureImage = result;
                 IsReloadNeeded = false;
                 return result;
+            }
+            private List<Glyph> GetGlyphs()
+            {
+                return _glyphs.Skip(GlyphStartIndex).Take(GlyphEndIndex - GlyphStartIndex + 1).ToList();
             }
         }
     }

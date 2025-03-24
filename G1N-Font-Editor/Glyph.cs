@@ -4,6 +4,8 @@ using System.IO;
 using System.Drawing;
 using System.Globalization;
 using G1N_Font_Editor.Helpers;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace G1N_Font_Editor
 {
@@ -17,11 +19,12 @@ namespace G1N_Font_Editor
         public sbyte Baseline { get; set; }
         public byte XAdvance { get; set; }
         public sbyte Unk { get; set; }
+        private bool _is8Bpp;
         private byte[] _pixelData;
         public byte[] PixelData { get { return _pixelData; } }
         private Bitmap _bmp;
         public Rectangle Rect { get; set; }
-        public Glyph(int charCode, char character, byte width, byte height, sbyte baseline, byte xAdvance, sbyte xOffset, sbyte unk, byte[] pixelData)
+        public Glyph(int charCode, char character, byte width, byte height, sbyte baseline, byte xAdvance, sbyte xOffset, sbyte unk, byte[] pixelData, bool is8Bpp = false)
         {
             CharCode = charCode;
             Character = character;
@@ -32,14 +35,16 @@ namespace G1N_Font_Editor
             XAdvance = xAdvance;
             Unk = unk;
             _pixelData = pixelData;
+            _is8Bpp = is8Bpp;
             GetBitmap();
         }
-        public Glyph(char character) 
+        public Glyph(char character, bool is8Bpp = false) 
         {
             CharCode = (int)character;
             Character = character;
+            _is8Bpp = is8Bpp;
         }
-        public Glyph(char character, Bitmap bitmap, sbyte baseline, byte xAdvance, sbyte xOffset)
+        public Glyph(char character, Bitmap bitmap, sbyte baseline, byte xAdvance, sbyte xOffset, bool is8Bpp)
         {
             Character = character;
             CharCode = (int)character;
@@ -49,7 +54,8 @@ namespace G1N_Font_Editor
             XOffset = xOffset;
             Baseline = baseline;
             XAdvance = xAdvance;
-            _pixelData = Convert8BppTo4Bpp(bitmap);
+            _is8Bpp = is8Bpp;
+            _pixelData = is8Bpp ? ConvertBitmapToRaw8Bpp(bitmap) : Convert8BppTo4Bpp(bitmap);
         }
         public Bitmap GetBitmap()
         {
@@ -58,10 +64,10 @@ namespace G1N_Font_Editor
                 return _bmp;
             }
             int index = 0;
-            var convertedData = Convert4BppTo8Bpp(_pixelData);
+            var convertedData = _is8Bpp ? _pixelData : Convert4BppTo8Bpp(_pixelData);
             int imgWidth = Width;
             int imgHeight = Height;
-            while (imgWidth % 2 != 0 || imgWidth <= 0) imgWidth++;
+            while ((imgWidth % 2 != 0 && !_is8Bpp) || imgWidth <= 0) imgWidth++;
             while (imgHeight <= 0) imgHeight++;
             _bmp = new Bitmap(imgWidth, imgHeight);
             for (int y = 0; y < _bmp.Height; y++)
@@ -83,7 +89,7 @@ namespace G1N_Font_Editor
             _bmp = bitmap;
             Width = Convert.ToByte(bitmap.Width);
             Height = Convert.ToByte(bitmap.Height);
-            _pixelData = Convert8BppTo4Bpp(_bmp);
+            _pixelData = _is8Bpp ? ConvertBitmapToRaw8Bpp(_bmp) : Convert8BppTo4Bpp(_bmp);
             return _bmp;
         }
         public byte[] Build(System.Windows.Media.GlyphTypeface glyphTypeface, Font font)
@@ -105,7 +111,7 @@ namespace G1N_Font_Editor
                         + Math.Abs(glyphTypeface.RightSideBearings[index])
                     ) * font.Size
                 );
-            while (width % 2 != 0 || width <= 0)
+            while ((width % 2 != 0 && !_is8Bpp) || width <= 0)
                 width++;
             int height = (int)
                 Math.Ceiling(
@@ -151,11 +157,11 @@ namespace G1N_Font_Editor
                 (byte)Math.Round((glyphTypeface.AdvanceWidths[index] + (glyphTypeface.LeftSideBearings[index] >= 0 ? 0 : Math.Abs(glyphTypeface.LeftSideBearings[index]))) * font.Size) : (byte)0;
             XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] < 0 ? 0 : glyphTypeface.LeftSideBearings[index] * font.Size * -1) : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
 
-            //XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? (byte)Math.Round(width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) : (byte)0;
-            //XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
+            // XAdvance = glyphTypeface.AdvanceWidths[index] > 0 ? (byte)Math.Round(width - (Math.Abs(glyphTypeface.RightSideBearings[index]) * font.Size)) : (byte)0;
+            // XOffset = glyphTypeface.AdvanceWidths[index] > 0 ? (sbyte)0 : (sbyte)Math.Round(glyphTypeface.LeftSideBearings[index] * font.Size);
 
             Baseline = (sbyte)Math.Round(glyphTypeface.Baseline * font.Size);
-            _pixelData = Convert8BppTo4Bpp(_bmp);
+            _pixelData = _is8Bpp ? ConvertBitmapToRaw8Bpp(_bmp) : Convert8BppTo4Bpp(_bmp);
             Unk = (sbyte)((_pixelData.Length / Height) * -1);
             return _pixelData;
         }
@@ -178,6 +184,39 @@ namespace G1N_Font_Editor
             }
             return result.ToArray();
         }
+
+        private byte[] ConvertBitmapToRaw8Bpp(Bitmap bmp)
+        {
+            int width = bmp.Width;
+            int height = bmp.Height;
+            byte[] rawBytes = new byte[width * height];
+            BitmapData bmpData = bmp.LockBits(
+                new Rectangle(0, 0, width, height),
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format24bppRgb
+            );
+            int stride = bmpData.Stride;
+            IntPtr ptr = bmpData.Scan0;
+            int bytesPerPixel = 3;
+            byte[] pixelData = new byte[stride * height];
+            Marshal.Copy(ptr, pixelData, 0, pixelData.Length);
+            bmp.UnlockBits(bmpData);
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int index = y * stride + x * bytesPerPixel;
+                    byte B = pixelData[index];
+                    byte G = pixelData[index + 1];
+                    byte R = pixelData[index + 2];
+
+                    // Convert to grayscale
+                    rawBytes[y * width + x] = ConvertToGrayscale(R, G, B);
+                }
+            }
+            return rawBytes;
+        }
+
         private byte[] Convert8BppTo4Bpp(Bitmap bmp)
         {
             var ms = new MemoryStream();
@@ -196,43 +235,13 @@ namespace G1N_Font_Editor
             }
             return ms.ToArray();
         }
-
+        private byte ConvertToGrayscale(byte r, byte g, byte b)
+        {
+            return (byte)(0.299 * r + 0.587 * g + 0.114 * b);
+        }
         private string JoinBit(byte input)
         {
-            string res = string.Empty;
-            if (input <= 0x0F)
-                res = "0";
-            if (0x0F < input && input <= 0x20)
-                res = "1";
-            if (0x20 < input && input <= 0x30)
-                res = "2";
-            if (0x30 < input && input <= 0x40)
-                res = "3";
-            if (0x40 < input && input <= 0x50)
-                res = "4";
-            if (0x50 < input && input <= 0x60)
-                res = "5";
-            if (0x60 < input && input <= 0x70)
-                res = "6";
-            if (0x70 < input && input <= 0x80)
-                res = "7";
-            if (0x80 < input && input <= 0x90)
-                res = "8";
-            if (0x90 < input && input <= 0xA0)
-                res = "9";
-            if (0xA0 < input && input <= 0xB0)
-                res = "A";
-            if (0xB0 < input && input <= 0xC0)
-                res = "B";
-            if (0xC0 < input && input <= 0xD0)
-                res = "C";
-            if (0xD0 < input && input <= 0xE0)
-                res = "D";
-            if (0xE0 < input && input <= 0xF0)
-                res = "E";
-            if (0xF0 < input && input <= 0xFF)
-                res = "F";
-            return res;
+            return "0123456789ABCDEF"[input / 0x10].ToString();
         }
     }
 }
