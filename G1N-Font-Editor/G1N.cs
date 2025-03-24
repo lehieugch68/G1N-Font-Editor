@@ -54,7 +54,7 @@ namespace G1N_Font_Editor
         public void LoadData()
         {
             OffsetUnkValueList = new List<int>();
-            int alastOffset = 0;
+            int alastOffsetDiff = 0;
             var ms = new MemoryStream(_rawData);
             var br = new BinaryReader(ms);
             br.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -126,10 +126,10 @@ namespace G1N_Font_Editor
                     var unk = br.ReadSByte();
                     br.BaseStream.Position += 2;
                     int pixelDataOffset = br.ReadInt32() - offsetUnkValue;
-                    if (j == 0 && pixelDataOffset > alastOffset)
+                    if (j == 0 && pixelDataOffset > alastOffsetDiff)
                     {
-                        offsetUnkValue = pixelDataOffset;
-                        pixelDataOffset = 0;
+                        offsetUnkValue = pixelDataOffset - alastOffsetDiff;
+                        pixelDataOffset = alastOffsetDiff;
                     } 
                     int pixelDataSize = 0;
                     long temp = br.BaseStream.Position;
@@ -151,10 +151,10 @@ namespace G1N_Font_Editor
                     }
                     br.BaseStream.Position = AtlasOffset + pixelDataOffset;
                     var pixelData = br.ReadBytes(pixelDataSize);
-                    alastOffset = (int)br.BaseStream.Position;
                     br.BaseStream.Position = temp;
-                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, baseline, xadv, xoff, unk, pixelData);
+                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, baseline, xadv, xoff, unk, pixelData, table.Is8Bpp);
                     table.Glyphs.Add(glyph);
+                    alastOffsetDiff += pixelDataSize;
                 }
                 GlyphTables.Add(table);
                 OffsetUnkValueList.Add(offsetUnkValue);

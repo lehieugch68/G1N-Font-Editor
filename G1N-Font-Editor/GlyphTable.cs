@@ -10,6 +10,7 @@ namespace G1N_Font_Editor
     public class GlyphTable
     {
         public int Index { get; set; }
+        public bool Is8Bpp { get; set; }
         public List<Glyph> Glyphs { get; set; }
         public Color[] Palettes { get; set; }
         private Bitmap _paletteImage;
@@ -22,9 +23,10 @@ namespace G1N_Font_Editor
             Index = index;
             Glyphs = new List<Glyph>();
             _tablePages = new List<TablePage>();
-            Palettes = new Color[0x10];
+            Is8Bpp = palettes == null;
             if (palettes != null)
             {
+                Palettes = new Color[0x10];
                 Array.Copy(palettes, Palettes, 0x10);
             }
             if (alphaPalettes != null)

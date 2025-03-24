@@ -698,7 +698,7 @@ namespace G1N_Font_Editor
                             var baseline = Convert.ToSByte(newGlyphForm.Baseline);
                             var xAdv = Convert.ToByte(newGlyphForm.XAdvance);
                             var xOff = Convert.ToSByte(newGlyphForm.XOffset);
-                            var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff);
+                            var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff, table.Is8Bpp);
                             table.AddGlyph(glyph);
                             handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
                             table.CalculatePageCount();
