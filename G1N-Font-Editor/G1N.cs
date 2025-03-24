@@ -15,7 +15,7 @@ namespace G1N_Font_Editor
         public byte[] Signature { get; set; }
         public int FileSize { get; set; }
         public int HeaderSize { get; set; }
-        public int UnkValue1 { get; set; }
+        public int UnkValue { get; set; }
         public int AtlasOffset { get; set; }
         public int PaletteCount { get; set; }
         public int TableCount { get; set; }
@@ -25,7 +25,6 @@ namespace G1N_Font_Editor
         public byte[] RawData { get { return _rawData; } }
 
         public List<int> OffsetUnkValueList { get; set; }
-        public List<bool> IsWriteGlyphCountList { get; set; }
         private struct CharID
         {
             public int CharCode { get; set; }
@@ -40,7 +39,7 @@ namespace G1N_Font_Editor
         public G1N(int totalPage)
         {
             Signature = Global.G1N_DEFAULT_SIGNATURE_BYTES;
-            UnkValue1 = 0x10;
+            UnkValue = 0x10;
             TableCount = totalPage;
             PaletteCount = totalPage;
             HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (totalPage * (4 + (4 * 0x10)));
@@ -54,7 +53,6 @@ namespace G1N_Font_Editor
         }
         public void LoadData()
         {
-            IsWriteGlyphCountList = new List<bool>();
             OffsetUnkValueList = new List<int>();
             int alastOffset = 0;
             var ms = new MemoryStream(_rawData);
@@ -65,7 +63,7 @@ namespace G1N_Font_Editor
                 throw new Exception(Global.MESSAGEBOX_MESSAGES["UnsupportedFormat"]);
             FileSize = br.ReadInt32();
             HeaderSize = br.ReadInt32();
-            UnkValue1 = br.ReadInt32();
+            UnkValue = br.ReadInt32();
             AtlasOffset = br.ReadInt32();
             PaletteCount = br.ReadInt32();
             TableCount = br.ReadInt32();
@@ -106,8 +104,8 @@ namespace G1N_Font_Editor
                 var table = new GlyphTable(i, colors, alphaColors);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
-                CharID[] charIDs = new CharID[0xFFFF];
-                for (int j = 0; j < 0xFFFF; j++)
+                CharID[] charIDs = new CharID[0x10000];
+                for (int j = 0; j < 0x10000; j++)
                 {
                     ushort ordinal = br.ReadUInt16();
                     if ((ordinal == 0 && charCount <= ordinal + 1) || ordinal > 0)
@@ -118,7 +116,6 @@ namespace G1N_Font_Editor
                         charIDs[ordinal].Character = (char)j;
                     }
                 }
-                var isWriteGlyphCount = br.ReadInt16() > 0;
                 for (int j = 0; j < charCount; j++)
                 {
                     var width = br.ReadByte();
@@ -160,7 +157,6 @@ namespace G1N_Font_Editor
                     table.Glyphs.Add(glyph);
                 }
                 GlyphTables.Add(table);
-                IsWriteGlyphCountList.Add(isWriteGlyphCount);
                 OffsetUnkValueList.Add(offsetUnkValue);
             }
         }
@@ -199,7 +195,7 @@ namespace G1N_Font_Editor
                 bw.Write(Signature);
                 bw.Write((uint)0);
                 bw.Write(HeaderSize);
-                bw.Write(UnkValue1);
+                bw.Write(UnkValue);
                 bw.Write((uint)0);
                 bw.Write(PaletteCount);
                 bw.Write(TableCount);
@@ -223,21 +219,13 @@ namespace G1N_Font_Editor
                     tablePointer[i] = (int)bw.BaseStream.Position;
                     var offsetUnkValue = OffsetUnkValueList != null ? OffsetUnkValueList[i] : 0;
                     ushort ordinal = 0;
-                    for (int j = 0; j < 0xFFFF; j++)
+                    for (int j = 0; j < 0x10000; j++)
                     {
                         var isExists = GlyphTables[i].Glyphs.Any(g => g.Character == (char)j);
                         if (isExists)
                             bw.Write(ordinal++);
                         else
                             bw.Write((ushort)0);
-                    }
-                    if (IsWriteGlyphCountList != null)
-                    {
-                        bw.Write(IsWriteGlyphCountList[i] ? ordinal : (ushort)0);
-                    }
-                    else
-                    {
-                        bw.Write((ushort)0);
                     }
                     for (int j = 0; j < GlyphTables[i].Glyphs.Count; j++)
                     {
