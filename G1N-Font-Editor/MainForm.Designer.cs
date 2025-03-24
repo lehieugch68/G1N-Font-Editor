@@ -98,6 +98,7 @@
             this.labelPage = new System.Windows.Forms.Label();
             this.numericGotoPage = new System.Windows.Forms.NumericUpDown();
             this.buttonGotoPage = new System.Windows.Forms.Button();
+            this.checkBox8Bpp = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOptPalette)).BeginInit();
             this.contextMenuSelectedGlyph.SuspendLayout();
@@ -294,7 +295,7 @@
             // labelPalettes
             // 
             this.labelPalettes.AutoSize = true;
-            this.labelPalettes.Location = new System.Drawing.Point(12, 430);
+            this.labelPalettes.Location = new System.Drawing.Point(12, 455);
             this.labelPalettes.Name = "labelPalettes";
             this.labelPalettes.Size = new System.Drawing.Size(72, 13);
             this.labelPalettes.TabIndex = 78;
@@ -304,7 +305,7 @@
             // 
             this.pictureBoxOptPalette.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.pictureBoxOptPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 450);
+            this.pictureBoxOptPalette.Location = new System.Drawing.Point(12, 475);
             this.pictureBoxOptPalette.Name = "pictureBoxOptPalette";
             this.pictureBoxOptPalette.Size = new System.Drawing.Size(317, 50);
             this.pictureBoxOptPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -754,11 +755,23 @@
             this.buttonGotoPage.UseVisualStyleBackColor = true;
             this.buttonGotoPage.Click += new System.EventHandler(this.buttonGotoPage_Click);
             // 
+            // checkBox8Bpp
+            // 
+            this.checkBox8Bpp.AutoSize = true;
+            this.checkBox8Bpp.Location = new System.Drawing.Point(12, 425);
+            this.checkBox8Bpp.Name = "checkBox8Bpp";
+            this.checkBox8Bpp.Size = new System.Drawing.Size(86, 17);
+            this.checkBox8Bpp.TabIndex = 95;
+            this.checkBox8Bpp.Text = "8 Bpp Image";
+            this.checkBox8Bpp.UseVisualStyleBackColor = true;
+            this.checkBox8Bpp.CheckedChanged += new System.EventHandler(this.checkBox8Bpp_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 591);
+            this.Controls.Add(this.checkBox8Bpp);
             this.Controls.Add(this.buttonGotoPage);
             this.Controls.Add(this.numericGotoPage);
             this.Controls.Add(this.labelPage);
@@ -885,6 +898,7 @@
         private System.Windows.Forms.ToolStripMenuItem x2048ToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown numericGotoPage;
         private System.Windows.Forms.Button buttonGotoPage;
+        private System.Windows.Forms.CheckBox checkBox8Bpp;
     }
 }
 

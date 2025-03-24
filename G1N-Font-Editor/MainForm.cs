@@ -23,6 +23,9 @@ namespace G1N_Font_Editor
             InitializeComponent();
             this.Icon = Properties.Resources.AppIcon;
             contextMenuSelectedGlyph.Items.Insert(0, new ToolStripLabel(Global.LABEL_NOT_AVAILABLE));
+
+            // Experimental feature
+            checkBox8Bpp.AutoCheck = false;
         }
 
         private void SetControlsEnabled(bool enabled)
@@ -194,7 +197,7 @@ namespace G1N_Font_Editor
                 var scaleX = (float)pictureBox.Width / picture.Width;
                 var scaleY = (float)pictureBox.Height / picture.Height;
                 var point = new Point((int)(e.X / scaleX), (int)(e.Y / scaleY));
-                var glyph = tablePage.Glyphs.Find(g => g.Rect.Contains(point));
+                var glyph = table.Glyphs.Skip(tablePage.GlyphStartIndex).Take(tablePage.GlyphEndIndex - tablePage.GlyphStartIndex + 1).FirstOrDefault(g => g.Rect.Contains(point));
                 var pos = (sender as Control).PointToScreen(e.Location);
                 if (glyph != null)
                 {
@@ -363,7 +366,7 @@ namespace G1N_Font_Editor
                         catch (Exception ex)
                         {
                             isError = true;
-                            MessageBox.Show(ex.ToString(), Global.MESSAGEBOX_TITLE);
+                            MessageBox.Show(ex.Message, Global.MESSAGEBOX_TITLE);
                         }
                     }).GetAwaiter().OnCompleted(() =>
                     {
@@ -480,6 +483,18 @@ namespace G1N_Font_Editor
             Environment.Exit(0);
         }
 
+        private void hideOrShowPatteleSection(bool visible)
+        {
+            pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+            {
+                pictureBoxOptPalette.Visible = visible;
+            });
+            labelPalettes.BeginInvoke((MethodInvoker)delegate
+            {
+                labelPalettes.Visible = visible;
+            });
+        }
+
         private void comboBoxPage_SelectedIndexChanged(object sender, EventArgs e)
         {
             int pageIndex = comboBoxPage.SelectedIndex;
@@ -510,13 +525,20 @@ namespace G1N_Font_Editor
                             pictureBox.BackColor = Color.Black;
                             pictureBox.Image = texPic;
                         });
-                        Bitmap palettePic = glyphTable.GetPaletteImage();
-                        pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                        hideOrShowPatteleSection(!glyphTable.Is8Bpp);
+                        checkBox8Bpp.BeginInvoke((MethodInvoker)delegate
                         {
-                            pictureBoxOptPalette.BackColor = Color.Transparent;
-                            pictureBoxOptPalette.Image = palettePic;
+                            checkBox8Bpp.Checked = glyphTable.Is8Bpp;
                         });
-
+                        if (!glyphTable.Is8Bpp)
+                        {
+                            Bitmap palettePic = glyphTable.GetPaletteImage();
+                            pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
+                            {
+                                pictureBoxOptPalette.BackColor = Color.Transparent;
+                                pictureBoxOptPalette.Image = palettePic;
+                            });
+                        }
                         Global.SELECTED_G1N_FONT_ID = pageIndex;
                     }
                     catch (Exception ex)
@@ -604,7 +626,8 @@ namespace G1N_Font_Editor
                     try
                     {
                         Global.G1N_FILE.AddGlyphTables();
-                        var table = Global.G1N_FILE.GlyphTables.Last();
+                        Console.WriteLine(Global.G1N_FILE.GlyphTables.Count());
+                        var table = Global.G1N_FILE.GlyphTables.LastOrDefault();
                         comboBoxPage.BeginInvoke((MethodInvoker)delegate
                         {
                             var item = $"{Global.LABEL_PAGE} {table.Index}";
@@ -701,8 +724,9 @@ namespace G1N_Font_Editor
                             var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff, table.Is8Bpp);
                             table.AddGlyph(glyph);
                             handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
-                            table.CalculatePageCount();
                             var tablePage = table.TablePages[Global.CURRENT_TEX_PAGE - 1];
+                            var totalPage = table.TablePages.Count();
+                            handleReloadTablePage(table, Global.CURRENT_TEX_PAGE, totalPage);
                             Bitmap texPic = tablePage.GetTextureImage();
                             pictureBox.BeginInvoke((MethodInvoker)delegate
                             {
@@ -753,7 +777,7 @@ namespace G1N_Font_Editor
                         var table = Global.G1N_FILE.GlyphTables.Find(t => t.Index == Global.SELECTED_G1N_FONT_ID);
                         table.RemoveGlyph(Global.CONTEXT_MENU_SELECTED_GLYPH.CharCode);
                         handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
-                        var totalPage = table.CalculatePageCount();
+                        var totalPage = table.TablePages.Count();
                         var currentPage = Global.CURRENT_TEX_PAGE;
                         if (currentPage > totalPage) currentPage = totalPage;
                         handleReloadTablePage(table, currentPage, totalPage);
@@ -1039,6 +1063,11 @@ namespace G1N_Font_Editor
                     });
                 }
             }
+        }
+
+        private void checkBox8Bpp_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

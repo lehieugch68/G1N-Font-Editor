@@ -5,8 +5,6 @@ using System.Text;
 using System.IO;
 using System.Drawing;
 using G1N_Font_Editor.Helpers;
-using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 
 namespace G1N_Font_Editor
 {
@@ -166,12 +164,11 @@ namespace G1N_Font_Editor
             PaletteCount = GlyphTables.Count;
             HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (GlyphTables.Count * (4 + (4 * 0x10)));
         }
-        public void AddGlyphTables(int num = 1)
+        public void AddGlyphTables(int num = 1, bool is8Bpp = false)
         {
-            var palettes = Utils.GeneratePalettes(Global.G1N_DEFAULT_RGB_COLOR);
             for (int i = 0; i < num; i++)
             {
-                var table = new GlyphTable(GlyphTables.Count, palettes);
+                var table = new GlyphTable(GlyphTables.Count, is8Bpp ? null : Utils.GeneratePalettes());
                 GlyphTables.Add(table);
             }
             CalculateHeaderData();

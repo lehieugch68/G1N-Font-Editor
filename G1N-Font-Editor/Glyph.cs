@@ -38,10 +38,11 @@ namespace G1N_Font_Editor
             _is8Bpp = is8Bpp;
             GetBitmap();
         }
-        public Glyph(char character) 
+        public Glyph(char character, bool is8Bpp = false) 
         {
             CharCode = (int)character;
             Character = character;
+            _is8Bpp = is8Bpp;
         }
         public Glyph(char character, Bitmap bitmap, sbyte baseline, byte xAdvance, sbyte xOffset, bool is8Bpp)
         {
