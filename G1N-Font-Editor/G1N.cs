@@ -19,10 +19,12 @@ namespace G1N_Font_Editor
         public int TableCount { get; set; }
         public List<GlyphTable> GlyphTables { get; set; }
         public string RootFile { get; set; }
-        public byte[] _rawData;
+        private byte[] _rawData;
         public byte[] RawData { get { return _rawData; } }
 
         public List<int> OffsetUnkValueList { get; set; }
+        private bool _is8Bpp;
+        public bool Is8Bpp { get { return _is8Bpp; } }
         private struct CharID
         {
             public int CharCode { get; set; }
@@ -34,18 +36,19 @@ namespace G1N_Font_Editor
             _rawData = File.ReadAllBytes(RootFile);
             LoadData();
         }
-        public G1N(int totalPage)
+        public G1N(int totalPage, bool is8Bpp)
         {
             Signature = Global.G1N_DEFAULT_SIGNATURE_BYTES;
             UnkValue = 0x10;
             TableCount = totalPage;
-            PaletteCount = totalPage;
-            HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (totalPage * (4 + (4 * 0x10)));
+            _is8Bpp = is8Bpp;
+            PaletteCount = _is8Bpp ? 0 : totalPage;
+            HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (totalPage * (4 + (Is8Bpp ? 4 * 0x10 : 0)));
             GlyphTables = new List<GlyphTable>();
-            var palettes = Utils.GeneratePalettes();
+            var palettes = _is8Bpp ? null : Utils.GeneratePalettes();
             for (int i = 0; i < TableCount; i++)
             {
-                var table = new GlyphTable(i, palettes);
+                var table = new GlyphTable(i, _is8Bpp, palettes);
                 GlyphTables.Add(table);
             }
         }
@@ -72,14 +75,18 @@ namespace G1N_Font_Editor
             {
                 tableOffsets[i] = br.ReadInt32();
             }
-            for (int i = 0; i < PaletteCount; i++)
+            _is8Bpp = PaletteCount == 0;
+            if (!_is8Bpp)
             {
-                var colors = new List<Color>();
-                for (int j = 0; j < 0x10; j++)
+                for (int i = 0; i < PaletteCount; i++)
                 {
-                    colors.Add(Color.FromArgb(br.ReadInt32()));
+                    var colors = new List<Color>();
+                    for (int j = 0; j < 0x10; j++)
+                    {
+                        colors.Add(Color.FromArgb(br.ReadInt32()));
+                    }
+                    palettes.Add(colors.ToArray());
                 }
-                palettes.Add(colors.ToArray());
             }
             for (int i = 0; i < TableCount; i++)
             {
@@ -99,7 +106,7 @@ namespace G1N_Font_Editor
                         colors = palettes[i + tableWithAlphaCount];
                     }
                 }
-                var table = new GlyphTable(i, colors, alphaColors);
+                var table = new GlyphTable(i, _is8Bpp, colors, alphaColors);
                 br.BaseStream.Position = offset;
                 int charCount = 0;
                 CharID[] charIDs = new CharID[0x10000];
@@ -150,7 +157,7 @@ namespace G1N_Font_Editor
                     br.BaseStream.Position = AtlasOffset + pixelDataOffset;
                     var pixelData = br.ReadBytes(pixelDataSize);
                     br.BaseStream.Position = temp;
-                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, baseline, xadv, xoff, unk, pixelData, table.Is8Bpp);
+                    var glyph = new Glyph(charIDs[j].CharCode, charIDs[j].Character, width, height, baseline, xadv, xoff, unk, pixelData, _is8Bpp);
                     table.Glyphs.Add(glyph);
                     alastOffsetDiff += pixelDataSize;
                 }
@@ -164,11 +171,11 @@ namespace G1N_Font_Editor
             PaletteCount = GlyphTables.Count;
             HeaderSize = Global.G1N_DEFAULT_HEADER_SIZE + (GlyphTables.Count * (4 + (4 * 0x10)));
         }
-        public void AddGlyphTables(int num = 1, bool is8Bpp = false)
+        public void AddGlyphTables(int num = 1)
         {
             for (int i = 0; i < num; i++)
             {
-                var table = new GlyphTable(GlyphTables.Count, is8Bpp ? null : Utils.GeneratePalettes());
+                var table = new GlyphTable(GlyphTables.Count, _is8Bpp, _is8Bpp ? null : Utils.GeneratePalettes());
                 GlyphTables.Add(table);
             }
             CalculateHeaderData();
@@ -224,9 +231,10 @@ namespace G1N_Font_Editor
                         else
                             bw.Write((ushort)0);
                     }
-                    for (int j = 0; j < GlyphTables[i].Glyphs.Count; j++)
+                    var glyphsSorted = GlyphTables[i].Glyphs.OrderBy(g => g.CharCode).ToList();
+                    for (int j = 0; j < glyphsSorted.Count(); j++)
                     {
-                        var glyph = GlyphTables[i].Glyphs[j];
+                        var glyph = glyphsSorted[j];
                         if (glyph == null) continue;
                         bw.Write(glyph.Width);
                         bw.Write(glyph.Height);
@@ -243,10 +251,11 @@ namespace G1N_Font_Editor
                 AtlasOffset = (int)bw.BaseStream.Position;
                 for (int i = 0; i < TableCount; i++)
                 {
-                    for (int j = 0; j < GlyphTables[i].Glyphs.Count; j++)
+                    var glyphsSorted = GlyphTables[i].Glyphs.OrderBy(g => g.CharCode).ToList();
+                    for (int j = 0; j < glyphsSorted.Count; j++)
                     {
-                        var glyph = GlyphTables[i].Glyphs[j];
-                        bw.Write(GlyphTables[i].Glyphs[j].PixelData);
+                        var glyph = glyphsSorted[j];
+                        bw.Write(glyph.PixelData);
                     }
                 }
                 bw.BaseStream.Position = 8;

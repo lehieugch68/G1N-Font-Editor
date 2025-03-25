@@ -31,6 +31,7 @@
             this.labelNewG1NTotalPage = new System.Windows.Forms.Label();
             this.numericNewG1NTotalPage = new System.Windows.Forms.NumericUpDown();
             this.buttonNewG1NCreate = new System.Windows.Forms.Button();
+            this.checkBox8Bpp = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericNewG1NTotalPage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +68,7 @@
             // 
             // buttonNewG1NCreate
             // 
-            this.buttonNewG1NCreate.Location = new System.Drawing.Point(12, 60);
+            this.buttonNewG1NCreate.Location = new System.Drawing.Point(12, 86);
             this.buttonNewG1NCreate.Name = "buttonNewG1NCreate";
             this.buttonNewG1NCreate.Size = new System.Drawing.Size(210, 23);
             this.buttonNewG1NCreate.TabIndex = 2;
@@ -75,17 +76,28 @@
             this.buttonNewG1NCreate.UseVisualStyleBackColor = true;
             this.buttonNewG1NCreate.Click += new System.EventHandler(this.buttonNewG1NCreate_Click);
             // 
+            // checkBox8Bpp
+            // 
+            this.checkBox8Bpp.AutoSize = true;
+            this.checkBox8Bpp.Location = new System.Drawing.Point(12, 55);
+            this.checkBox8Bpp.Name = "checkBox8Bpp";
+            this.checkBox8Bpp.Size = new System.Drawing.Size(54, 17);
+            this.checkBox8Bpp.TabIndex = 3;
+            this.checkBox8Bpp.Text = "8 Bpp";
+            this.checkBox8Bpp.UseVisualStyleBackColor = true;
+            // 
             // NewG1NForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(234, 101);
+            this.ClientSize = new System.Drawing.Size(234, 121);
+            this.Controls.Add(this.checkBox8Bpp);
             this.Controls.Add(this.buttonNewG1NCreate);
             this.Controls.Add(this.numericNewG1NTotalPage);
             this.Controls.Add(this.labelNewG1NTotalPage);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(250, 140);
-            this.MinimumSize = new System.Drawing.Size(250, 140);
+            this.MaximumSize = new System.Drawing.Size(250, 160);
+            this.MinimumSize = new System.Drawing.Size(250, 160);
             this.Name = "NewG1NForm";
             this.Text = "New G1N";
             this.Load += new System.EventHandler(this.NewG1NForm_Load);
@@ -100,5 +112,6 @@
         private System.Windows.Forms.Label labelNewG1NTotalPage;
         private System.Windows.Forms.NumericUpDown numericNewG1NTotalPage;
         private System.Windows.Forms.Button buttonNewG1NCreate;
+        private System.Windows.Forms.CheckBox checkBox8Bpp;
     }
 }

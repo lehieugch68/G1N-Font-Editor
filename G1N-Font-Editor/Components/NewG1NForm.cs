@@ -7,6 +7,8 @@ namespace G1N_Font_Editor.Components
     {
         private int _totalPage;
         public int TotalPage { get { return _totalPage; } }
+        private bool _is8Bpp;
+        public bool Is8Bpp { get { return _is8Bpp; } }
         public NewG1NForm()
         {
             InitializeComponent();
@@ -16,6 +18,7 @@ namespace G1N_Font_Editor.Components
         private void buttonNewG1NCreate_Click(object sender, EventArgs e)
         {
             _totalPage = (int)numericNewG1NTotalPage.Value;
+            _is8Bpp = checkBox8Bpp.Checked;
             DialogResult = DialogResult.OK;
         }
 

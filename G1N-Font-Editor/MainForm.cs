@@ -354,6 +354,12 @@ namespace G1N_Font_Editor
                         try
                         {
                             Global.G1N_FILE = new G1N(filePath);
+                            var is8Bpp = Global.G1N_FILE.Is8Bpp;
+                            hideOrShowPatteleSection(!is8Bpp);
+                            checkBox8Bpp.BeginInvoke((MethodInvoker)delegate
+                            {
+                                checkBox8Bpp.Checked = is8Bpp;
+                            });
                             comboBoxPage.BeginInvoke((MethodInvoker)delegate
                             {
                                 foreach (var fontId in Global.G1N_FILE.GlyphTables)
@@ -525,12 +531,7 @@ namespace G1N_Font_Editor
                             pictureBox.BackColor = Color.Black;
                             pictureBox.Image = texPic;
                         });
-                        hideOrShowPatteleSection(!glyphTable.Is8Bpp);
-                        checkBox8Bpp.BeginInvoke((MethodInvoker)delegate
-                        {
-                            checkBox8Bpp.Checked = glyphTable.Is8Bpp;
-                        });
-                        if (!glyphTable.Is8Bpp)
+                        if (!Global.G1N_FILE.Is8Bpp)
                         {
                             Bitmap palettePic = glyphTable.GetPaletteImage();
                             pictureBoxOptPalette.BeginInvoke((MethodInvoker)delegate
@@ -579,8 +580,14 @@ namespace G1N_Font_Editor
                         try
                         {
                             var totalPage = newForm.TotalPage;
-                            Global.G1N_FILE = new G1N(totalPage);
+                            var is8Bpp = newForm.Is8Bpp;
+                            Global.G1N_FILE = new G1N(totalPage, is8Bpp);
                             Global.SELECTED_G1N_FONT_ID = -1;
+                            hideOrShowPatteleSection(!is8Bpp);
+                            checkBox8Bpp.BeginInvoke((MethodInvoker)delegate
+                            {
+                                checkBox8Bpp.Checked = is8Bpp;
+                            });
                             comboBoxPage.BeginInvoke((MethodInvoker)delegate
                             {
                                 comboBoxPage.Items.Clear();
@@ -626,7 +633,6 @@ namespace G1N_Font_Editor
                     try
                     {
                         Global.G1N_FILE.AddGlyphTables();
-                        Console.WriteLine(Global.G1N_FILE.GlyphTables.Count());
                         var table = Global.G1N_FILE.GlyphTables.LastOrDefault();
                         comboBoxPage.BeginInvoke((MethodInvoker)delegate
                         {
@@ -721,7 +727,7 @@ namespace G1N_Font_Editor
                             var baseline = Convert.ToSByte(newGlyphForm.Baseline);
                             var xAdv = Convert.ToByte(newGlyphForm.XAdvance);
                             var xOff = Convert.ToSByte(newGlyphForm.XOffset);
-                            var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff, table.Is8Bpp);
+                            var glyph = new Glyph(newGlyphForm.Character, newGlyphForm.GlyphBitmap, baseline, xAdv, xOff, Global.G1N_FILE.Is8Bpp);
                             table.AddGlyph(glyph);
                             handleUpdateProgressFromTask(Global.PROGRESS_MESSAGES["PreparingBMP"]);
                             var tablePage = table.TablePages[Global.CURRENT_TEX_PAGE - 1];

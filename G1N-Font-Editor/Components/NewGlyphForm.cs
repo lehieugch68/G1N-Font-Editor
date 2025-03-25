@@ -39,6 +39,7 @@ namespace G1N_Font_Editor.Components
                 _glyphBitmap = bmp;
                 numericNewGlyphWidth.Value = _glyphBitmap.Width;
                 numericNewGlyphHeight.Value = _glyphBitmap.Height;
+                numericNewGlyphXAdv.Value = _glyphBitmap.Width;
                 pictureBoxNewGlyph.BackColor = Color.Black;
                 pictureBoxNewGlyph.Image = _glyphBitmap;
             }

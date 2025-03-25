@@ -9,7 +9,6 @@ namespace G1N_Font_Editor
     public class GlyphTable
     {
         public int Index { get; set; }
-        public bool Is8Bpp { get; set; }
         public List<Glyph> Glyphs { get; set; }
         public Color[] Palettes { get; set; }
         private Bitmap _paletteImage;
@@ -17,12 +16,13 @@ namespace G1N_Font_Editor
         public Color[] AlphaPalettes { get; set; }
         private List<TablePage> _tablePages;
         public List<TablePage> TablePages { get { return _tablePages; } }
-        public GlyphTable(int index, Color[] palettes = null, Color[] alphaPalettes = null)
+        private bool _is8Bpp;
+        public GlyphTable(int index, bool is8Bpp = false, Color[] palettes = null, Color[] alphaPalettes = null)
         {
             Index = index;
             Glyphs = new List<Glyph>();
             _tablePages = new List<TablePage>();
-            Is8Bpp = palettes == null;
+            _is8Bpp = is8Bpp;
             if (palettes != null)
             {
                 Palettes = new Color[0x10];
@@ -85,7 +85,6 @@ namespace G1N_Font_Editor
             int width = Global.DEFAULT_TEX_WIDTH, height = Global.DEFAULT_TEX_HEIGHT;
             while (index < Glyphs.Count())
             {
-                Console.WriteLine($"{index} - {Glyphs.Count}");
                 var isFull = false;
                 var tablePage = new TablePage(Glyphs, index);
                 var rects = new List<Rectangle>();
@@ -128,7 +127,7 @@ namespace G1N_Font_Editor
                 foreach (var ch in chars)
                 {
                     if (Glyphs.FindIndex(g => g.Character == ch) != -1 || !dict.ContainsKey(ch)) continue;
-                    var glyph = new Glyph(ch, Is8Bpp);
+                    var glyph = new Glyph(ch, _is8Bpp);
                     Glyphs.Add(glyph);
                 }
             }
